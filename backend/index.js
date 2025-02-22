@@ -6,24 +6,24 @@ const mongoose = require("mongoose");
 
 const app = express();
 
+const dbUrl = process.env.ATLASDB_URL;
+
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
 // Database Connection
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log("MongoDB connected successfully");
-  } catch (error) {
-    console.error("Database connection error:", error.message);
-    process.exit(1);
-  }
-};
-connectDB();
+main()
+  .then(() => {
+    console.log("Connected");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+
+async function main() {
+  await mongoose.connect(dbUrl);
+}
 
 // Routes
 app.get("/", (req, res) => {
@@ -31,7 +31,6 @@ app.get("/", (req, res) => {
 });
 
 // Start Server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(8000, () => {
+  console.log(`Server running on http://localhost:8000`);
 });
