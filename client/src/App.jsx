@@ -1,6 +1,6 @@
 import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './screens/Home';
+import Home from './Screens/Home';
 import ScrollToTop from './Components/ScrollToTop';
 import Login from './Screens/Login';
 import Signup from './Screens/SignUp';

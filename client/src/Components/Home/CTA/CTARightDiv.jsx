@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
+const slideInRight = {
+  hidden: { opacity: 0, x: 50 },
+  visible: { 
+    opacity: 1, 
+    x: 0, 
+    transition: { duration: 0.6, ease: "easeOut", delay: 0.4 } 
+  },
+};
+
 const CTARightDiv = () => {
   const [flipped, setFlipped] = useState(false);
 
@@ -14,7 +23,13 @@ const CTARightDiv = () => {
   }, []);
 
   return (
-    <div className="md:w-1/2 flex justify-center">
+    <motion.div
+      className="md:w-1/2 flex justify-center"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, amount: 0.1 }}
+      variants={slideInRight}
+    >
       {/* Flip Card Container */}
       <div className="relative h-[450px] w-[450px] perspective-1000">
         <motion.div
@@ -50,7 +65,7 @@ const CTARightDiv = () => {
           </div>
         </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
