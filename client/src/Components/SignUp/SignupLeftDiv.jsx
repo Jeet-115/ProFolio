@@ -1,0 +1,166 @@
+import React from "react";
+import { TextField, IconButton, InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import useSignUp from "./SignUp";
+
+const fadeInLeft = (delay) => ({
+  initial: { opacity: 0, x: -50 },
+  animate: { opacity: 1, x: 0 },
+  transition: { duration: 0.5, delay },
+});
+
+const SignupLeftDiv = () => {
+  const {
+    formData,
+    errors,
+    showPassword,
+    setShowPassword,
+    handleChange,
+    handleSubmit,
+  } = useSignUp();
+
+  return (
+    <div className="flex-1 flex items-center justify-center">
+      <motion.div className="p-6 w-full max-w-sm">
+        <motion.h1
+          className="text-white text-5xl font-bold text-center mb-4"
+          {...fadeInLeft(0.1)}
+        >
+          Sign Up
+        </motion.h1>
+
+        <motion.h2
+          className="text-white text-sm text-center mb-8 inter"
+          {...fadeInLeft(0.2)}
+        >
+          Please Enter Your Details
+        </motion.h2>
+
+        <form onSubmit={handleSubmit} noValidate>
+          <motion.div className="mb-8" {...fadeInLeft(0.3)}>
+            <TextField
+              label="Username"
+              name="username"
+              type="text"
+              value={formData.username}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                style: { backgroundColor: "white", borderRadius: "20px" },
+              }}
+              sx={{
+                "& label": { color: "#808080" },
+                "& label.Mui-focused": { color: "black" },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "black" },
+                },
+              }}
+              error={!!errors.username}
+              helperText={errors.username}
+            />
+          </motion.div>
+
+          <motion.div className="mb-8" {...fadeInLeft(0.4)}>
+            <TextField
+              label="Email ID"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                style: { backgroundColor: "white", borderRadius: "20px" },
+              }}
+              sx={{
+                "& label": { color: "#808080" },
+                "& label.Mui-focused": { color: "black" },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "black" },
+                },
+              }}
+              error={!!errors.email}
+              helperText={errors.email}
+            />
+          </motion.div>
+
+          <motion.div className="mb-4" {...fadeInLeft(0.5)}>
+            <TextField
+              label="Password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={formData.password}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              InputProps={{
+                style: { backgroundColor: "white", borderRadius: "20px" },
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                "& label": { color: "#808080" },
+                "& label.Mui-focused": { color: "black" },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": { borderColor: "black" },
+                },
+              }}
+              error={!!errors.password}
+              helperText={errors.password}
+            />
+          </motion.div>
+
+          <motion.div
+            className="mb-4 flex justify-between items-center"
+            {...fadeInLeft(0.6)}
+          >
+            <div></div>
+            <Link to="/login" className="text-white text-sm hover:underline">
+              Already a User? Login
+            </Link>
+          </motion.div>
+
+          <motion.button
+            type="submit"
+            className="w-full bg-black text-white py-3 rounded-full font-semibold hover:opacity-80 transition-all"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            {...fadeInLeft(0.7)}
+          >
+            Sign Up
+          </motion.button>
+        </form>
+
+        <motion.div className="flex items-center my-6" {...fadeInLeft(0.8)}>
+          <div className="flex-1 border-t border-dashed border-white"></div>
+          <span className="px-2 text-white text-sm">OR</span>
+          <div className="flex-1 border-t border-dashed border-white"></div>
+        </motion.div>
+
+        <motion.div
+          className="flex justify-center space-x-16 text-white text-md"
+          {...fadeInLeft(0.9)}
+        >
+          <button className="flex items-center space-x-2 hover:opacity-80 transition-all">
+            <img src="/google.png" alt="Google" className="w-5 h-5" />
+            <span>Google</span>
+          </button>
+          <button className="flex items-center space-x-2 hover:opacity-80 transition-all">
+            <img src="/github.png" alt="Github" className="w-5 h-5" />
+            <span>Github</span>
+          </button>
+        </motion.div>
+      </motion.div>
+    </div>
+  );
+};
+
+export default SignupLeftDiv;
