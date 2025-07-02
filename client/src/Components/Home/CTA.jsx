@@ -21,7 +21,7 @@ const CTA = () => {
       {/* Heading */}
       <motion.div
         initial="hidden"
-        whileInView="visible"
+        whileInView="visible"   
         viewport={{ once: false, amount: 0.2 }}
         variants={popUp}
       >

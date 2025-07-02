@@ -1,7 +1,5 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 50 },
@@ -9,7 +7,17 @@ const fadeInUp = {
 };
 
 const InfoMenu = ({ selection, handleChange }) => {
-  const buttonStyles = "!text-[#346779] !font-semibold !px-6 !py-3 !border-[#346779]";
+  const buttonStyles =
+    'px-6 py-3 border-2 rounded-full font-semibold text-[#346779] border-[#346779] bg-white mx-1 transition-colors duration-200 focus:outline-none ' +
+    'hover:bg-[#346779] hover:text-white';
+  const selectedStyles = 'bg-[#346779] text-white';
+
+  const options = [
+    { value: 'resumetemplate', label: 'Resume Templates' },
+    { value: 'resumebuilder', label: 'Resume Builder' },
+    { value: 'portfolio', label: 'Portfolio' },
+    { value: 'resumereview', label: 'Resume Review' },
+  ];
 
   return (
     <motion.div
@@ -20,26 +28,21 @@ const InfoMenu = ({ selection, handleChange }) => {
       variants={fadeInUp}
       viewport={{ once: false, amount: 0.1 }}
     >
-      <ToggleButtonGroup
-        color="primary"
-        value={selection}
-        exclusive
-        onChange={handleChange}
-        aria-label="Options"
-      >
-        <ToggleButton value="resumetemplate" className={buttonStyles}>
-          Resume Templates
-        </ToggleButton>
-        <ToggleButton value="resumebuilder" className={buttonStyles}>
-          Resume Builder
-        </ToggleButton>
-        <ToggleButton value="portfolio" className={buttonStyles}>
-          Portfolio
-        </ToggleButton>
-        <ToggleButton value="resumereview" className={buttonStyles}>
-          Resume Review
-        </ToggleButton>
-      </ToggleButtonGroup>
+      <div className="flex space-x-2">
+        {options.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            className={
+              buttonStyles + (selection === opt.value ? ' ' + selectedStyles : '')
+            }
+            onClick={() => handleChange(null, opt.value)}
+            aria-pressed={selection === opt.value}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
     </motion.div>
   );
 };
