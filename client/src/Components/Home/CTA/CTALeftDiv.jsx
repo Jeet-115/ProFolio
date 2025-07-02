@@ -31,14 +31,7 @@ const CTALeftDiv = () => {
     >
       {/* Paragraph - Fades in after slide-in */}
       <motion.p className="text-lg text-gray-200" variants={fadeInUp(0.5)}>
-        Create a stunning portfolio and showcase your skills to the world.
-        Profolio helps you build professional resumes effortlessly. Create a
-        stunning portfolio and showcase your skills to the world. Profolio helps
-        you build professional resumes effortlessly. Create a stunning portfolio
-        and showcase your skills to the world. Profolio helps you build
-        professional resumes effortlessly. Create a stunning portfolio and
-        showcase your skills to the world. Profolio helps you build professional
-        resumes effortlessly.
+      Take your career to the next level with our AI-powered Resume & Portfolio Generator! Create professional, ATS-friendly resumes and stunning portfolios in minutes. Stand out from the competition with personalized templates, smart keyword suggestions, and seamless customization. Whether you're a job seeker or a freelancer, our tool ensures you make a lasting impression. Start building your perfect resume and portfolio today—your dream opportunity is just a click away!
       </motion.p>
 
       {/* Buttons - Fading in one by one */}
