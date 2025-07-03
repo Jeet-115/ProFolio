@@ -1,7 +1,7 @@
 const User = require("../models/user.js");
 
 module.exports.renderSignupForm = (req, res) => {
-  res.render("users/signup.ejs");
+  res.json({ message: "Render signup form (not used in API)" });
 };
 
 module.exports.signupPage = async (req, res) => {
@@ -24,7 +24,7 @@ module.exports.signupPage = async (req, res) => {
 };
 
 module.exports.renderLoginForm = (req, res) => {
-  res.render("users/login.ejs");
+  res.json({ message: "Render login form (not used in API)" });
 };
 
 module.exports.loginPage = async (req, res) => {
