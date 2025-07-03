@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const useSignUp = () => {
   const [formData, setFormData] = useState({
@@ -9,10 +10,15 @@ const useSignUp = () => {
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setServerError("");
+    setSuccess("");
   };
 
   const validateForm = () => {
@@ -26,10 +32,18 @@ const useSignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Signup form submitted");
+    setServerError("");
+    setSuccess("");
     if (validateForm()) {
       try {
-        await axios.post("/signup", formData);
+        const res = await axios.post("http://localhost:3000/signup", formData);
+        setSuccess(res.data.message || "Signup successful!");
+        setTimeout(() => navigate("/"), 1000); // Redirect to home after 1s
       } catch (err) {
+        setServerError(
+          err.response?.data?.error || err.message || "Signup failed."
+        );
         console.error(err);
       }
     }
@@ -42,6 +56,8 @@ const useSignUp = () => {
     setShowPassword,
     handleChange,
     handleSubmit,
+    serverError,
+    success,
   };
 };
 
