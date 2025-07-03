@@ -1,9 +1,12 @@
 import React from "react";
-import { TextField, IconButton, InputAdornment } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import useSignUp from "./SignUp";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const fadeInLeft = (delay) => ({
   initial: { opacity: 0, x: -50 },
@@ -19,11 +22,20 @@ const SignupLeftDiv = () => {
     setShowPassword,
     handleChange,
     handleSubmit,
+    serverError,
+    success,
   } = useSignUp();
 
   return (
     <div className="flex-1 flex items-center justify-center">
       <motion.div className="p-6 w-full max-w-sm">
+        {/* Feedback messages */}
+        {serverError && (
+          <div className="mb-4 text-red-500 text-center font-semibold">
+            {serverError}
+          </div>
+        )}
+
         <motion.h1
           className="text-white text-5xl font-bold text-center mb-4"
           {...fadeInLeft(0.1)}

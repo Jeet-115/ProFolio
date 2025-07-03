@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const useLogin = () => {
   const [formData, setFormData] = useState({
@@ -7,14 +8,16 @@ const useLogin = () => {
     password: "",
   });
 
-  const [errors, setErrors] = useState({
-    username: "",
-    password: "",
-  });
+  const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+  const [success, setSuccess] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    setServerError("");
+    setSuccess("");
   };
 
   const validateForm = () => {
@@ -27,17 +30,23 @@ const useLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setServerError("");
+    setSuccess("");
     if (validateForm()) {
       try {
-        await axios.post("/login", formData);
-        // Redirect or show success message after login
+        const res = await axios.post("http://localhost:3000/login", formData);
+        setSuccess(res.data.message || "Login successful!");
+        setTimeout(() => navigate("/"), 1000); // Redirect to home after 1s
       } catch (err) {
+        setServerError(
+          err.response?.data?.error || err.message || "Login failed."
+        );
         console.error(err);
       }
     }
   };
 
-  return { formData, errors, handleChange, handleSubmit };
+  return { formData, errors, handleChange, handleSubmit, serverError, success };
 };
 
 export default useLogin;

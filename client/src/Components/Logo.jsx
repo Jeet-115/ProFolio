@@ -9,11 +9,27 @@ const Logo = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
     >
-      <Link to="/">
-        <div className="flex pl-3 pt-3">
-          <h1 className="text-5xl font-bold text-[#1ABC9C] inter ml-3 mt-3">PROFOLIO</h1>
+      <div className="flex items-center justify-between px-6 pt-3">
+        <Link to="/">
+          <div className="flex">
+            <h1 className="text-5xl font-bold text-[#1ABC9C] inter ml-3 mt-3">
+              PROFOLIO
+            </h1>
+          </div>
+        </Link>
+        <div className="flex space-x-4 mt-3">
+          <Link to="/login">
+            <button className="bg-transparent border border-[#1ABC9C] text-[#1ABC9C] px-6 py-2 rounded-full font-semibold hover:bg-[#1ABC9C] hover:text-white transition-all">
+              Login
+            </button>
+          </Link>
+          <Link to="/signup">
+            <button className="bg-[#1ABC9C] text-white px-6 py-2 rounded-full font-semibold hover:bg-[#159c87] transition-all">
+              Sign Up
+            </button>
+          </Link>
         </div>
-      </Link>
+      </div>
     </motion.div>
   );
 };
