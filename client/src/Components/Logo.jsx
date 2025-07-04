@@ -17,18 +17,6 @@ const Logo = () => {
             </h1>
           </div>
         </Link>
-        <div className="flex space-x-4 mt-3">
-          <Link to="/login">
-            <button className="bg-transparent border border-[#1ABC9C] text-[#1ABC9C] px-6 py-2 rounded-full font-semibold hover:bg-[#1ABC9C] hover:text-white transition-all">
-              Login
-            </button>
-          </Link>
-          <Link to="/signup">
-            <button className="bg-[#1ABC9C] text-white px-6 py-2 rounded-full font-semibold hover:bg-[#159c87] transition-all">
-              Sign Up
-            </button>
-          </Link>
-        </div>
       </div>
     </motion.div>
   );

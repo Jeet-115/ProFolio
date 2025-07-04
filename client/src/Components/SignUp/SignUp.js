@@ -1,13 +1,17 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { signupUser } from "../../service/authService";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../redux/authSlice";
 
 const useSignUp = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
   });
+  
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState("");
@@ -32,14 +36,14 @@ const useSignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Signup form submitted");
     setServerError("");
     setSuccess("");
     if (validateForm()) {
       try {
-        const res = await axios.post("http://localhost:3000/signup", formData);
-        setSuccess(res.data.message || "Signup successful!");
-        setTimeout(() => navigate("/"), 1000); // Redirect to home after 1s
+        const data = await signupUser(formData);
+        setSuccess(data.message || "Signup successful!");
+        dispatch(setCredentials({ user: data.user }));
+        navigate(data.redirect || "/dashboard"); // ✅ navigate directly
       } catch (err) {
         setServerError(
           err.response?.data?.error || err.message || "Signup failed."
