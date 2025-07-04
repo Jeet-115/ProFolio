@@ -1,55 +1,62 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
-const session = require("express-session");
-const passport = require("passport");
-const flash = require("connect-flash");
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import bodyParser from "body-parser";
+import session from "express-session";
+import passport from "passport";
+import flash from "connect-flash";
+import connectDB from "./config/db.js";
+import userRoutes from "./routes/user.js";
 
+import "./config/passportConfig.js"; // important: must come before routes
+
+dotenv.config();
 const app = express();
 
-const dbUrl = process.env.ATLASDB_URL;
+// Connect to DB
+await connectDB();
+
+// CORS
+app.use(
+  cors({
+    origin: [
+      process.env.CLIENT_URL,
+      process.env.VERCEL_URL,
+      "http://localhost:5173",
+    ],
+    credentials: true,
+  })
+);
 
 // Middleware
-app.use(cors());
 app.use(bodyParser.json());
 app.use(
   session({
-    secret: "yourSecretKey", // use a strong secret in production!
+    secret: process.env.SESSION_SECRET || "yourSecretKey",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false, // set to true in prod w/ https
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    },
   })
 );
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-require("./passportConfig");
-
-// Import and use user routes
-const userRoutes = require("./routes/user");
+// Routes
 app.use("/", userRoutes);
 
-// Database Connection
-main()
-  .then(() => {
-    console.log("Connected");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-async function main() {
-  await mongoose.connect(dbUrl);
-}
-
-// Routes
+// Health check
 app.get("/", (req, res) => {
-  res.send("Backend for Profolio is running!");
+  res.send("Backend for Portfolio is running!");
 });
 
-// Start Server
-app.listen(3000, () => {
-  console.log(`Server running on http://localhost:3000`);
+// Server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
 });

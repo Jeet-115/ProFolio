@@ -1,55 +1,53 @@
-// const express = require("express");
-// const router = express.Router();
-// const User = require("../models/user.js");
-// const passport = require("passport");
+import express from "express";
+import passport from "passport";
 
-// router.post("/signup", async (req, res) => {
-//   try {
-//     const { username, email, password } = req.body;
-//     // Handle signup logic (hash password, save to DB, etc.)
-//     const user = new User({ username, email, password });
-//     await user.save();
-//     res.status(200).send("User created");
-//   } catch (err) {
-//     res.status(500).send("Error creating user");
-//   }
-// });
+import wrapAsync from "../utils/wrapAsync.js";
+import { saveRedirectUrl } from "../middleware/middlewares.js";
+import * as userController from "../controllers/user.js";
 
-// router.post("/login", passport.authenticate("local", {
-//   failureRedirect: "/login",
-//   failureFlash: true,
-// }), async (req, res) => {
-//   res.status(200).send("User logged in");
-// });
-
-// module.exports = router;
-
-const express = require("express");
-const router = express.Router({});
-const User = require("../models/user.js");
-const passport = require("passport");
-const wrapAsync = require("../utils/wrapAsync.js");
-const { saveRedirectUrl } = require("../middlewares.js");
-
-const userController = require("../controllers/user.js");
+const router = express.Router();
 
 router
   .route("/signup")
   .get(userController.renderSignupForm)
   .post(wrapAsync(userController.signupPage));
 
-router
-  .route("/login")
-  .get(userController.renderLoginForm)
-  .post(
-    saveRedirectUrl,
-    passport.authenticate("local", {
-      failureRedirect: "/login",
-      failureFlash: true,
-    }),
-    wrapAsync(userController.loginPage)
-  );
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+
+    if (!user) {
+      return res.status(401).json({
+        error: info?.message || "Invalid username or password",
+      });
+    }
+
+    req.login(user, (err) => {
+      if (err) return next(err);
+
+      const redirect = user.role === "admin" ? "/admin/dashboard" : "/dashboard";
+
+      return res.status(200).json({
+        message: "Login successful!",
+        user: {
+          id: user._id,
+          username: user.username,
+          role: user.role,
+        },
+        redirect,
+      });
+    });
+  })(req, res, next);
+});
+
+router.get("/profile", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ user: req.user });
+  } else {
+    res.status(401).json({ error: "Not authenticated" });
+  }
+});
 
 router.get("/logout", userController.logoutPage);
 
-module.exports = router;
+export default router;

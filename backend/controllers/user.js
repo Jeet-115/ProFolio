@@ -1,45 +1,50 @@
-const User = require("../models/user.js");
+import User from "../models/user.js";
 
-module.exports.renderSignupForm = (req, res) => {
+export const renderSignupForm = (req, res) => {
   res.json({ message: "Render signup form (not used in API)" });
 };
 
-module.exports.signupPage = async (req, res) => {
+export const signupPage = async (req, res, next) => {
   try {
     const { email, username, password } = req.body;
     const user = new User({ email, username });
     const registeredUser = await User.register(user, password);
-    console.log(registeredUser);
+
     req.login(registeredUser, (err) => {
-      if (err) {
-        return next(err);
-      }
-      req.flash("success", "Welcome to Wanderlust!");
-      res.redirect("/listings");
+      if (err) return next(err);
+      return res.status(201).json({
+        message: "Signup successful!",
+        user: { id: registeredUser._id, username: registeredUser.username },
+        redirect: "/dashboard",
+      });
     });
   } catch (e) {
-    req.flash("error", e.message);
-    res.redirect("/signup");
+    res.status(400).json({ error: e.message });
   }
 };
 
-module.exports.renderLoginForm = (req, res) => {
+export const renderLoginForm = (req, res) => {
   res.json({ message: "Render login form (not used in API)" });
 };
 
-module.exports.loginPage = async (req, res) => {
-  req.flash("success", "Welcome back!");
-  const redirectUrl = res.locals.redirectUrl || "/listings";
-  // delete req.session.returnTo;
-  res.redirect(redirectUrl);
+export const loginPage = (req, res) => {
+  const redirect = req.user.role === "admin" ? "/admin/dashboard" : "/dashboard";
+
+  return res.status(200).json({
+    message: "Login successful!",
+    user: {
+      id: req.user._id,
+      username: req.user.username,
+      role: req.user.role,
+    },
+    redirect, // ✅ dynamic redirect path
+  });
 };
 
-module.exports.logoutPage = (req, res) => {
+export const logoutPage = (req, res, next) => {
   req.logout((err) => {
-    if (err) {
-      return next(err);
-    }
-    req.flash("success", "You have logged out!");
-    res.redirect("/listings");
+    if (err) return next(err);
+    res.clearCookie('connect.sid');
+    return res.status(200).json({ message: 'You have logged out.' });
   });
 };
