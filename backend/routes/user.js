@@ -25,7 +25,8 @@ router.post("/login", (req, res, next) => {
     req.login(user, (err) => {
       if (err) return next(err);
 
-      const redirect = user.role === "admin" ? "/admin/dashboard" : "/dashboard";
+      const redirect =
+        user.role === "admin" ? "/admin/dashboard" : "/dashboard";
 
       return res.status(200).json({
         message: "Login successful!",
@@ -49,5 +50,35 @@ router.get("/profile", (req, res) => {
 });
 
 router.get("/logout", userController.logoutPage);
+
+// Google OAuth
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login", session: true }),
+  (req, res) => {
+    // Redirect or respond as needed
+    res.redirect("/profile"); // or send a token/JSON
+  }
+);
+
+// GitHub OAuth
+router.get(
+  "/auth/github",
+  passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+  "/auth/github/callback",
+  passport.authenticate("github", { failureRedirect: "/login", session: true }),
+  (req, res) => {
+    // Redirect or respond as needed
+    res.redirect("/profile"); // or send a token/JSON
+  }
+);
 
 export default router;
