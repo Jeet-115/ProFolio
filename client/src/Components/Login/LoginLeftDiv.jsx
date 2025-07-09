@@ -49,9 +49,9 @@ const LoginLeftDiv = () => {
           >
             <input
               className="w-full px-4 py-3 rounded-2xl bg-white text-black focus:outline-none focus:ring-2 focus:ring-black placeholder-gray-500"
-              placeholder="Email ID"
+              placeholder="Email ID or Username"
               name="username"
-              type="email"
+              type="text"
               value={formData.username}
               onChange={handleChange}
             />

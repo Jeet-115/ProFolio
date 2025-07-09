@@ -1,26 +1,15 @@
-import './App.css'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './Screens/Home';
-import ScrollToTop from './Components/ScrollToTop';
-import Login from './Screens/Login';
-import Signup from './Screens/SignUp';
+import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import ScrollToTop from "./Components/ScrollToTop";
+import AppRoutes from "./AppRoutes"; // 👈 New component below
 
 function App() {
-
   return (
-    <>
-      <Router>
-        <ScrollToTop />
-        <div>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-          </Routes>
-        </div>
-      </Router>
-    </>
-  )
+    <Router>
+      <ScrollToTop />
+      <AppRoutes />
+    </Router>
+  );
 }
 
-export default App
+export default App;
