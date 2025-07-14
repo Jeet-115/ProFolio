@@ -37,9 +37,13 @@ const useSignUp = () => {
     setSuccess("");
     if (validateForm()) {
       try {
-        const res = await axios.post("http://localhost:3000/signup", formData);
+        const res = await axios.post("http://localhost:3000/signup", formData, {
+          withCredentials: true,
+        });
+
         setSuccess(res.data.message || "Signup successful!");
-        setTimeout(() => navigate("/"), 1000); // Redirect to home after 1s
+        const redirectPath = res.data.redirect || "/dashboard";
+        setTimeout(() => navigate(redirectPath), 1000);
       } catch (err) {
         setServerError(
           err.response?.data?.error || err.message || "Signup failed."
@@ -48,7 +52,7 @@ const useSignUp = () => {
       }
     }
   };
-
+  
   return {
     formData,
     errors,
