@@ -28,7 +28,7 @@ function Topbar() {
 
   return (
     <motion.div
-      className="flex justify-end items-center gap-4 mb-6"
+      className="flex justify-between items-center mb-6 px-4 py-2 border border-white/10 bg-white/10 backdrop-blur rounded-xl shadow-sm text-white"
       variants={{
         hidden: { opacity: 0 },
         visible: {
@@ -41,15 +41,15 @@ function Topbar() {
     >
       <motion.span
         variants={itemVariants}
-        className="text-[#2E3C43] outfit font-semibold"
+        className="outfit font-semibold text-lg pl-[50px] md:pl-0"
       >
-        {user?.username || user?.name || "User"}
+        Welcome, {user?.username || user?.name || "User"}
       </motion.span>
 
       <motion.button
         variants={itemVariants}
         onClick={handleLogout}
-        className="bg-white text-[#00ACC1] px-4 py-2 rounded shadow-sm hover:bg-[#4DD0E1] hover:text-white transition-all cursor-pointer outfit font-semibold"
+        className="bg-[#1BA089] hover:bg-[#159f82] px-4 py-2 rounded-lg text-white outfit transition-all"
       >
         Logout
       </motion.button>

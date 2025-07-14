@@ -1,4 +1,6 @@
-export const isLoggedIn = (req, res, next) => {
+const ExpressError = require("../utils/expressError");
+
+module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
     req.session.redirectUrl = req.originalUrl;
     req.flash("error", "You must be signed in to do that");
@@ -7,9 +9,10 @@ export const isLoggedIn = (req, res, next) => {
   next();
 };
 
-export const saveRedirectUrl = (req, res, next) => {
+module.exports.saveRedirectUrl = (req, res, next) => {
   if (req.session.redirectUrl) {
     res.locals.redirectUrl = req.session.redirectUrl;
   }
   next();
 };
+

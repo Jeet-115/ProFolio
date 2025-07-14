@@ -4,7 +4,6 @@ import User from "../models/user.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-// Custom strategy: allow login with username OR email
 passport.use(
   new LocalStrategy(
     { usernameField: "username" },
@@ -33,10 +32,6 @@ passport.use(
   )
 );
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-// Google Strategy
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 passport.use(
   new GoogleStrategy(
@@ -44,7 +39,7 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID || "GOOGLE_CLIENT_ID_PLACEHOLDER",
       clientSecret:
         process.env.GOOGLE_CLIENT_SECRET || "GOOGLE_CLIENT_SECRET_PLACEHOLDER",
-      callbackURL: "/auth/google/callback",
+      callbackURL: process.env.GOOGLE_CALLBACK_URL || "/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -73,7 +68,7 @@ passport.use(
       clientID: process.env.GITHUB_CLIENT_ID || "GITHUB_CLIENT_ID_PLACEHOLDER",
       clientSecret:
         process.env.GITHUB_CLIENT_SECRET || "GITHUB_CLIENT_SECRET_PLACEHOLDER",
-      callbackURL: "/auth/github/callback",
+      callbackURL: process.env.GITHUB_CALLBACK_URL || "/auth/github/callback",
       scope: ["user:email"],
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -98,3 +93,13 @@ passport.use(
     }
   )
 );
+
+passport.serializeUser((user, done) => {
+  console.log("Serializing user:", user);
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  const user = await User.findById(id);
+  done(null, user);
+});

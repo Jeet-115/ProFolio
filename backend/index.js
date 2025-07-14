@@ -8,7 +8,7 @@ import flash from "connect-flash";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.js";
 
-import "./config/passportConfig.js"; // important: must come before routes
+import "./config/passportConfig.js";
 
 dotenv.config();
 const app = express();
@@ -35,12 +35,6 @@ app.use(
     secret: process.env.SESSION_SECRET || "yourSecretKey",
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false, // set to true in prod w/ https
-      sameSite: "lax",
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    },
   })
 );
 app.use(flash());
@@ -50,9 +44,9 @@ app.use(passport.session());
 // Routes
 app.use("/", userRoutes);
 
-// Health check
+// Check
 app.get("/", (req, res) => {
-  res.send("Backend for Portfolio is running!");
+  res.send("Backend for Profolio is running!");
 });
 
 // Server

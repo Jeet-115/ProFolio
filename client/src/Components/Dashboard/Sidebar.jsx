@@ -3,14 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   FaFileExcel,
   FaChartBar,
-  FaRobot,
   FaHistory,
   FaDownload,
   FaCog,
   FaThLarge,
   FaBars,
   FaTimes,
-  FaComment,
 } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -37,11 +35,11 @@ const itemVariants = {
 const SidebarItem = ({ icon, label, active, onClick }) => (
   <div
     onClick={onClick}
-    className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-300 outfit
+    className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all duration-300 outfit
       ${
         active
-          ? "bg-white text-[#2E3C43] font-semibold"
-          : "text-white hover:bg-gradient-to-r hover:from-white hover:to-[#E0F7FA] hover:text-[#2E3C43]"
+          ? "bg-white/20 text-white shadow-inner"
+          : "text-white hover:bg-white/10 hover:shadow-sm"
       }`}
   >
     <div className="text-lg">{icon}</div>
@@ -55,14 +53,48 @@ function Sidebar() {
   const navigate = useNavigate();
 
   const items = [
-  { icon: <FaThLarge />, label: "Dashboard", path: "/dashboard" },
-  { icon: <FaFileExcel />, label: "Upload Excel", path: "/dashboard/upload" },
-  { icon: <FaChartBar />, label: "Analyze Data", path: "/dashboard/analyze" },
-  { icon: <FaHistory />, label: "History", path: "/dashboard/history" },
-  { icon: <FaRobot />, label: "AI Insights", path: "/dashboard/ai-insights" },
-  { icon: <FaComment />, label: "Chat With File", path: "/dashboard/chatwithfile" },
-  { icon: <FaCog />, label: "Settings", path: "/dashboard/settings" },
-];
+    { icon: <FaThLarge />, label: "Dashboard", path: "/dashboard" },
+    {
+      icon: <FaFileExcel />,
+      label: "Resume Builder",
+      path: "/dashboard/resume-builder",
+    },
+    {
+      icon: <FaDownload />,
+      label: "Portfolio Builder",
+      path: "/dashboard/portfolio-builder",
+    },
+
+    // Templates Section
+    {
+      icon: <FaFileExcel />,
+      label: "Resume Templates",
+      path: "/dashboard/templates/resumes",
+    },
+    {
+      icon: <FaDownload />,
+      label: "Portfolio Templates",
+      path: "/dashboard/templates/portfolios",
+    },
+
+    // My Documents Section
+    { icon: <FaHistory />, label: "My Resumes", path: "/dashboard/my-resumes" },
+    {
+      icon: <FaHistory />,
+      label: "My Portfolios",
+      path: "/dashboard/my-portfolios",
+    },
+
+    // Analytics
+    { icon: <FaChartBar />, label: "Analytics", path: "/dashboard/analytics" },
+
+    // Profile & Settings
+    {
+      icon: <FaCog />,
+      label: "Profile / Settings",
+      path: "/dashboard/profile",
+    },
+  ];
 
   const handleNavigate = (path) => {
     if (path) {
@@ -73,18 +105,20 @@ function Sidebar() {
 
   return (
     <>
+      {/* Mobile Toggle Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className="md:hidden text-[#00ACC1] text-2xl m-4 fixed top-4 left-4 z-50"
+        className="md:hidden text-[#E0F7FA] text-2xl m-4 fixed top-6 left-5 z-50"
       >
         <FaBars />
       </button>
 
+      {/* Mobile Sidebar */}
       <AnimatePresence>
         {isOpen && (
           <>
             <motion.div
-              className="fixed inset-0 backdrop-blur-[60px] z-40"
+              className="fixed inset-0 backdrop-blur-lg bg-black/30 z-40"
               onClick={() => setIsOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -96,20 +130,19 @@ function Sidebar() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed inset-y-0 left-0 z-50 w-64 bg-[#00ACC1] text-white p-6 flex flex-col gap-6 shadow-lg rounded-tr-3xl rounded-br-3xl md:hidden"
+              className="fixed inset-y-0 left-0 z-50 w-64 bg-white/10 backdrop-blur-xl border-r border-white/20 text-white p-6 flex flex-col gap-6 shadow-xl rounded-tr-3xl rounded-br-3xl md:hidden"
             >
-              <div className="flex justify-end">
-                <button onClick={() => setIsOpen(false)} className="text-white text-xl">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold tracking-wide outfit">
+                  PROFOLIO
+                </h2>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-white text-xl"
+                >
                   <FaTimes />
                 </button>
               </div>
-
-              <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8">
-                <img src="/logo.png" alt="logo" className="w-10 h-10" />
-                <h2 className="text-2xl font-bold outfit tracking-wide text-white">
-                  SheetSense
-                </h2>
-              </motion.div>
 
               {items.map((item, index) => (
                 <motion.div key={index} variants={itemVariants}>
@@ -126,15 +159,21 @@ function Sidebar() {
         )}
       </AnimatePresence>
 
+      {/* Desktop Sidebar */}
       <motion.aside
         variants={sidebarVariants}
         initial="hidden"
         animate="visible"
-        className="hidden md:flex w-64 bg-[#00ACC1] text-white p-6 flex flex-col gap-6 shadow-lg rounded-tr-3xl rounded-br-3xl"
+        className="hidden md:flex w-64 bg-white/10 backdrop-blur-xl border-r border-white/20 text-white p-6 flex-col gap-6 shadow-xl rounded-tr-3xl rounded-br-3xl"
       >
-        <motion.div variants={itemVariants} className="flex items-center gap-3 mb-8">
-          <img src="/logo.png" alt="logo" className="w-10 h-10" />
-          <h2 className="text-2xl font-bold outfit tracking-wide text-white">SheetSense</h2>
+        <motion.div
+          variants={itemVariants}
+          className="flex items-center gap-3 mb-8"
+        >
+          <div className="bg-white/20 p-2 rounded-full shadow-lg">
+            <img src="/logo.png" alt="logo" className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-bold tracking-wide outfit">PROFOLIO</h2>
         </motion.div>
 
         {items.map((item, index) => (
