@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 
 const fadeUp = {
@@ -15,7 +15,7 @@ const fadeUp = {
 };
 
 function DashboardHome() {
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
 
   return (
     <AnimatePresence mode="wait">
@@ -31,7 +31,7 @@ function DashboardHome() {
           variants={fadeUp}
           custom={1}
         >
-          Welcome, {user?.username || user?.name || "User"}!
+          {/* Welcome, {user?.username || user?.name || "User"}! */}
         </motion.h1>
         <motion.p
           className="text-lg text-[#E0F7FA]/90"
