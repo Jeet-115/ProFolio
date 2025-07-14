@@ -34,9 +34,13 @@ const useLogin = () => {
     setSuccess("");
     if (validateForm()) {
       try {
-        const res = await axios.post("http://localhost:3000/login", formData);
+        const res = await axios.post("http://localhost:3000/login", formData, {
+          withCredentials: true,
+        });
+
         setSuccess(res.data.message || "Login successful!");
-        setTimeout(() => navigate("/"), 1000); // Redirect to home after 1s
+        const redirectPath = res.data.redirect || "/dashboard"; // default fallback
+        setTimeout(() => navigate(redirectPath), 1000);
       } catch (err) {
         setServerError(
           err.response?.data?.error || err.message || "Login failed."
@@ -45,7 +49,7 @@ const useLogin = () => {
       }
     }
   };
-
+  
   return { formData, errors, handleChange, handleSubmit, serverError, success };
 };
 
