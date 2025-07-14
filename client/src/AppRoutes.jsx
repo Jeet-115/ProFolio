@@ -8,6 +8,7 @@ import DashboardHome from "./Components/Dashboard/DashboardHome";
 import AdminRoute from "./protection/AdminRoute";
 import AdminDashboard from "./layouts/AdminLayout";
 import AdminHome from "./Components/Admin/AdminHome";
+import ResumeBuilder from "./Screens/dashboard/ResumeBuilder";
 
 const AppRoutes = () => {
 
@@ -25,6 +26,7 @@ const AppRoutes = () => {
         }
       >
         <Route index element={<DashboardHome />} />
+        <Route path="resume-builder" element={<ResumeBuilder />} />
       </Route>
       <Route
         path="/admin"
