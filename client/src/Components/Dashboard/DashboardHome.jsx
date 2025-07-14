@@ -1,4 +1,4 @@
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 
 const fadeUp = {
@@ -15,7 +15,7 @@ const fadeUp = {
 };
 
 function DashboardHome() {
-  const { user } = useSelector((state) => state.auth);
+  // const { user } = useSelector((state) => state.auth);
 
   return (
     <AnimatePresence mode="wait">
@@ -24,15 +24,22 @@ function DashboardHome() {
         animate="visible"
         exit="hidden"
         variants={fadeUp}
-        className="p-4 sm:p-6 md:p-8 bg-white/80 rounded-2xl shadow-md w-full"
+        className="p-6 sm:p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg text-white text-center"
       >
         <motion.h1
-          className="text-xl sm:text-2xl md:text-3xl font-semibold text-[#2E3C43] mb-4 outfit"
+          className="text-3xl font-semibold mb-2"
           variants={fadeUp}
           custom={1}
         >
-          Welcome, {user?.username || user?.name || "User"}!
+          {/* Welcome, {user?.username || user?.name || "User"}! */}
         </motion.h1>
+        <motion.p
+          className="text-lg text-[#E0F7FA]/90"
+          variants={fadeUp}
+          custom={2}
+        >
+          Let’s transform your data into meaningful insights ✨
+        </motion.p>
       </motion.div>
     </AnimatePresence>
   );

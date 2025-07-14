@@ -1,12 +1,10 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import Sidebar from "../components/Admin/Sidebar";
 import Topbar from "../components/Admin/Topbar";
 
 function AdminLayout() {
-  const { user } = useSelector((state) => state.auth);
 
   return (
     <motion.div
@@ -18,7 +16,7 @@ function AdminLayout() {
       <Sidebar />
 
       <div className="flex-1 p-8">
-        <Topbar user={user} />
+        <Topbar />
 
         <div className="bg-white p-6 rounded-xl shadow-lg min-h-[300px] outfit">
           <Outlet />

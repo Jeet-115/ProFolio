@@ -161,11 +161,21 @@ const SignupLeftDiv = () => {
           className="flex justify-center space-x-16 text-white text-md"
           {...fadeInLeft(0.9)}
         >
-          <button className="flex items-center space-x-2 hover:opacity-80 transition-all">
+          <button
+            className="flex items-center space-x-2 hover:opacity-80 transition-all"
+            onClick={() =>
+              (window.location.href = "http://localhost:3000/auth/google")
+            }
+          >
             <img src="/google.png" alt="Google" className="w-5 h-5" />
             <span>Google</span>
           </button>
-          <button className="flex items-center space-x-2 hover:opacity-80 transition-all">
+          <button
+            className="flex items-center space-x-2 hover:opacity-80 transition-all"
+            onClick={() =>
+              (window.location.href = "http://localhost:3000/auth/github")
+            }
+          >
             <img src="/github.png" alt="Github" className="w-5 h-5" />
             <span>Github</span>
           </button>

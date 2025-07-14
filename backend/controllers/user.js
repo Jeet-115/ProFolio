@@ -27,6 +27,7 @@ export const renderLoginForm = (req, res) => {
   res.json({ message: "Render login form (not used in API)" });
 };
 
+
 export const loginPage = (req, res) => {
   const redirect = req.user.role === "admin" ? "/admin/dashboard" : "/dashboard";
 
@@ -37,7 +38,7 @@ export const loginPage = (req, res) => {
       username: req.user.username,
       role: req.user.role,
     },
-    redirect, // ✅ dynamic redirect path
+    redirect,
   });
 };
 

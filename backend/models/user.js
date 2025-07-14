@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
 });
 
-UserSchema.plugin(passportLocalMongoose); // adds username + hashed password
+UserSchema.plugin(passportLocalMongoose); 
 
 const User = mongoose.model('User', UserSchema);
 export default User;
