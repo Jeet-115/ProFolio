@@ -1,8 +1,5 @@
 import { motion } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../utils/axiosInstance";
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
@@ -10,21 +7,7 @@ const itemVariants = {
 };
 
 function Topbar() {
-  const { user } = useSelector((state) => state.auth);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    try {
-      // 🔥 Destroy session cookie
-      await axiosInstance.get("/logout");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    } finally {
-      dispatch(logout());
-      navigate("/");
-    }
-  };
 
   return (
     <motion.div
@@ -43,12 +26,12 @@ function Topbar() {
         variants={itemVariants}
         className="text-[#2E3C43] outfit font-semibold"
       >
-        {user?.username || user?.name || "User"}
+        {/* {user?.username || user?.name || "User"} */}
       </motion.span>
 
       <motion.button
         variants={itemVariants}
-        onClick={handleLogout}
+        // onClick={handleLogout}
         className="bg-white text-[#00ACC1] px-4 py-2 rounded shadow-sm hover:bg-[#4DD0E1] hover:text-white transition-all cursor-pointer outfit font-semibold"
       >
         Logout
