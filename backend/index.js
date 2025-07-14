@@ -7,7 +7,8 @@ import passport from "passport";
 import flash from "connect-flash";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.js";
-
+import resumeRoutes from "./routes/resume.js";
+import uploadRoutes from './routes/upload.js';
 import "./config/passportConfig.js";
 
 dotenv.config();
@@ -43,6 +44,8 @@ app.use(passport.session());
 
 // Routes
 app.use("/", userRoutes);
+app.use("/api/resumes", resumeRoutes);
+app.use('/api/upload', uploadRoutes);
 
 // Check
 app.get("/", (req, res) => {
