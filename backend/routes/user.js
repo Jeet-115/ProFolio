@@ -10,35 +10,33 @@ router
   .get(userController.renderSignupForm)
   .post(wrapAsync(userController.signupPage));
 
-  router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) return next(err);
-  
-      if (!user) {
-        return res.status(401).json({
-          error: info?.message || "Invalid username or password",
-        });
-      }
-  
-      req.login(user, (err) => {
-        if (err) return next(err);
-  
-        const redirect =
-          user.role === "admin" ? "/admin" : "/dashboard";
-  
-        return res.status(200).json({
-          message: "Login successful!",
-          user: {
-            id: user._id,
-            username: user.username,
-            role: user.role,
-          },
-          redirect,
-        });
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+
+    if (!user) {
+      return res.status(401).json({
+        error: info?.message || "Invalid username or password",
       });
-    })(req, res, next);
-  });
-  
+    }
+
+    req.login(user, (err) => {
+      if (err) return next(err);
+
+      const redirect = user.role === "admin" ? "/admin" : "/dashboard";
+
+      return res.status(200).json({
+        message: "Login successful!",
+        user: {
+          id: user._id,
+          username: user.username,
+          role: user.role,
+        },
+        redirect,
+      });
+    });
+  })(req, res, next);
+});
 
 router.get("/logout", userController.logoutPage);
 
@@ -56,7 +54,45 @@ router.get(
   }),
   (req, res) => {
     req.session.save(() => {
-      res.redirect("http://localhost:5173/dashboard");
+      if (
+        req.headers.accept &&
+        req.headers.accept.includes("application/json")
+      ) {
+        return res.status(200).json({
+          message: "Google login successful!",
+          user: {
+            id: req.user._id,
+            username: req.user.username,
+            role: req.user.role,
+          },
+          redirect: "/dashboard",
+        });
+      }
+      res.send(`
+        <script>
+          const data = ${JSON.stringify({
+            user: {
+              id: req.user._id,
+              username: req.user.username,
+              role: req.user.role,
+            },
+            message: "Google login successful!",
+            redirect: "/dashboard",
+          })};
+          if (window.opener) {
+            window.opener.postMessage(data, "${
+              process.env.CLIENT_URL || "http://localhost:5173"
+            }");
+            window.close();
+          } else {
+            window.addEventListener('DOMContentLoaded', function() {
+              window.location.href = "${
+                process.env.CLIENT_URL || "http://localhost:5173"
+              }/dashboard";
+            });
+          }
+        </script>
+      `);
     });
   }
 );
@@ -75,10 +111,47 @@ router.get(
   }),
   (req, res) => {
     req.session.save(() => {
-      res.redirect("http://localhost:5173/dashboard");
+      if (
+        req.headers.accept &&
+        req.headers.accept.includes("application/json")
+      ) {
+        return res.status(200).json({
+          message: "GitHub login successful!",
+          user: {
+            id: req.user._id,
+            username: req.user.username,
+            role: req.user.role,
+          },
+          redirect: "/dashboard",
+        });
+      }
+      res.send(`
+        <script>
+          const data = ${JSON.stringify({
+            user: {
+              id: req.user._id,
+              username: req.user.username,
+              role: req.user.role,
+            },
+            message: "GitHub login successful!",
+            redirect: "/dashboard",
+          })};
+          if (window.opener) {
+            window.opener.postMessage(data, "${
+              process.env.CLIENT_URL || "http://localhost:5173"
+            }");
+            window.close();
+          } else {
+            window.addEventListener('DOMContentLoaded', function() {
+              window.location.href = "${
+                process.env.CLIENT_URL || "http://localhost:5173"
+              }/dashboard";
+            });
+          }
+        </script>
+      `);
     });
   }
 );
-
 
 export default router;

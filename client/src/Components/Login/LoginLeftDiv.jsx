@@ -2,16 +2,62 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import useLogin from "./Login";
+import OAuthLoginButton from "./OAuthLoginButton";
+import { useNavigate } from "react-router-dom";
 
 const LoginLeftDiv = () => {
   const { formData, errors, handleChange, handleSubmit } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   // Animation settings
   const animationSettings = {
     initial: { opacity: 0, x: -50, y: 20 },
     animate: { opacity: 1, x: 0, y: 0 },
     transition: (delay) => ({ duration: 0.5, delay }),
+  };
+
+  // OAuth popup handler
+  const handleOAuthPopup = (provider) => {
+    const OAUTH_URLS = {
+      google: "http://localhost:3000/auth/google",
+      github: "http://localhost:3000/auth/github",
+    };
+    const width = 500,
+      height = 600;
+    const left = window.screenX + (window.outerWidth - width) / 2;
+    const top = window.screenY + (window.outerHeight - height) / 2.5;
+
+    const popup = window.open(
+      OAUTH_URLS[provider],
+      `${provider}-login`,
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
+
+    const handleMessage = (event) => {
+      if (event.origin !== "http://localhost:3000") return;
+      if (event.data?.user) {
+        navigate(event.data.redirect);
+        window.removeEventListener("message", handleMessage);
+        popup.close();
+      } else if (event.data?.error) {
+        window.removeEventListener("message", handleMessage);
+        popup.close();
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+  };
+
+  // Handle OAuth login success
+  const handleOAuthSuccess = (data) => {
+    // Save user info to state/context if needed
+    navigate(data.redirect);
+  };
+
+  const handleOAuthError = (error) => {
+    // Show error to user
+    console.error("OAuth Error:", error);
   };
 
   return (
@@ -162,18 +208,14 @@ const LoginLeftDiv = () => {
         >
           <button
             className="flex items-center space-x-2 hover:opacity-80 transition-all"
-            onClick={() =>
-              (window.location.href = "http://localhost:3000/auth/google")
-            }
+            onClick={() => handleOAuthPopup("google")}
           >
             <img src="/google.png" alt="Google" className="w-5 h-5" />
             <span>Google</span>
           </button>
           <button
             className="flex items-center space-x-2 hover:opacity-80 transition-all"
-            onClick={() =>
-              (window.location.href = "http://localhost:3000/auth/github")
-            }
+            onClick={() => handleOAuthPopup("github")}
           >
             <img src="/github.png" alt="Github" className="w-5 h-5" />
             <span>Github</span>
