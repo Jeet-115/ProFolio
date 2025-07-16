@@ -27,9 +27,9 @@ export const renderLoginForm = (req, res) => {
   res.json({ message: "Render login form (not used in API)" });
 };
 
-
 export const loginPage = (req, res) => {
-  const redirect = req.user.role === "admin" ? "/admin/dashboard" : "/dashboard";
+  const redirect =
+    req.user.role === "admin" ? "/admin/dashboard" : "/dashboard";
 
   return res.status(200).json({
     message: "Login successful!",
@@ -42,10 +42,16 @@ export const loginPage = (req, res) => {
   });
 };
 
-export const logoutPage = (req, res, next) => {
-  req.logout((err) => {
-    if (err) return next(err);
-    res.clearCookie('connect.sid');
-    return res.status(200).json({ message: 'You have logged out.' });
+export const logoutPage = (req, res) => {
+  req.logout(() => {
+    req.session?.destroy(() => {
+      res.clearCookie("connect.sid", {
+        httpOnly: true,
+        sameSite: "Strict",
+        secure: false, // set true in production
+        path: "/",
+      });
+      res.status(200).json({ message: "Logged out successfully" });
+    });
   });
 };

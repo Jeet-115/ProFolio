@@ -8,7 +8,7 @@ import flash from "connect-flash";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.js";
 import resumeRoutes from "./routes/resume.js";
-import uploadRoutes from './routes/upload.js';
+import uploadRoutes from "./routes/upload.js";
 import "./config/passportConfig.js";
 
 dotenv.config();
@@ -36,6 +36,12 @@ app.use(
     secret: process.env.SESSION_SECRET || "yourSecretKey",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+      httpOnly: true,
+      sameSite: "Strict",
+      secure: false, // set true in production
+    },
   })
 );
 app.use(flash());
@@ -45,7 +51,7 @@ app.use(passport.session());
 // Routes
 app.use("/", userRoutes);
 app.use("/api/resumes", resumeRoutes);
-app.use('/api/upload', uploadRoutes);
+app.use("/api/upload", uploadRoutes);
 
 // Check
 app.get("/", (req, res) => {
