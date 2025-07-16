@@ -38,7 +38,7 @@ router.post("/login", (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/logout", userController.logoutPage);
+router.post("/logout", userController.logoutPage);
 
 // Google OAuth
 router.get(

@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
@@ -8,6 +9,21 @@ const itemVariants = {
 
 function Topbar() {
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3000/logout",
+        {},
+        { withCredentials: true }
+      );
+      // Optionally clear user state here if you add it later
+      navigate("/login");
+    } catch (err) {
+      console.error("Logout failed", err);
+      // Optionally show a toast or error message
+    }
+  };
 
   return (
     <motion.div
@@ -31,7 +47,7 @@ function Topbar() {
 
       <motion.button
         variants={itemVariants}
-        // onClick={handleLogout}
+        onClick={handleLogout}
         className="bg-white text-[#00ACC1] px-4 py-2 rounded shadow-sm hover:bg-[#4DD0E1] hover:text-white transition-all cursor-pointer outfit font-semibold"
       >
         Logout

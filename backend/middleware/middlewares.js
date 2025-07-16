@@ -1,4 +1,3 @@
-const ExpressError = require("../utils/expressError");
 
 module.exports.isLoggedIn = (req, res, next) => {
   if (!req.isAuthenticated()) {
