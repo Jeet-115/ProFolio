@@ -17,9 +17,9 @@
 
 % ================= Header ==================
 \begin{center}
-    {\fontsize{16pt}{18pt}\selectfont \textbf{{{full_name}}}} \\
+    {\fontsize{16pt}{18pt}\selectfont \textbf{{full_name}}} \\
     {\fontsize{9pt}{11pt}\selectfont
-    {{{location}}} \,\textbullet\, {{{phone}}} \,\textbullet\, \href{mailto:{{{email}}}}{{{email}}} \,\textbullet\, \href{{{website}}}{{{website_display}}}
+    {{location}} \,\textbullet\, {{phone}} \,\textbullet\, \href{mailto:{{email}}}{{email}} \,\textbullet\, \href{{website}}{{website_display}}
     }
 \end{center}
 
@@ -30,7 +30,7 @@
 \noindent\rule{\linewidth}{0.4pt}
 \vspace{-0.1em}
 {\fontsize{10.5pt}{12pt}\selectfont
-{{{summary}}}
+{{summary}}
 }
 
 \vspace{0.2em}
@@ -39,85 +39,72 @@
 {\fontsize{11pt}{13pt}\selectfont\section*{Education}\vspace{-1.8em}}
 \noindent\rule{\linewidth}{0.4pt}
 {\fontsize{10.5pt}{12pt}\selectfont
+{{#each education}}
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
-\textbf{{{edu_institute}}} & {{{edu_location}}} \\
-\textit{{{edu_degree}}} & {{{edu_year}}} \\
+\textbf{{institute}} & {{location}} \\
+\textit{{degree}} & {{year}} \\
 \end{tabular*}
 \vspace{0.4pt}
-\textbf{Relevant Coursework:} {{{edu_coursework}}}
-}
+\textbf{Relevant Coursework:} {{coursework}}
 
-\vspace{0.1em}
+\vspace{0.6em}
+{{/each}}
+}
 
 % ================= Work Experience ==================
 {\fontsize{11pt}{13pt}\selectfont\section*{Work Experience}\vspace{-1.8em}}
 \noindent\rule{\linewidth}{0.4pt}
 
 {\fontsize{10.5pt}{12pt}\selectfont
+{{#each experience}}
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
-\textbf{{{exp_company1}}} & {{{exp_location1}}} \\
-\textit{{{exp_role1}}} & {{{exp_duration1}}} \\
+\textbf{{company}} & {{location}} \\
+\textit{{role}} & {{duration}} \\
 \end{tabular*}
 \vspace{-2ex}
 \begin{itemize}[leftmargin=1.5em, itemsep=0pt, topsep=0.1ex, label=\textbullet]
-    \item {{{exp_point1_1}}}
-    \item {{{exp_point1_2}}}
-    \item {{{exp_point1_3}}}
+    {{#each points}}
+    \item {{this}}
+    {{/each}}
 \end{itemize}
 
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
-\textbf{{{exp_company2}}} & {{{exp_location2}}} \\
-\textit{{{exp_role2}}} & {{{exp_duration2}}} \\
-\end{tabular*}
-\vspace{-2ex}
-\begin{itemize}[leftmargin=1.5em, itemsep=0pt, topsep=0.1ex, label=\textbullet]
-    \item {{{exp_point2_1}}}
-    \item {{{exp_point2_2}}}
-    \item {{{exp_point2_3}}}
-\end{itemize}
+\vspace{0.6em}
+{{/each}}
 }
-
-\vspace{-0.8em}
 
 % ================= Projects ==================
 {\fontsize{11pt}{13pt}\selectfont\section*{Projects}\vspace{-1.8em}}
 \noindent\rule{\linewidth}{0.4pt}
 
 {\fontsize{10.5pt}{12pt}\selectfont
+{{#each projects}}
 \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
-\textbf{{{proj_name1}}} & {{{proj_date1}}} \\
+\textbf{{name}} & {{date}} \\
 \end{tabular*}
 \vspace{-3.8ex}
 \begin{itemize}[leftmargin=1.5em, itemsep=0pt, topsep=0.1ex, label=\textbullet]
-  \item {{{proj_point1_1}}}
-  \item {{{proj_point1_2}}}
+  {{#each points}}
+  \item {{this}}
+  {{/each}}
 \end{itemize}
 
-\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
-\textbf{{{proj_name2}}} & {{{proj_date2}}} \\
-\end{tabular*}
-\vspace{-3.8ex}
-\begin{itemize}[leftmargin=1.5em, itemsep=0pt, topsep=0.1ex, label=\textbullet]
-  \item {{{proj_point2_1}}}
-  \item {{{proj_point2_2}}}
-\end{itemize}
+\vspace{0.6em}
+{{/each}}
 }
-
-\vspace{-1em}
 
 % ================= Skills ==================
 {\fontsize{11pt}{13pt}\selectfont\section*{Skills}\vspace{-1.8em}}
 \noindent\rule{\linewidth}{0.4pt}
 
 {\fontsize{10pt}{11.5pt}\selectfont
-\textbf{Advanced:} {{{skill_advanced}}} \\
-\textbf{Proficient:} {{{skill_proficient}}} \\
-\textbf{Familiar:} {{{skill_familiar}}}
+\textbf{Advanced:} {{skill_advanced}} \\
+\textbf{Proficient:} {{skill_proficient}} \\
+\textbf{Familiar:} {{skill_familiar}}
 }
 
 \vspace{-0.3em}
 
 % ================= Languages ==================
-{\fontsize{10.5pt}{12pt}\selectfont\textbf{Languages:}}{\fontsize{10pt}{11.5pt}\selectfont\ {{{languages}}}}
+{\fontsize{10.5pt}{12pt}\selectfont\textbf{Languages:}}{\fontsize{10pt}{11.5pt}\selectfont\ {{languages}}}
 
 \end{document}
