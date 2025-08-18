@@ -11,6 +11,7 @@ import resumeRoutes from "./routes/resume.js";
 import uploadRoutes from "./routes/upload.js";
 import templateResumeRoutes from "./routes/templateResume.js";
 import templateFilesRouter from "./routes/templateFiles.js";
+import portfolioRoutes from "./routes/portfolio.js";
 import "./config/passportConfig.js";
 
 dotenv.config();
@@ -56,6 +57,7 @@ app.use("/api/resumes", resumeRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/template-resumes", templateResumeRoutes);
 app.use("/api/template-files", templateFilesRouter);
+app.use("/api/portfolio", portfolioRoutes);
 
 // Check
 app.get("/", (req, res) => {
