@@ -1,0 +1,49 @@
+{
+  "name": "Modern Resume",
+  "id": "modern_resume",
+  "fields": [
+    { "name": "full_name", "label": "Full Name", "type": "text", "required": true },
+    { "name": "location", "label": "Location", "type": "text", "required": false },
+    { "name": "phone", "label": "Phone", "type": "text", "required": false },
+    { "name": "email", "label": "Email", "type": "text", "required": true },
+    { "name": "website", "label": "Website URL", "type": "text", "required": false },
+    { "name": "website_display", "label": "Website Display Text", "type": "text", "required": false },
+    { "name": "summary", "label": "Summary", "type": "textarea", "required": false },
+
+    { "name": "edu_institute", "label": "Education - Institute", "type": "text", "required": false },
+    { "name": "edu_location", "label": "Education - Location", "type": "text", "required": false },
+    { "name": "edu_degree", "label": "Education - Degree", "type": "text", "required": false },
+    { "name": "edu_year", "label": "Education - Year", "type": "text", "required": false },
+    { "name": "edu_coursework", "label": "Education - Coursework", "type": "textarea", "required": false },
+
+    {
+      "name": "work_experience",
+      "label": "Work Experience",
+      "type": "repeatable",
+      "fields": [
+        { "name": "exp_company", "label": "Company", "type": "text", "required": true },
+        { "name": "exp_location", "label": "Location", "type": "text", "required": false },
+        { "name": "exp_role", "label": "Role", "type": "text", "required": false },
+        { "name": "exp_duration", "label": "Duration", "type": "text", "required": false },
+        { "name": "exp_points", "label": "Bullet Points", "type": "list", "required": false }
+      ]
+    },
+
+    {
+      "name": "projects",
+      "label": "Projects",
+      "type": "repeatable",
+      "fields": [
+        { "name": "proj_name", "label": "Project Name", "type": "text", "required": true },
+        { "name": "proj_date", "label": "Project Date", "type": "text", "required": false },
+        { "name": "proj_points", "label": "Bullet Points", "type": "list", "required": false }
+      ]
+    },
+
+    { "name": "skill_advanced", "label": "Advanced Skills", "type": "text", "required": false },
+    { "name": "skill_proficient", "label": "Proficient Skills", "type": "text", "required": false },
+    { "name": "skill_familiar", "label": "Familiar Skills", "type": "text", "required": false },
+
+    { "name": "languages", "label": "Languages", "type": "text", "required": false }
+  ]
+}

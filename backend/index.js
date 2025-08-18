@@ -9,6 +9,8 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/user.js";
 import resumeRoutes from "./routes/resume.js";
 import uploadRoutes from "./routes/upload.js";
+import templateResumeRoutes from "./routes/templateResume.js";
+import templateFilesRouter from "./routes/templateFiles.js";
 import "./config/passportConfig.js";
 
 dotenv.config();
@@ -52,6 +54,8 @@ app.use(passport.session());
 app.use("/", userRoutes);
 app.use("/api/resumes", resumeRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/template-resumes", templateResumeRoutes);
+app.use("/api/template-files", templateFilesRouter);
 
 // Check
 app.get("/", (req, res) => {

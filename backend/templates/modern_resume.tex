@@ -1,0 +1,123 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper,top=0.8in,bottom=0.8in,left=0.7in,right=0.7in]{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{multicol}
+\usepackage{parskip}
+\usepackage{graphicx}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+
+\titleformat{\section}{\bfseries\uppercase}{\thesection}{1em}{}
+\titleformat{\subsection}[runin]{\bfseries}{\thesubsection}{1em}{}[.]
+\renewcommand{\labelitemi}{--}
+
+\begin{document}
+
+% ================= Header ==================
+\begin{center}
+    {\fontsize{16pt}{18pt}\selectfont \textbf{{{full_name}}}} \\
+    {\fontsize{9pt}{11pt}\selectfont
+    {{{location}}} \,\textbullet\, {{{phone}}} \,\textbullet\, \href{mailto:{{{email}}}}{{{email}}} \,\textbullet\, \href{{{website}}}{{{website_display}}}
+    }
+\end{center}
+
+\vspace{-0.8em}
+
+% ================= Summary ==================
+{\fontsize{11pt}{13pt}\selectfont\section*{Summary}\vspace{-1.8em}}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{-0.1em}
+{\fontsize{10.5pt}{12pt}\selectfont
+{{{summary}}}
+}
+
+\vspace{0.2em}
+
+% ================= Education ==================
+{\fontsize{11pt}{13pt}\selectfont\section*{Education}\vspace{-1.8em}}
+\noindent\rule{\linewidth}{0.4pt}
+{\fontsize{10.5pt}{12pt}\selectfont
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
+\textbf{{{edu_institute}}} & {{{edu_location}}} \\
+\textit{{{edu_degree}}} & {{{edu_year}}} \\
+\end{tabular*}
+\vspace{0.4pt}
+\textbf{Relevant Coursework:} {{{edu_coursework}}}
+}
+
+\vspace{0.1em}
+
+% ================= Work Experience ==================
+{\fontsize{11pt}{13pt}\selectfont\section*{Work Experience}\vspace{-1.8em}}
+\noindent\rule{\linewidth}{0.4pt}
+
+{\fontsize{10.5pt}{12pt}\selectfont
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
+\textbf{{{exp_company1}}} & {{{exp_location1}}} \\
+\textit{{{exp_role1}}} & {{{exp_duration1}}} \\
+\end{tabular*}
+\vspace{-2ex}
+\begin{itemize}[leftmargin=1.5em, itemsep=0pt, topsep=0.1ex, label=\textbullet]
+    \item {{{exp_point1_1}}}
+    \item {{{exp_point1_2}}}
+    \item {{{exp_point1_3}}}
+\end{itemize}
+
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
+\textbf{{{exp_company2}}} & {{{exp_location2}}} \\
+\textit{{{exp_role2}}} & {{{exp_duration2}}} \\
+\end{tabular*}
+\vspace{-2ex}
+\begin{itemize}[leftmargin=1.5em, itemsep=0pt, topsep=0.1ex, label=\textbullet]
+    \item {{{exp_point2_1}}}
+    \item {{{exp_point2_2}}}
+    \item {{{exp_point2_3}}}
+\end{itemize}
+}
+
+\vspace{-0.8em}
+
+% ================= Projects ==================
+{\fontsize{11pt}{13pt}\selectfont\section*{Projects}\vspace{-1.8em}}
+\noindent\rule{\linewidth}{0.4pt}
+
+{\fontsize{10.5pt}{12pt}\selectfont
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
+\textbf{{{proj_name1}}} & {{{proj_date1}}} \\
+\end{tabular*}
+\vspace{-3.8ex}
+\begin{itemize}[leftmargin=1.5em, itemsep=0pt, topsep=0.1ex, label=\textbullet]
+  \item {{{proj_point1_1}}}
+  \item {{{proj_point1_2}}}
+\end{itemize}
+
+\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}} l r}
+\textbf{{{proj_name2}}} & {{{proj_date2}}} \\
+\end{tabular*}
+\vspace{-3.8ex}
+\begin{itemize}[leftmargin=1.5em, itemsep=0pt, topsep=0.1ex, label=\textbullet]
+  \item {{{proj_point2_1}}}
+  \item {{{proj_point2_2}}}
+\end{itemize}
+}
+
+\vspace{-1em}
+
+% ================= Skills ==================
+{\fontsize{11pt}{13pt}\selectfont\section*{Skills}\vspace{-1.8em}}
+\noindent\rule{\linewidth}{0.4pt}
+
+{\fontsize{10pt}{11.5pt}\selectfont
+\textbf{Advanced:} {{{skill_advanced}}} \\
+\textbf{Proficient:} {{{skill_proficient}}} \\
+\textbf{Familiar:} {{{skill_familiar}}}
+}
+
+\vspace{-0.3em}
+
+% ================= Languages ==================
+{\fontsize{10.5pt}{12pt}\selectfont\textbf{Languages:}}{\fontsize{10pt}{11.5pt}\selectfont\ {{{languages}}}}
+
+\end{document}
