@@ -11,6 +11,8 @@ import AdminHome from "./Components/Admin/AdminHome";
 import ResumeBuilder from "./Screens/dashboard/ResumeBuilder";
 import TemplatesList from "./Screens/dashboard/TemplatesList";
 import TemplateFill from "./Screens/dashboard/TemplateFill";
+import TechStackSelection from "./Screens/dashboard/TechStackSelection";
+import PortfolioBuilder from "./Screens/dashboard/PortfolioBuilder";
 
 const AppRoutes = () => {
 
@@ -31,6 +33,8 @@ const AppRoutes = () => {
         <Route path="resume-builder" element={<ResumeBuilder />} />
         <Route path="/dashboard/templates/resumes" element={<TemplatesList />} />
         <Route path="/dashboard/templates/resumes/:templateId/fill" element={<TemplateFill />} />
+        <Route path="portfolio-builder" element={<TechStackSelection />} />
+        <Route path="portfolio/builder" element={<PortfolioBuilder />} />
       </Route>
       <Route
         path="/admin"
