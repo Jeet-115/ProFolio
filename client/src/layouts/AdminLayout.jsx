@@ -1,11 +1,10 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { motion } from "framer-motion";
-import Sidebar from "../components/Admin/Sidebar";
-import Topbar from "../components/Admin/Topbar";
+import Sidebar from "../Components/Admin/Sidebar";
+import Topbar from "../Components/Admin/Topbar";
 
 function AdminLayout() {
-
   return (
     <motion.div
       className="min-h-screen w-full bg-gradient-to-br from-[#E0F7FA] to-[#B2EBF2] flex transition-all duration-500"

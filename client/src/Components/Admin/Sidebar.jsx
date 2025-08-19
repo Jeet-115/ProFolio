@@ -9,7 +9,6 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
-import Logo from "../Logo";
 
 const sidebarVariants = {
   hidden: { x: -300, opacity: 0 },
@@ -106,13 +105,11 @@ function Sidebar() {
                 variants={itemVariants}
                 className="flex items-center gap-3 mb-8"
               >
-                <img
-                  src="./logo.png"
-                  alt="SheetSense Logo"
-                  className="w-10 h-10"
-                />
-                <h2 className="text-2xl font-bold outfit tracking-wide text-white">
-                  Admin Panel
+                <div className="bg-white/20 p-2 rounded-full shadow-lg">
+                  <img src="/logo.png" alt="logo" className="w-8 h-8" />
+                </div>
+                <h2 className="text-xl font-bold tracking-wide outfit text-white">
+                  PROFOLIO
                 </h2>
               </motion.div>
 
@@ -142,9 +139,11 @@ function Sidebar() {
           variants={itemVariants}
           className="flex items-center gap-3 mb-8"
         >
-          <Logo />
-          <h2 className="text-2xl font-bold outfit tracking-wide text-white">
-            Admin Panel
+          <div className="bg-white/20 p-2 rounded-full shadow-lg">
+            <img src="/logo.png" alt="logo" className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-bold outfit tracking-wide text-white">
+            PROFOLIO
           </h2>
         </motion.div>
 

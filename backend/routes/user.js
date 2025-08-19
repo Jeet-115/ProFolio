@@ -40,6 +40,25 @@ router.post("/login", (req, res, next) => {
 
 router.post("/logout", userController.logoutPage);
 
+// Admin-only guard
+const isAdmin = (req, res, next) => {
+  if (req.isAuthenticated() && req.user?.role === "admin") return next();
+  return res.status(403).json({ error: "Forbidden" });
+};
+
+// Manage Users (admin)
+router.get("/admin/users", isAdmin, wrapAsync(userController.listUsers));
+router.put(
+  "/admin/users/:id/role",
+  isAdmin,
+  wrapAsync(userController.updateUserRole)
+);
+router.delete(
+  "/admin/users/:id",
+  isAdmin,
+  wrapAsync(userController.deleteUser)
+);
+
 // Google OAuth
 router.get(
   "/auth/google",

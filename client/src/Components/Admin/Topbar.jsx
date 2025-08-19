@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "../../services/axiosInstance";
 
 const itemVariants = {
   hidden: { y: 20, opacity: 0 },
@@ -12,11 +12,7 @@ function Topbar() {
 
   const handleLogout = async () => {
     try {
-      await axios.post(
-        "http://localhost:3000/logout",
-        {},
-        { withCredentials: true }
-      );
+      await axios.post("/logout", {});
       // Optionally clear user state here if you add it later
       navigate("/login");
     } catch (err) {
