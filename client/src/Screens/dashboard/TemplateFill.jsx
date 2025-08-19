@@ -1,7 +1,10 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { createTemplateResume } from "../../services/templateResumeService";
-import { getTemplateFileById } from "../../services/templateFiles";
+import {
+  getTemplateFileById,
+  renderTemplate,
+} from "../../services/templateFiles";
 
 export default function TemplateFill() {
   const { templateId } = useParams();
@@ -54,7 +57,13 @@ export default function TemplateFill() {
     setFormData({ ...formData, [field]: group });
   };
 
-  const updateRepeatableListItem = (field, index, subField, listIndex, value) => {
+  const updateRepeatableListItem = (
+    field,
+    index,
+    subField,
+    listIndex,
+    value
+  ) => {
     const group = [...(formData[field] || [])];
     const list = [...(group[index][subField] || [])];
     list[listIndex] = value;
@@ -78,6 +87,31 @@ export default function TemplateFill() {
       fields: formData,
     });
     alert("Saved successfully!");
+  };
+
+  const downloadFile = async (format) => {
+    try {
+      const { data } = await renderTemplate(templateId, formData, format);
+      const blob = new Blob([data], {
+        type:
+          format === "pdf"
+            ? "application/pdf"
+            : format === "tex"
+            ? "application/x-tex"
+            : "text/plain;charset=utf-8",
+      });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${schema.id}.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error("Download failed", e);
+      alert("Failed to download. Try again.");
+    }
   };
 
   if (!schema) return <p>Loading template...</p>;
@@ -105,7 +139,9 @@ export default function TemplateFill() {
                   <input
                     key={idx}
                     value={item}
-                    onChange={(e) => updateListItem(f.name, idx, e.target.value)}
+                    onChange={(e) =>
+                      updateListItem(f.name, idx, e.target.value)
+                    }
                     className="block w-full mb-2 p-2 rounded text-black"
                   />
                 ))}
@@ -187,12 +223,35 @@ export default function TemplateFill() {
           </div>
         ))}
 
-        <button
-          onClick={handleSubmit}
-          className="mt-4 bg-blue-600 px-4 py-2 rounded text-white"
-        >
-          Save Resume
-        </button>
+        <div className="mt-4 flex gap-3 flex-wrap">
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-600 px-4 py-2 rounded text-white"
+          >
+            Save Resume
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadFile("pdf")}
+            className="bg-emerald-600 px-4 py-2 rounded text-white"
+          >
+            Download PDF
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadFile("tex")}
+            className="bg-indigo-600 px-4 py-2 rounded text-white"
+          >
+            Download .tex
+          </button>
+          <button
+            type="button"
+            onClick={() => downloadFile("txt")}
+            className="bg-gray-700 px-4 py-2 rounded text-white"
+          >
+            Download .txt
+          </button>
+        </div>
       </div>
 
       {/* Live Preview */}
