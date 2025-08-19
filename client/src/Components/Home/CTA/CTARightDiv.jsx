@@ -31,7 +31,7 @@ const CTARightDiv = () => {
       variants={slideInRight}
     >
       {/* Flip Card Container */}
-      <div className="relative h-[450px] w-[450px] perspective-1000">
+      <div className="relative h-[300px] w-[300px] sm:h-[350px] sm:w-[350px] md:h-[400px] md:w-[400px] lg:h-[450px] lg:w-[450px] perspective-1000">
         <motion.div
           className="relative w-full h-full"
           animate={{ rotateY: flipped ? 180 : 0 }}

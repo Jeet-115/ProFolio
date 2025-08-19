@@ -1,14 +1,24 @@
 import { useRef, useState, useEffect } from "react";
 import { Editor } from "@tinymce/tinymce-react";
-import { uploadResumeImage, saveResume } from "../../services/resumeApi";
+import {
+  uploadResumeImage,
+  saveResume,
+  getResume,
+  updateResume,
+} from "../../services/resumeApi";
 import { toast } from "react-hot-toast";
+import { useParams, useNavigate } from "react-router-dom";
 
 function ResumeBuilder() {
   const tinymceApiKey = import.meta.env.VITE_TINYMCE_API_KEY;
 
   const editorRef = useRef(null);
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [resumeName, setResumeName] = useState("");
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [fetchedContent, setFetchedContent] = useState("");
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -16,17 +26,45 @@ function ResumeBuilder() {
     mediaQuery.onchange = (e) => setIsDarkMode(e.matches);
   }, []);
 
+  // Fetch resume if editing
+  useEffect(() => {
+    if (!id) return; // creating new resume
+    setLoading(true);
+    getResume(id)
+      .then((res) => {
+        setResumeName(res.data.name);
+        setFetchedContent(res.data.content); // store content in state
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Failed to load resume for editing");
+      })
+      .finally(() => setLoading(false));
+  }, [id]);
+
+  // Handle Save / Update
   const handleSave = async () => {
     const content = editorRef.current?.getContent();
     if (!resumeName.trim()) return toast.error("Enter a resume name");
+
     try {
-      await saveResume({ name: resumeName, content });
-      toast.success("Resume saved successfully!");
+      if (id) {
+        // Update existing resume
+        await updateResume(id, { name: resumeName, content });
+        toast.success("Resume updated successfully!");
+      } else {
+        // Create new resume
+        await saveResume({ name: resumeName, content });
+        toast.success("Resume saved successfully!");
+      }
+      navigate("/dashboard/resume-history"); // redirect after save
     } catch (error) {
       console.error(error);
       toast.error("Failed to save resume");
     }
   };
+
+  if (loading) return <p className="p-6">Loading resume...</p>;
 
   return (
     <div className="p-6 max-w-7xl mx-auto">
@@ -46,15 +84,21 @@ function ResumeBuilder() {
               !resumeName.trim() ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            Save
+            {id ? "Update Resume" : "Save Resume"}
           </button>
         </div>
       </div>
 
       <Editor
         apiKey={tinymceApiKey}
-        onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue={`<h2 style="text-align: center;">Start building your resume</h2>`}
+        onInit={(evt, editor) => {
+          editorRef.current = editor;
+          if (fetchedContent) editor.setContent(fetchedContent); // set content after editor ready
+        }}
+        initialValue={
+          fetchedContent ||
+          `<h2 style="text-align: center;">Start building your resume</h2>`
+        }
         init={{
           height: 600,
           menubar: "file edit view insert format tools table help",
@@ -92,16 +136,14 @@ function ResumeBuilder() {
               input.onchange = async () => {
                 const file = input.files[0];
                 if (!file) return;
-
                 try {
-                  const imageUrl = await uploadResumeImage(file); // upload to Cloudinary
-                  callback(imageUrl, { title: file.name }); // insert into editor
+                  const imageUrl = await uploadResumeImage(file);
+                  callback(imageUrl, { title: file.name });
                 } catch (err) {
                   console.error("Image upload failed:", err);
                   toast.error("Failed to upload image");
                 }
               };
-
               input.click();
             }
           },

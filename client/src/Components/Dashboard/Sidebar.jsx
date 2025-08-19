@@ -78,11 +78,11 @@ function Sidebar() {
     },
 
     // My Documents Section
-    { icon: <FaHistory />, label: "My Resumes", path: "/dashboard/my-resumes" },
+    { icon: <FaHistory />, label: "My Resumes", path: "/dashboard/resume-history" },
     {
       icon: <FaHistory />,
       label: "My Portfolios",
-      path: "/dashboard/my-portfolios",
+      path: "/dashboard/portfolio-history",
     },
 
     // Analytics

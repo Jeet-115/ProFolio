@@ -9,7 +9,7 @@ const fadeInUp = {
 const InfoHeading = () => {
   return (
     <motion.h2
-      className="text-3xl md:text-4xl font-bold text-[#ffffff]"
+      className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#ffffff] px-4"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: false, amount: 0.1 }}

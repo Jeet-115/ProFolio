@@ -37,8 +37,10 @@ const Card = () => {
 
 const StyledWrapper = styled.div`
 	.card {
-		width: 280px;
+		width: 100%;
+		max-width: 280px;
 		height: 280px;
+		min-height: 250px;
 		background: rgba(255,255,255,0.08);
 		border-radius: 32px;
 		padding: 3px;
@@ -46,6 +48,14 @@ const StyledWrapper = styled.div`
 		border: 1px solid rgba(255,255,255,0.12);
 		box-shadow: rgba(11,21,29,0.35) 0px 20px 40px;
 		transition: all 0.5s ease-in-out;
+		margin: 0 auto;
+	}
+
+	@media (max-width: 640px) {
+		.card {
+			height: 250px;
+			border-radius: 24px;
+		}
 	}
 
 	.card .mail {
@@ -131,6 +141,67 @@ const StyledWrapper = styled.div`
 		font-size: 0.9rem;
 		color: rgba(255,255,255,0.85);
 		margin-top: 1rem;
+	}
+
+	@media (max-width: 1024px) {
+		.card:hover {
+			border-top-left-radius: 32px !important;
+		}
+
+		.card:hover .bottom {
+			top: 80% !important;
+			border-radius: 29px !important;
+			transition: none !important;
+		}
+
+		.card:hover .profile-pic {
+			width: calc(100% - 6px) !important;
+			height: calc(100% - 6px) !important;
+			top: 3px !important;
+			left: 3px !important;
+			border-radius: 29px !important;
+			z-index: 1 !important;
+			border: 0px solid transparent !important;
+			box-shadow: none !important;
+			transition: none !important;
+		}
+
+		.card:hover .profile-pic:hover {
+			transform: none !important;
+			border-radius: 29px !important;
+		}
+
+		.card:hover .profile-pic img {
+			transform: none !important;
+			object-position: center center !important;
+			transition: none !important;
+		}
+	}
+
+	@media (max-width: 640px) {
+		.card .bottom .content .name {
+			font-size: 1rem;
+		}
+
+		.card .bottom .content .about-me {
+			font-size: 0.8rem;
+			margin-top: 0.5rem;
+		}
+
+		.card .mail {
+			right: 1rem;
+			top: 1rem;
+		}
+
+		.card .mail svg {
+			width: 20px;
+			height: 20px;
+		}
+
+		.card .bottom .bottom-bottom .button {
+			font-size: 0.5rem;
+			padding: 0.3rem 0.5rem;
+		}
 	}
 
 	.card .bottom .bottom-bottom {
