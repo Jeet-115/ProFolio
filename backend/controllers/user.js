@@ -84,3 +84,24 @@ export const deleteUser = async (req, res) => {
   if (!deleted) return res.status(404).json({ error: "User not found" });
   res.json({ message: "User deleted" });
 };
+
+// DEV-ONLY: Promote the currently authenticated user to admin
+export const devPromoteMeToAdmin = async (req, res) => {
+  if (!req.isAuthenticated())
+    return res.status(401).json({ error: "Unauthorized" });
+  if (process.env.NODE_ENV === "production") {
+    return res.status(403).json({ error: "Not allowed in production" });
+  }
+  const updated = await User.findByIdAndUpdate(
+    req.user._id,
+    { role: "admin" },
+    { new: true }
+  );
+  if (!updated) return res.status(404).json({ error: "User not found" });
+  // also update session user
+  req.user.role = "admin";
+  res.json({
+    message: "Promoted to admin (dev)",
+    user: { id: updated._id, username: updated.username, role: updated.role },
+  });
+};

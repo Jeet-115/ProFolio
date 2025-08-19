@@ -59,6 +59,12 @@ router.delete(
   wrapAsync(userController.deleteUser)
 );
 
+// Dev-only helper to promote current user to admin
+router.post(
+  "/admin/dev/promote",
+  wrapAsync(userController.devPromoteMeToAdmin)
+);
+
 // Google OAuth
 router.get(
   "/auth/google",
