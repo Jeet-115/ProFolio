@@ -1,28 +1,44 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { createTemplateResume } from "../../services/templateResumeService";
+import {
+  createTemplateResume,
+  getTemplateResumeById,
+  updateTemplateResume,
+} from "../../services/templateResumeService";
 import {
   getTemplateFileById,
   renderTemplate,
 } from "../../services/templateFiles";
 
 export default function TemplateFill() {
-  const { templateId } = useParams();
+  const { templateId, resumeId } = useParams();
+  const navigate = useNavigate();
   const [schema, setSchema] = useState(null);
   const [formData, setFormData] = useState({});
+  const [resumeName, setResumeName] = useState("");
+  const [isEdit, setIsEdit] = useState(false);
 
   // Fetch schema on mount
   useEffect(() => {
-    const fetchSchema = async () => {
+    const fetchData = async () => {
       try {
-        const { data } = await getTemplateFileById(templateId);
-        setSchema(data); // schema comes from backend JSON
+        // 1. Fetch schema
+        const { data: schemaData } = await getTemplateFileById(templateId);
+        setSchema(schemaData);
+
+        // 2. If editing, fetch existing resume
+        if (resumeId) {
+          setIsEdit(true);
+          const { data: resume } = await getTemplateResumeById(resumeId);
+          setFormData(resume.fields || {});
+          setResumeName(resume.name || `My ${schemaData.name} resume`);
+        }
       } catch (err) {
-        console.error("Error fetching schema", err);
+        console.error("Error loading data", err);
       }
     };
-    fetchSchema();
-  }, [templateId]);
+    fetchData();
+  }, [templateId, resumeId]);
 
   // Handle single field update
   const handleChange = (field, value) => {
@@ -80,13 +96,28 @@ export default function TemplateFill() {
   };
 
   const handleSubmit = async () => {
-    await createTemplateResume({
-      templateName: schema.name,
-      templateId: schema.id,
-      name: `My ${schema.name} resume`,
-      fields: formData,
-    });
-    alert("Saved successfully!");
+    try {
+      if (isEdit) {
+        await updateTemplateResume(resumeId, {
+          templateId: schema.id, // ✅ include
+          templateName: schema.name,
+          name: resumeName,
+          fields: formData,
+        });
+        alert("Resume updated successfully!");
+      } else {
+        await createTemplateResume({
+          templateId: schema.id, // ✅ include
+          templateName: schema.name,
+          name: resumeName || `My ${schema.name} resume`,
+          fields: formData,
+        });
+        alert("Resume created successfully!");
+      }
+      navigate("/dashboard/templates/resumes");
+    } catch (err) {
+      console.error("Error saving resume", err);
+    }
   };
 
   const downloadFile = async (format) => {
