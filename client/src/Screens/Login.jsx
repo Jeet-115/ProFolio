@@ -2,6 +2,7 @@ import React from "react";
 import Logo from "../components/Logo";
 import LoginLeftDiv from "../Components/Login/LoginLeftDiv";
 import LoginRightDiv from "../Components/Login/LoginRightDiv";
+import UnifiedAuth from "../Components/Auth/UnifiedAuth";
 
 const Login = () => {
   return (
@@ -9,8 +10,13 @@ const Login = () => {
       {/* Logo */}
       <Logo />
 
-      {/* Main container with left and right divs */}
-      <main className="flex flex-col md:flex-row items-center justify-center w-full mt-14">
+      {/* Mobile/Tablet: Unified Auth Component */}
+      <main className="lg:hidden flex items-center justify-center w-full mt-14">
+        <UnifiedAuth />
+      </main>
+
+      {/* Desktop: Original Layout */}
+      <main className="hidden lg:flex flex-row items-center justify-center w-full mt-14">
         {/* Left Div */}
         <LoginLeftDiv />
 

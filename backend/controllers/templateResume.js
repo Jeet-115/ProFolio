@@ -2,9 +2,10 @@ import TemplateResume from "../models/templateResume.js";
 
 // Create and save a new template resume
 export const createTemplateResume = async (req, res) => {
-  const { templateName, name, fields } = req.body;
+  const { templateId, templateName, name, fields } = req.body; // ✅ added templateId
   const newResume = new TemplateResume({
     user: req.user._id,
+    templateId,    // ✅ save it
     templateName,
     name,
     fields,
@@ -28,10 +29,10 @@ export const getTemplateResumeById = async (req, res) => {
 
 // Update a template resume (edit fields)
 export const updateTemplateResume = async (req, res) => {
-  const { templateName, name, fields } = req.body;
+  const { templateId, templateName, name, fields } = req.body; // ✅ include templateId
   const resume = await TemplateResume.findOneAndUpdate(
     { _id: req.params.id, user: req.user._id },
-    { templateName, name, fields, updatedAt: Date.now() },
+    { templateId, templateName, name, fields, updatedAt: Date.now() },
     { new: true }
   );
   if (!resume) return res.status(404).json({ error: "Template resume not found" });

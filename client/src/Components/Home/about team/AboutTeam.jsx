@@ -13,19 +13,19 @@ const popUp = {
 const AboutTeam = () => {
 	return (
 		<motion.section
-			className="p-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg mt-[20px]"
+			className="p-4 sm:p-6 md:p-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg mt-[20px]"
 			initial="hidden"
 			whileInView="visible"
 			viewport={{ once: false, amount: 0.2 }}
 			variants={popUp}
 		>
-			<div className="text-center mb-6">
-				<h2 className="text-3xl font-semibold text-white">About the Team</h2>
-				<p className="mt-2 text-white max-w-2xl mx-auto">
-				We’re just four friends building something to make showcasing your talent effortless.
+			<div className="text-center mb-6 px-4">
+				<h2 className="text-2xl sm:text-3xl font-semibold text-white">About the Team</h2>
+				<p className="mt-2 text-white max-w-2xl mx-auto text-sm sm:text-base">
+				We're just four friends building something to make showcasing your talent effortless.
 				</p>
 			</div>
-			<div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+			<div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 px-2 sm:px-0">
 				<Jeet />
 				<Maanav />
 				<Dev />

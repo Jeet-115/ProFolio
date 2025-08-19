@@ -16,7 +16,7 @@ const Info = () => {
   }, []);
 
   return (
-    <div className="text-center mt-8 px-4 pb-10">
+    <div className="text-center mt-8 px-2 sm:px-4 pb-10">
       <InfoHeading />
       <InfoMenu selection={selection} handleChange={handleChange} />
       <InfoImage key={key} selection={selection} imageMap={imageMap} />
