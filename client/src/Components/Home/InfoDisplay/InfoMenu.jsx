@@ -10,7 +10,7 @@ const InfoMenu = ({ selection, handleChange }) => {
   const buttonStyles =
     'px-6 py-3 border-2 rounded-full font-semibold text-[#346779] border-[#346779] bg-white mx-1 transition-colors duration-200 focus:outline-none ' +
     'hover:bg-[#346779] hover:text-white';
-  const selectedStyles = 'bg-[#346779] text-white';
+  const selectedStyles = 'bg-[#346779] text-black';
 
   const options = [
     { value: 'resumetemplate', label: 'Resume Templates' },
@@ -34,7 +34,7 @@ const InfoMenu = ({ selection, handleChange }) => {
             key={opt.value}
             type="button"
             className={
-              buttonStyles + (selection === opt.value ? ' ' + selectedStyles : '')
+              buttonStyles + ((selection === opt.value && opt.value !== 'resumetemplate') ? ' ' + selectedStyles : '')
             }
             onClick={() => handleChange(null, opt.value)}
             aria-pressed={selection === opt.value}
