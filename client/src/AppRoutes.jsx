@@ -26,9 +26,9 @@ const AppRoutes = () => {
       <Route
         path="/dashboard"
         element={
-          // <ProtectedRoute>
-          <DashboardLayout />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
         }
       >
         <Route index element={<DashboardHome />} />
@@ -41,7 +41,10 @@ const AppRoutes = () => {
           path="/dashboard/templates/resumes/:templateId/fill"
           element={<TemplateFill />}
         />
-        <Route path="/dashboard/templates/resumes/:templateId/edit/:resumeId" element={<TemplateFill />} />
+        <Route
+          path="/dashboard/templates/resumes/:templateId/edit/:resumeId"
+          element={<TemplateFill />}
+        />
         <Route path="portfolio-builder" element={<TechStackSelection />} />
         <Route path="portfolio/builder" element={<PortfolioBuilder />} />
         <Route path="resume-history" element={<ResumeHistory />} />
@@ -50,11 +53,11 @@ const AppRoutes = () => {
       <Route
         path="/admin"
         element={
-          // <ProtectedRoute>
-          // <AdminRoute>
-          <AdminDashboard />
-          // </AdminRoute>
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          </ProtectedRoute>
         }
       >
         <Route index element={<AdminHome />} />
