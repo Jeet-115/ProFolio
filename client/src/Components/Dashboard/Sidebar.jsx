@@ -62,7 +62,7 @@ function Sidebar() {
     {
       icon: <FaDownload />,
       label: "Portfolio Builder",
-      path: "/dashboard/portfolio-builder",
+      path: "/dashboard/portfolio-techstack",
     },
 
     // Templates Section
@@ -74,7 +74,7 @@ function Sidebar() {
     {
       icon: <FaDownload />,
       label: "Portfolio Templates",
-      path: "/dashboard/templates/portfolios",
+      path: "/dashboard/portfolio-templates",
     },
 
     // My Documents Section

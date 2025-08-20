@@ -5,7 +5,7 @@ export default function TechStackSelection() {
 
   const handleSelect = (techStack) => {
     // Redirect to builder page with techStack param
-    navigate(`/dashboard/portfolio/builder?techStack=${techStack}`);
+    navigate(`/dashboard/portfolio-builder?techStack=${techStack}`);
   };
 
   return (
