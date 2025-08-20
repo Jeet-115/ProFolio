@@ -16,6 +16,8 @@ import TechStackSelection from "./Screens/dashboard/TechStackSelection";
 import PortfolioBuilder from "./Screens/dashboard/PortfolioBuilder";
 import ResumeHistory from "./Screens/dashboard/ResumeHistory";
 import PortfolioHistory from "./Screens/dashboard/PortfolioHistory";
+import PortfolioTemplatesList from "./Screens/dashboard/PortfolioTemplatesList";
+import PortfolioFill from "./Screens/dashboard/PortfolioFill";
 
 const AppRoutes = () => {
   return (
@@ -32,23 +34,17 @@ const AppRoutes = () => {
         }
       >
         <Route index element={<DashboardHome />} />
-        <Route path="resume-builder" element={<ResumeBuilder />} />
-        <Route
-          path="/dashboard/templates/resumes"
-          element={<TemplatesList />}
-        />
-        <Route
-          path="/dashboard/templates/resumes/:templateId/fill"
-          element={<TemplateFill />}
-        />
-        <Route
-          path="/dashboard/templates/resumes/:templateId/edit/:resumeId"
-          element={<TemplateFill />}
-        />
-        <Route path="portfolio-builder" element={<TechStackSelection />} />
-        <Route path="portfolio/builder" element={<PortfolioBuilder />} />
+        <Route path="resume-builder/:id?" element={<ResumeBuilder />} />
+        <Route path="/dashboard/templates/resumes" element={<TemplatesList />} />
+        <Route path="/dashboard/templates/resumes/:templateId/fill" element={<TemplateFill />} />
+        <Route path="/dashboard/templates/resumes/:templateId/edit/:resumeId" element={<TemplateFill />} />
+        <Route path="portfolio-techstack" element={<TechStackSelection />} />
+        <Route path="portfolio-builder/:id?" element={<PortfolioBuilder />} />
         <Route path="resume-history" element={<ResumeHistory />} />
         <Route path="portfolio-history" element={<PortfolioHistory />} />
+        <Route path="portfolio-templates" element={<PortfolioTemplatesList />} />
+        <Route path="portfolio-templates/:templateId/fill" element={<PortfolioFill />} />
+        <Route path="portfolio-templates/:templateId/edit/:portfolioId" element={<PortfolioFill />} />
       </Route>
       <Route
         path="/admin"
