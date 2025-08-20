@@ -152,6 +152,16 @@ export default function TemplateFill() {
       {/* Form Section */}
       <div className="flex-1">
         <h2 className="text-xl font-bold mb-4">Fill {schema.name} Template</h2>
+        <div className="mb-6">
+          <label className="block mb-2 font-semibold">Resume Name</label>
+          <input
+            type="text"
+            value={resumeName}
+            onChange={(e) => setResumeName(e.target.value)}
+            placeholder={`My ${schema.name} Resume`}
+            className="block w-full p-2 rounded text-black"
+          />
+        </div>
         {schema.fields.map((f) => (
           <div key={f.name} className="mb-6">
             <label className="block mb-2 font-semibold">{f.label}</label>

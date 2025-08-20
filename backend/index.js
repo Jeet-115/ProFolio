@@ -53,6 +53,8 @@ app.use(passport.session());
 
 // Routes
 app.use("/", userRoutes);
+// Also expose user routes under /api so client axios base (/api) works for logout and admin endpoints
+app.use("/api", userRoutes);
 app.use("/api/resumes", resumeRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/template-resumes", templateResumeRoutes);

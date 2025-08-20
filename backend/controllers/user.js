@@ -55,3 +55,53 @@ export const logoutPage = (req, res) => {
     });
   });
 };
+
+// -------------------- Admin: Manage Users --------------------
+
+export const listUsers = async (req, res) => {
+  const users = await User.find({}, { hash: 0, salt: 0 }).sort({ _id: -1 });
+  res.json(users);
+};
+
+export const updateUserRole = async (req, res) => {
+  const { id } = req.params;
+  const { role } = req.body;
+  if (!role || !["user", "admin"].includes(role)) {
+    return res.status(400).json({ error: "Invalid role" });
+  }
+  const updated = await User.findByIdAndUpdate(
+    id,
+    { role },
+    { new: true, projection: { hash: 0, salt: 0 } }
+  );
+  if (!updated) return res.status(404).json({ error: "User not found" });
+  res.json({ message: "Role updated", user: updated });
+};
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  const deleted = await User.findByIdAndDelete(id);
+  if (!deleted) return res.status(404).json({ error: "User not found" });
+  res.json({ message: "User deleted" });
+};
+
+// DEV-ONLY: Promote the currently authenticated user to admin
+export const devPromoteMeToAdmin = async (req, res) => {
+  if (!req.isAuthenticated())
+    return res.status(401).json({ error: "Unauthorized" });
+  if (process.env.NODE_ENV === "production") {
+    return res.status(403).json({ error: "Not allowed in production" });
+  }
+  const updated = await User.findByIdAndUpdate(
+    req.user._id,
+    { role: "admin" },
+    { new: true }
+  );
+  if (!updated) return res.status(404).json({ error: "User not found" });
+  // also update session user
+  req.user.role = "admin";
+  res.json({
+    message: "Promoted to admin (dev)",
+    user: { id: updated._id, username: updated.username, role: updated.role },
+  });
+};

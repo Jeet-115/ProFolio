@@ -8,6 +8,7 @@ import DashboardHome from "./Components/Dashboard/DashboardHome";
 import AdminRoute from "./protection/AdminRoute";
 import AdminDashboard from "./layouts/AdminLayout";
 import AdminHome from "./Components/Admin/AdminHome";
+import ManageUsers from "./Components/Admin/ManageUsers";
 import ResumeBuilder from "./Screens/dashboard/ResumeBuilder";
 import TemplatesList from "./Screens/dashboard/TemplatesList";
 import TemplateFill from "./Screens/dashboard/TemplateFill";
@@ -17,7 +18,6 @@ import ResumeHistory from "./Screens/dashboard/ResumeHistory";
 import PortfolioHistory from "./Screens/dashboard/PortfolioHistory";
 
 const AppRoutes = () => {
-
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -26,16 +26,25 @@ const AppRoutes = () => {
       <Route
         path="/dashboard"
         element={
-          // <ProtectedRoute>
+          <ProtectedRoute>
             <DashboardLayout />
-          // </ProtectedRoute>
+          </ProtectedRoute>
         }
       >
         <Route index element={<DashboardHome />} />
         <Route path="resume-builder" element={<ResumeBuilder />} />
-        <Route path="/dashboard/templates/resumes" element={<TemplatesList />} />
-        <Route path="/dashboard/templates/resumes/:templateId/fill" element={<TemplateFill />} />
-        <Route path="/dashboard/templates/resumes/:templateId/edit/:resumeId" element={<TemplateFill />} />
+        <Route
+          path="/dashboard/templates/resumes"
+          element={<TemplatesList />}
+        />
+        <Route
+          path="/dashboard/templates/resumes/:templateId/fill"
+          element={<TemplateFill />}
+        />
+        <Route
+          path="/dashboard/templates/resumes/:templateId/edit/:resumeId"
+          element={<TemplateFill />}
+        />
         <Route path="portfolio-builder" element={<TechStackSelection />} />
         <Route path="portfolio/builder" element={<PortfolioBuilder />} />
         <Route path="resume-history" element={<ResumeHistory />} />
@@ -44,14 +53,15 @@ const AppRoutes = () => {
       <Route
         path="/admin"
         element={
-          // <ProtectedRoute>
-            // <AdminRoute>
+          <ProtectedRoute>
+            <AdminRoute>
               <AdminDashboard />
-            // </AdminRoute>
-          // </ProtectedRoute>
+            </AdminRoute>
+          </ProtectedRoute>
         }
       >
         <Route index element={<AdminHome />} />
+        <Route path="users" element={<ManageUsers />} />
       </Route>
     </Routes>
   );
