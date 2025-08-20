@@ -1,0 +1,58 @@
+{
+  "id": "modern_portfolio",
+  "name": "Modern Portfolio",
+  "fields": [
+    { "name": "full_name", "label": "Full Name", "type": "text", "required": true },
+    { "name": "title", "label": "Title/Role", "type": "text", "required": true },
+    { "name": "about_me", "label": "About Me", "type": "textarea", "required": true },
+    { "name": "accentColor", "label": "Accent Color", "type": "color", "required": false },
+
+    {
+      "name": "skills",
+      "label": "Skills",
+      "type": "list",
+      "required": false
+    },
+
+    {
+      "name": "projects",
+      "label": "Projects",
+      "type": "repeatable",
+      "fields": [
+        { "name": "name", "label": "Project Name", "type": "text", "required": true },
+        { "name": "url", "label": "Project URL", "type": "text", "required": false },
+        { "name": "description", "label": "Description", "type": "textarea", "required": false },
+        { "name": "skills", "label": "Skills", "type": "list", "required": false }
+      ]
+    },
+
+    {
+      "name": "experience",
+      "label": "Experience",
+      "type": "repeatable",
+      "fields": [
+        { "name": "role", "label": "Role", "type": "text", "required": true },
+        { "name": "company", "label": "Company", "type": "text", "required": true },
+        { "name": "duration", "label": "Duration", "type": "text", "required": true },
+        { "name": "points", "label": "Bullet Points", "type": "list", "required": false }
+      ]
+    },
+
+    {
+      "name": "education",
+      "label": "Education",
+      "type": "repeatable",
+      "fields": [
+        { "name": "degree", "label": "Degree", "type": "text", "required": true },
+        { "name": "institute", "label": "Institute", "type": "text", "required": true },
+        { "name": "year", "label": "Year", "type": "text", "required": true },
+        { "name": "points", "label": "Bullet Points", "type": "list", "required": false }
+      ]
+    },
+
+    { "name": "email", "label": "Email", "type": "text", "required": true },
+    { "name": "linkedin", "label": "LinkedIn", "type": "text", "required": false },
+    { "name": "twitter", "label": "Twitter", "type": "text", "required": false },
+    { "name": "github", "label": "GitHub", "type": "text", "required": false }
+  ]
+}

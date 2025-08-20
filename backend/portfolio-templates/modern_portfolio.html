@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{full_name}} - Portfolio</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Hero Section -->
+    <header id="hero">
+      <div class="container">
+        <h1 class="fade-in delay-200">
+          I'm <span class="accent">{{full_name}}</span>
+        </h1>
+        <p class="fade-in delay-400">{{title}}</p>
+
+        <div class="hero-social fade-in delay-600">
+          {{#if email}}<a href="mailto:{{email}}" class="social-link">📧</a
+          >{{/if}} {{#if linkedin}}<a
+            href="{{linkedin}}"
+            target="_blank"
+            class="social-link"
+            >in</a
+          >{{/if}} {{#if twitter}}<a
+            href="{{twitter}}"
+            target="_blank"
+            class="social-link"
+            >𝕏</a
+          >{{/if}} {{#if github}}<a
+            href="{{github}}"
+            target="_blank"
+            class="social-link"
+            >🐱</a
+          >{{/if}}
+        </div>
+      </div>
+    </header>
+
+    <!-- About Section -->
+    <section id="about">
+      <div class="container">
+        <h2>About Me</h2>
+        <p>{{about_me}}</p>
+
+        <div class="skills">
+          {{#each skills}}
+          <span class="skill-tag">{{this}}</span>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <div class="container">
+        <h2>Projects</h2>
+        <div class="projects-list">
+          {{#each projects}}
+          <a
+            href="{{url}}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="project-card"
+          >
+            <div class="project-header">
+              <span class="project-index">{{@index}}</span>
+              <h3>{{name}}</h3>
+            </div>
+            <p>{{description}}</p>
+            <div class="project-skills">
+              {{#each skills}}<span>{{this}}</span>{{/each}}
+            </div>
+          </a>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience">
+      <div class="container">
+        <h2>Experience</h2>
+        <div class="timeline">
+          {{#each experience}}
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3 class="card-title">{{role}}</h3>
+                  <p class="card-company">{{company}}</p>
+                </div>
+                <span class="card-date">{{duration}}</span>
+              </div>
+              <ul class="card-list">
+                {{#each points}}
+                <li>{{this}}</li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education">
+      <div class="container">
+        <h2>Education</h2>
+        <div class="grid-right">
+          {{#each education}}
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">{{degree}}</h3>
+                <p class="card-company">{{institute}}</p>
+              </div>
+              <span class="card-date">{{year}}</span>
+            </div>
+            <ul class="card-list">
+              {{#each points}}
+              <li>{{this}}</li>
+              {{/each}}
+            </ul>
+          </div>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contact">
+      <div class="container">
+        <h2>Get in Touch</h2>
+        <div class="social-links">
+          {{#if email}}<a href="mailto:{{email}}">📧</a>{{/if}} {{#if
+          linkedin}}<a href="{{linkedin}}">in</a>{{/if}} {{#if twitter}}<a
+            href="{{twitter}}"
+            >𝕏</a
+          >{{/if}} {{#if github}}<a href="{{github}}">🐱</a>{{/if}}
+        </div>
+        <h3 id="footer-name">{{full_name}}</h3>
+        <p id="footer-title">{{title}}</p>
+        <p>© {{year}} {{full_name}}. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+</html>
