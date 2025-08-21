@@ -8,6 +8,8 @@ import {
 } from "../../services/resumeApi";
 import { toast } from "react-hot-toast";
 import { useParams, useNavigate } from "react-router-dom";
+import ResumeNameInput from "../../Components/Dashboard/ResumeNameInput";
+import SaveButton from "../../Components/Dashboard/SaveButton";
 
 function ResumeBuilder() {
   const tinymceApiKey = import.meta.env.VITE_TINYMCE_API_KEY;
@@ -69,23 +71,15 @@ function ResumeBuilder() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4">
-        <input
-          type="text"
-          className="px-4 py-2 rounded border w-full md:w-1/2"
-          placeholder="Enter Resume Name"
+        <ResumeNameInput
           value={resumeName}
           onChange={(e) => setResumeName(e.target.value)}
+          placeholder="Enter your resume name..."
         />
         <div className="flex gap-3">
-          <button
-            onClick={handleSave}
-            disabled={!resumeName.trim()}
-            className={`px-4 py-2 rounded text-white bg-blue-600 transition-opacity ${
-              !resumeName.trim() ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
+          <SaveButton onClick={handleSave} disabled={!resumeName.trim()}>
             {id ? "Update Resume" : "Save Resume"}
-          </button>
+          </SaveButton>
         </div>
       </div>
 
