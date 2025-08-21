@@ -11,6 +11,7 @@ import {
   FaTimes,
 } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
+import LoadingOverlay from "./LoadingOverlay";
 
 const sidebarVariants = {
   hidden: { x: -300, opacity: 0 },
@@ -49,20 +50,24 @@ const SidebarItem = ({ icon, label, active, onClick }) => (
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
   const location = useLocation();
   const navigate = useNavigate();
 
   const items = [
-    { icon: <FaThLarge />, label: "Dashboard", path: "/dashboard" },
+    { icon: <FaThLarge />, label: "Dashboard", path: "/dashboard", loadingMessage: "Loading Dashboard..." },
     {
       icon: <FaFileExcel />,
       label: "Resume Builder",
       path: "/dashboard/resume-builder",
+      loadingMessage: "Loading Resume Builder...",
     },
     {
       icon: <FaDownload />,
       label: "Portfolio Builder",
       path: "/dashboard/portfolio-techstack",
+      loadingMessage: "Loading Portfolio Builder...",
     },
 
     // Templates Section
@@ -70,36 +75,51 @@ function Sidebar() {
       icon: <FaFileExcel />,
       label: "Resume Templates",
       path: "/dashboard/templates/resumes",
+      loadingMessage: "Loading Resume Templates...",
     },
     {
       icon: <FaDownload />,
       label: "Portfolio Templates",
       path: "/dashboard/portfolio-templates",
+      loadingMessage: "Loading Portfolio Templates...",
     },
 
     // My Documents Section
-    { icon: <FaHistory />, label: "My Resumes", path: "/dashboard/resume-history" },
+    { icon: <FaHistory />, label: "My Resumes", path: "/dashboard/resume-history", loadingMessage: "Loading Your Resumes..." },
     {
       icon: <FaHistory />,
       label: "My Portfolios",
       path: "/dashboard/portfolio-history",
+      loadingMessage: "Loading Your Portfolios...",
     },
 
     // Analytics
-    { icon: <FaChartBar />, label: "Analytics", path: "/dashboard/analytics" },
+    { icon: <FaChartBar />, label: "Analytics", path: "/dashboard/analytics", loadingMessage: "Loading Analytics..." },
 
     // Profile & Settings
     {
       icon: <FaCog />,
       label: "Profile / Settings",
       path: "/dashboard/profile",
+      loadingMessage: "Loading Profile Settings...",
     },
   ];
 
-  const handleNavigate = (path) => {
+  const handleNavigate = async (path, message) => {
     if (path) {
+      setIsLoading(true);
+      setLoadingMessage(message);
+      
+      // Simulate loading time for better UX
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
       navigate(path);
       setIsOpen(false);
+      
+      // Hide loading after navigation with 1 second buffer
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1000);
     }
   };
 
@@ -150,7 +170,7 @@ function Sidebar() {
                     icon={item.icon}
                     label={item.label}
                     active={location.pathname === item.path}
-                    onClick={() => handleNavigate(item.path)}
+                    onClick={() => handleNavigate(item.path, item.loadingMessage)}
                   />
                 </motion.div>
               ))}
@@ -182,11 +202,14 @@ function Sidebar() {
               icon={item.icon}
               label={item.label}
               active={location.pathname === item.path}
-              onClick={() => handleNavigate(item.path)}
+              onClick={() => handleNavigate(item.path, item.loadingMessage)}
             />
           </motion.div>
         ))}
       </motion.aside>
+      
+      {/* Loading Overlay */}
+      <LoadingOverlay isLoading={isLoading} message={loadingMessage} />
     </>
   );
 }

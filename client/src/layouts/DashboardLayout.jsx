@@ -12,7 +12,11 @@ function DashboardLayout() {
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }}
     >
-      <Sidebar />
+      {/* Sidebar - Only show on mobile */}
+      <div className="md:hidden">
+        <Sidebar />
+      </div>
+      
       <div className="flex-1 p-6 sm:p-8">
         <Topbar />
         <motion.div
