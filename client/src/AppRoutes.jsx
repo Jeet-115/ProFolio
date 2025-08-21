@@ -18,6 +18,8 @@ import ResumeHistory from "./Screens/dashboard/ResumeHistory";
 import PortfolioHistory from "./Screens/dashboard/PortfolioHistory";
 import PortfolioTemplatesList from "./Screens/dashboard/PortfolioTemplatesList";
 import PortfolioFill from "./Screens/dashboard/PortfolioFill";
+import UserAnalytics from "./Screens/dashboard/UserAnalytics";
+import UserProfile from "./Screens/dashboard/UserProfile";
 
 const AppRoutes = () => {
   return (
@@ -45,6 +47,8 @@ const AppRoutes = () => {
         <Route path="portfolio-templates" element={<PortfolioTemplatesList />} />
         <Route path="portfolio-templates/:templateId/fill" element={<PortfolioFill />} />
         <Route path="portfolio-templates/:templateId/edit/:portfolioId" element={<PortfolioFill />} />
+        <Route path="analytics" element={<UserAnalytics />} />
+        <Route path="profile" element={<UserProfile />} />
       </Route>
       <Route
         path="/admin"

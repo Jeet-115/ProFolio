@@ -14,6 +14,7 @@ import templateFilesRouter from "./routes/templateFiles.js";
 import portfolioRoutes from "./routes/portfolio.js";
 import portfolioTemplateFiles from "./routes/portfolioTemplateFiles.js";
 import templatePortfolioRoutes from "./routes/templatePortfolio.js";
+import analyticsRoutes from "./routes/analytics.js";
 import "./config/passportConfig.js";
 
 dotenv.config();
@@ -64,6 +65,7 @@ app.use("/api/template-files", templateFilesRouter);
 app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/portfolio-templates", portfolioTemplateFiles);
 app.use("/api/template-portfolios", templatePortfolioRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // Check
 app.get("/", (req, res) => {

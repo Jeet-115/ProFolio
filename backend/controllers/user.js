@@ -105,3 +105,71 @@ export const devPromoteMeToAdmin = async (req, res) => {
     user: { id: updated._id, username: updated.username, role: updated.role },
   });
 };
+
+// ---------------- PROFILE ----------------
+
+// Get logged-in user profile
+export const getProfile = async (req, res) => {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+
+  const user = await User.findById(req.user._id, { hash: 0, salt: 0 });
+  res.json(user);
+};
+
+// Update profile (basic info, bio, profile picture, social links)
+export const updateProfile = async (req, res) => {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+
+  const { fullName, username, bio, profilePicture, socialLinks } = req.body;
+
+  const updated = await User.findByIdAndUpdate(
+    req.user._id,
+    { fullName, username, bio, profilePicture, socialLinks },
+    { new: true, runValidators: true, projection: { hash: 0, salt: 0 } }
+  );
+
+  res.json({ message: "Profile updated", user: updated });
+};
+
+// Remove profile picture
+export const removeProfilePicture = async (req, res) => {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+
+  const updated = await User.findByIdAndUpdate(
+    req.user._id,
+    { $unset: { profilePicture: "" } },
+    { new: true, projection: { hash: 0, salt: 0 } }
+  );
+
+  res.json({ message: "Profile picture removed", user: updated });
+};
+
+// ---------------- SETTINGS ----------------
+
+// Update preferences (theme, notifications, privacy)
+export const updatePreferences = async (req, res) => {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+
+  const { preferences } = req.body;
+
+  const updated = await User.findByIdAndUpdate(
+    req.user._id,
+    { preferences },
+    { new: true, runValidators: true, projection: { hash: 0, salt: 0 } }
+  );
+
+  res.json({ message: "Preferences updated", preferences: updated.preferences });
+};
+
+// Delete own account
+export const deleteMyAccount = async (req, res) => {
+  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+
+  await User.findByIdAndDelete(req.user._id);
+  req.logout(() => {
+    req.session?.destroy(() => {
+      res.clearCookie("connect.sid");
+      res.json({ message: "Account deleted successfully" });
+    });
+  });
+};

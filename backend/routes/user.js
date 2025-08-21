@@ -179,4 +179,16 @@ router.get(
   }
 );
 
+// Profile
+router.get("/me", wrapAsync(userController.getProfile));
+router.put("/me", wrapAsync(userController.updateProfile));
+router.delete(
+  "/me/profile-picture",
+  wrapAsync(userController.removeProfilePicture)
+);
+
+// Settings
+router.put("/me/preferences", wrapAsync(userController.updatePreferences));
+router.delete("/me", wrapAsync(userController.deleteMyAccount));
+
 export default router;
