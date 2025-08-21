@@ -157,7 +157,7 @@ function DashboardHome() {
             variants={fadeUp}
             custom={2}
           >
-            Let's transform your data into meaningful insights ✨
+            Build more than a resume — build your story. ✨
           </motion.p>
         </motion.div>
 

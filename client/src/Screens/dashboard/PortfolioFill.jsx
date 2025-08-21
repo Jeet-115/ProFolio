@@ -182,7 +182,7 @@ export default function PortfolioFill() {
                 <button
                   type="button"
                   onClick={() => addListItem(f.name)}
-                  className="bg-green-500 px-3 py-1 rounded text-white"
+                  className="bg-green-500 px-3 py-1 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
                 >
                   + Add {f.label}
                 </button>
@@ -219,7 +219,7 @@ export default function PortfolioFill() {
                             onClick={() =>
                               addRepeatableListItem(f.name, idx, sf.name)
                             }
-                            className="bg-green-500 px-2 py-1 rounded text-white text-sm"
+                            className="bg-green-500 px-2 py-1 rounded-lg text-white text-sm font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
                           >
                             + Add {sf.label}
                           </button>
@@ -248,7 +248,7 @@ export default function PortfolioFill() {
                 <button
                   type="button"
                   onClick={() => addRepeatableItem(f.name, f.fields)}
-                  className="bg-blue-500 px-3 py-1 rounded text-white"
+                  className="bg-blue-500 px-3 py-1 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
                 >
                   + Add {f.label}
                 </button>
@@ -260,28 +260,28 @@ export default function PortfolioFill() {
         <div className="mt-4 flex gap-3 flex-wrap">
           <button
             onClick={handleSubmit}
-            className="bg-blue-600 px-4 py-2 rounded text-white"
+            className="bg-blue-600 px-4 py-2 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
           >
             Save Portfolio
           </button>
           <button
             type="button"
             onClick={() => downloadFile("pdf")}
-            className="bg-emerald-600 px-4 py-2 rounded text-white"
+            className="bg-emerald-600 px-4 py-2 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
           >
             Download PDF
           </button>
           <button
             type="button"
             onClick={() => downloadFile("html")}
-            className="bg-indigo-600 px-4 py-2 rounded text-white"
+            className="bg-indigo-600 px-4 py-2 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
           >
             Download HTML
           </button>
           <button
             type="button"
             onClick={() => downloadFile("txt")}
-            className="bg-gray-700 px-4 py-2 rounded text-white"
+            className="bg-gray-700 px-4 py-2 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
           >
             Download .txt
           </button>

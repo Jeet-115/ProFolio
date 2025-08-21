@@ -77,7 +77,7 @@ function ResumeBuilder() {
           placeholder="Enter your resume name..."
         />
         <div className="flex gap-3">
-          <SaveButton onClick={handleSave} disabled={!resumeName.trim()}>
+          <SaveButton onClick={handleSave} disabled={!resumeName.trim()} hoverText="Thanks">
             {id ? "Update Resume" : "Save Resume"}
           </SaveButton>
         </div>

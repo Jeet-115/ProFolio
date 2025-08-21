@@ -110,13 +110,13 @@ export default function PortfolioHistory() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => handleEdit(p)}
-                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                    className="px-3 py-1 bg-blue-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300 hover:bg-blue-700"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDelete(p)}
-                    className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
+                    className="px-3 py-1 bg-red-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300 hover:bg-red-700"
                   >
                     Delete
                   </button>
