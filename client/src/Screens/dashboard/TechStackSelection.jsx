@@ -14,19 +14,19 @@ export default function TechStackSelection() {
       <div className="space-x-4">
         <button
           onClick={() => handleSelect("HTML-CSS-JS")}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
         >
           HTML / CSS / JS
         </button>
         <button
           onClick={() => handleSelect("React")}
-          className="px-4 py-2 bg-green-500 text-white rounded"
+          className="px-4 py-2 bg-green-500 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
         >
           React (soon)
         </button>
         <button
           onClick={() => handleSelect("Angular")}
-          className="px-4 py-2 bg-red-500 text-white rounded"
+          className="px-4 py-2 bg-red-500 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
         >
           Angular (soon)
         </button>
