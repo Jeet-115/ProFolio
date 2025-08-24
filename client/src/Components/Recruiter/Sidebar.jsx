@@ -51,10 +51,8 @@ function Sidebar() {
   const navigate = useNavigate();
 
   const items = [
-    { icon: <FaThLarge />, label: "Admin Dashboard", path: "/admin" },
-    { icon: <FaUserCog />, label: "Manage Users", path: "/admin/users" },
-    { icon: <FaDatabase />, label: "Manage Files", path: "/admin/files" },
-    { icon: <FaCog />, label: "Settings", path: "/admin/settings" },
+    { icon: <FaThLarge />, label: "Recruiter Dashboard", path: "/recruiter/dashboard" },
+    { icon: <FaUserCog />, label: "Candidate Directory", path: "/recruiter/dashboard/candidates" },
   ];
 
   const handleNavigate = (path) => {

@@ -22,6 +22,7 @@ import UserAnalytics from "./Screens/dashboard/UserAnalytics";
 import UserProfile from "./Screens/dashboard/UserProfile";
 import RecruiterLayout from "./layouts/RecruiterLayout";
 import RecruiterDashboardHome from "./Screens/recruiter/RecruiterDashboardHome";
+import CandidateDirectory from "./Screens/recruiter/CandidateDirectory";
 
 const AppRoutes = () => {
   return (
@@ -61,6 +62,7 @@ const AppRoutes = () => {
         }
       >
         <Route index element={<RecruiterDashboardHome />} />
+        <Route path="candidates" element={<CandidateDirectory />} />
       </Route>
       <Route
         path="/admin"
