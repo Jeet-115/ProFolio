@@ -131,18 +131,49 @@ export const getProfile = async (req, res) => {
   res.json(user);
 };
 
-// Update profile (basic info, bio, profile picture, social links)
+// Update profile (basic info, bio, picture, socials, candidate fields)
 export const updateProfile = async (req, res) => {
   if (!req.isAuthenticated())
     return res.status(401).json({ error: "Unauthorized" });
 
-  const { fullName, username, bio, profilePicture, socialLinks } = req.body;
+  const {
+    fullName,
+    username,
+    bio,
+    profilePicture,
+    socialLinks,
+    // candidate fields
+    skills,
+    location,
+    experienceLevel,
+    education,
+    headline,
+  } = req.body;
 
-  const updated = await User.findByIdAndUpdate(
-    req.user._id,
-    { fullName, username, bio, profilePicture, socialLinks },
-    { new: true, runValidators: true, projection: { hash: 0, salt: 0 } }
-  );
+  const updateData = {
+    fullName,
+    username,
+    bio,
+    profilePicture,
+    socialLinks,
+  };
+
+  // If candidate, allow candidate-specific updates
+  if (req.user.role === "user") {
+    Object.assign(updateData, {
+      skills,
+      location,
+      experienceLevel,
+      education,
+      headline,
+    });
+  }
+
+  const updated = await User.findByIdAndUpdate(req.user._id, updateData, {
+    new: true,
+    runValidators: true,
+    projection: { hash: 0, salt: 0 },
+  });
 
   res.json({ message: "Profile updated", user: updated });
 };

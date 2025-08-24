@@ -8,7 +8,11 @@ const SocialLinksSchema = new mongoose.Schema({
   behance: String,
   dribbble: String,
   website: String,
-  primary: { type: String, enum: ["github", "linkedin", "twitter", "behance", "dribbble", "website", null], default: null }
+  primary: { 
+    type: String, 
+    enum: ["github", "linkedin", "twitter", "behance", "dribbble", "website", null], 
+    default: null 
+  }
 }, { _id: false });
 
 const PreferencesSchema = new mongoose.Schema({
@@ -55,7 +59,17 @@ const UserSchema = new mongoose.Schema({
   authProvider: { type: String, enum: ["local", "google", "github"], default: "local" },
   role: { type: String, enum: ["user", "recruiter", "admin"], default: "user" },
 
-  // Only meaningful if role === "recruiter"
+  // Candidate fields (only meaningful if role === "user")
+  skills: [String], // ["React", "Node.js", "Figma"]
+  location: { type: String },
+  experienceLevel: { 
+    type: String, 
+    enum: ["Fresher", "1-3 years", "3-5 years", "5+ years"] 
+  },
+  education: { type: String }, // highest qualification / certification
+  headline: { type: String }, // short role headline
+
+  // Recruiter fields (only meaningful if role === "recruiter")
   viewedCandidates: [ViewedCandidateSchema],
   bookmarkedCandidates: [BookmarkedCandidateSchema],
   contactedCandidates: [ContactedCandidateSchema]
