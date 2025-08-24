@@ -6,6 +6,9 @@ import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 const fadeInLeft = (delay) => ({
@@ -49,6 +52,26 @@ const SignupLeftDiv = () => {
         >
           Please Enter Your Details
         </motion.h2>
+        <motion.div className="mb-6" {...fadeInLeft(0.25)}>
+          <RadioGroup
+            row
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            className="flex justify-center"
+          >
+            <FormControlLabel
+              value="user"
+              control={<Radio sx={{ color: "white" }} />}
+              label={<span className="text-white">User</span>}
+            />
+            <FormControlLabel
+              value="recruiter"
+              control={<Radio sx={{ color: "white" }} />}
+              label={<span className="text-white">Recruiter</span>}
+            />
+          </RadioGroup>
+        </motion.div>
 
         <form onSubmit={handleSubmit} noValidate>
           <motion.div className="mb-8" {...fadeInLeft(0.3)}>
