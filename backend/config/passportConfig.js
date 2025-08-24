@@ -4,10 +4,11 @@ import User from "../models/user.js";
 import dotenv from "dotenv";
 dotenv.config();
 
+// ---------------- Local Strategy ----------------
 passport.use(
   new LocalStrategy(
-    { usernameField: "username" },
-    async (usernameOrEmail, password, done) => {
+    { usernameField: "username", passReqToCallback: true }, // add req
+    async (req, usernameOrEmail, password, done) => {
       try {
         // Find by username OR email
         const user = await User.findOne({
@@ -32,6 +33,7 @@ passport.use(
   )
 );
 
+// ---------------- Google Strategy ----------------
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 passport.use(
   new GoogleStrategy(
@@ -40,15 +42,21 @@ passport.use(
       clientSecret:
         process.env.GOOGLE_CLIENT_SECRET || "GOOGLE_CLIENT_SECRET_PLACEHOLDER",
       callbackURL: process.env.GOOGLE_CALLBACK_URL || "/auth/google/callback",
+      passReqToCallback: true, // 👈 allow reading req.query.role
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
       try {
-        // Find user by Google ID or email
         let user = await User.findOne({ email: profile.emails[0].value });
         if (!user) {
+          // role toggle from frontend (query param)
+          let assignedRole = ["user", "recruiter"].includes(req.query.role)
+            ? req.query.role
+            : "user";
+
           user = new User({
             email: profile.emails[0].value,
             username: profile.displayName || profile.emails[0].value,
+            role: assignedRole,
           });
           await user.save();
         }
@@ -60,7 +68,7 @@ passport.use(
   )
 );
 
-// GitHub Strategy
+// ---------------- GitHub Strategy ----------------
 import { Strategy as GitHubStrategy } from "passport-github2";
 passport.use(
   new GitHubStrategy(
@@ -70,19 +78,25 @@ passport.use(
         process.env.GITHUB_CLIENT_SECRET || "GITHUB_CLIENT_SECRET_PLACEHOLDER",
       callbackURL: process.env.GITHUB_CALLBACK_URL || "/auth/github/callback",
       scope: ["user:email"],
+      passReqToCallback: true, // 👈 allow reading req.query.role
     },
-    async (accessToken, refreshToken, profile, done) => {
+    async (req, accessToken, refreshToken, profile, done) => {
       try {
-        // GitHub may not always provide email directly
         const email =
           profile.emails && profile.emails[0]
             ? profile.emails[0].value
             : `${profile.username}@github.com`;
+
         let user = await User.findOne({ email });
         if (!user) {
+          let assignedRole = ["user", "recruiter"].includes(req.query.role)
+            ? req.query.role
+            : "user";
+
           user = new User({
             email,
             username: profile.username,
+            role: assignedRole,
           });
           await user.save();
         }
@@ -94,6 +108,7 @@ passport.use(
   )
 );
 
+// ---------------- Serialize / Deserialize ----------------
 passport.serializeUser((user, done) => {
   console.log("Serializing user:", user);
   done(null, user.id);

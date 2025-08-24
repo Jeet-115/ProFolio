@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema({
   preferences: PreferencesSchema,
 
   authProvider: { type: String, enum: ["local", "google", "github"], default: "local" },
-  role: { type: String, enum: ["user", "admin"], default: "user" }
+  role: { type: String, enum: ["user", "recruiter", "admin"], default: "user" }
 }, { timestamps: true });
 
 UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });

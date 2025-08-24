@@ -6,16 +6,29 @@ export const renderSignupForm = (req, res) => {
 
 export const signupPage = async (req, res, next) => {
   try {
-    const { email, username, password } = req.body;
-    const user = new User({ email, username });
+    const { email, username, password, role } = req.body;
+    let assignedRole = role;
+    if (!["user", "recruiter"].includes(role)) {
+      assignedRole = "user"; // fallback
+    }
+
+    const user = new User({ email, username, role: assignedRole });
     const registeredUser = await User.register(user, password);
 
     req.login(registeredUser, (err) => {
       if (err) return next(err);
+      let redirect = "/dashboard";
+      if (registeredUser.role === "admin") redirect = "/admin/dashboard";
+      else if (registeredUser.role === "recruiter")
+        redirect = "/recruiter/dashboard";
       return res.status(201).json({
         message: "Signup successful!",
-        user: { id: registeredUser._id, username: registeredUser.username },
-        redirect: "/dashboard",
+        user: {
+          id: registeredUser._id,
+          username: registeredUser.username,
+          role: registeredUser.role,
+        },
+        redirect,
       });
     });
   } catch (e) {
@@ -28,8 +41,9 @@ export const renderLoginForm = (req, res) => {
 };
 
 export const loginPage = (req, res) => {
-  const redirect =
-    req.user.role === "admin" ? "/admin/dashboard" : "/dashboard";
+  let redirect = "/dashboard";
+  if (req.user.role === "admin") redirect = "/admin/dashboard";
+  else if (req.user.role === "recruiter") redirect = "/recruiter/dashboard";
 
   return res.status(200).json({
     message: "Login successful!",
@@ -66,7 +80,7 @@ export const listUsers = async (req, res) => {
 export const updateUserRole = async (req, res) => {
   const { id } = req.params;
   const { role } = req.body;
-  if (!role || !["user", "admin"].includes(role)) {
+  if (!role || !["user", "recruiter", "admin"].includes(role)) {
     return res.status(400).json({ error: "Invalid role" });
   }
   const updated = await User.findByIdAndUpdate(
@@ -110,7 +124,8 @@ export const devPromoteMeToAdmin = async (req, res) => {
 
 // Get logged-in user profile
 export const getProfile = async (req, res) => {
-  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+  if (!req.isAuthenticated())
+    return res.status(401).json({ error: "Unauthorized" });
 
   const user = await User.findById(req.user._id, { hash: 0, salt: 0 });
   res.json(user);
@@ -118,7 +133,8 @@ export const getProfile = async (req, res) => {
 
 // Update profile (basic info, bio, profile picture, social links)
 export const updateProfile = async (req, res) => {
-  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+  if (!req.isAuthenticated())
+    return res.status(401).json({ error: "Unauthorized" });
 
   const { fullName, username, bio, profilePicture, socialLinks } = req.body;
 
@@ -133,7 +149,8 @@ export const updateProfile = async (req, res) => {
 
 // Remove profile picture
 export const removeProfilePicture = async (req, res) => {
-  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+  if (!req.isAuthenticated())
+    return res.status(401).json({ error: "Unauthorized" });
 
   const updated = await User.findByIdAndUpdate(
     req.user._id,
@@ -148,7 +165,8 @@ export const removeProfilePicture = async (req, res) => {
 
 // Update preferences (theme, notifications, privacy)
 export const updatePreferences = async (req, res) => {
-  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+  if (!req.isAuthenticated())
+    return res.status(401).json({ error: "Unauthorized" });
 
   const { preferences } = req.body;
 
@@ -158,12 +176,16 @@ export const updatePreferences = async (req, res) => {
     { new: true, runValidators: true, projection: { hash: 0, salt: 0 } }
   );
 
-  res.json({ message: "Preferences updated", preferences: updated.preferences });
+  res.json({
+    message: "Preferences updated",
+    preferences: updated.preferences,
+  });
 };
 
 // Delete own account
 export const deleteMyAccount = async (req, res) => {
-  if (!req.isAuthenticated()) return res.status(401).json({ error: "Unauthorized" });
+  if (!req.isAuthenticated())
+    return res.status(401).json({ error: "Unauthorized" });
 
   await User.findByIdAndDelete(req.user._id);
   req.logout(() => {
