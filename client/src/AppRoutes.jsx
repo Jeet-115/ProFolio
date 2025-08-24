@@ -20,6 +20,8 @@ import PortfolioTemplatesList from "./Screens/dashboard/PortfolioTemplatesList";
 import PortfolioFill from "./Screens/dashboard/PortfolioFill";
 import UserAnalytics from "./Screens/dashboard/UserAnalytics";
 import UserProfile from "./Screens/dashboard/UserProfile";
+import RecruiterLayout from "./layouts/RecruiterLayout";
+import RecruiterHome from "./Components/Recruiter/RecruiterHome";
 
 const AppRoutes = () => {
   return (
@@ -49,6 +51,16 @@ const AppRoutes = () => {
         <Route path="portfolio-templates/:templateId/edit/:portfolioId" element={<PortfolioFill />} />
         <Route path="analytics" element={<UserAnalytics />} />
         <Route path="profile" element={<UserProfile />} />
+      </Route>
+      <Route
+        path="/recruiter/dashboard"
+        element={
+          <ProtectedRoute>
+            <RecruiterLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route index element={<RecruiterHome />} />
       </Route>
       <Route
         path="/admin"
