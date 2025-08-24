@@ -17,7 +17,7 @@ function DashboardLayout() {
         <Sidebar />
       </div>
       
-      <div className="flex-1 p-6 sm:p-8">
+      <div className="flex-1 md:p-6">
         <Topbar />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
