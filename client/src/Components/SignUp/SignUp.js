@@ -7,6 +7,7 @@ const useSignUp = () => {
     username: "",
     email: "",
     password: "",
+    role: "user", // default role
   });
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
@@ -42,7 +43,13 @@ const useSignUp = () => {
         });
 
         setSuccess(res.data.message || "Signup successful!");
-        const redirectPath = res.data.redirect || "/dashboard";
+
+        // 👇 Redirect based on role
+        let redirectPath = "/dashboard";
+        if (res.data.user?.role === "recruiter") {
+          redirectPath = "/recruiter/dashboard";
+        }
+
         setTimeout(() => navigate(redirectPath), 1000);
       } catch (err) {
         setServerError(
@@ -52,7 +59,7 @@ const useSignUp = () => {
       }
     }
   };
-  
+
   return {
     formData,
     errors,

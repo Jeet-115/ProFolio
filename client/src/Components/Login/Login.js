@@ -39,7 +39,12 @@ const useLogin = () => {
         });
 
         setSuccess(res.data.message || "Login successful!");
-        const redirectPath = res.data.redirect || "/dashboard"; // default fallback
+
+        // 👇 Redirect based on role
+        let redirectPath = "/dashboard";
+        if (res.data.user?.role === "recruiter") {
+          redirectPath = "/recruiter/dashboard";
+        }
         setTimeout(() => navigate(redirectPath), 1000);
       } catch (err) {
         setServerError(
@@ -49,7 +54,7 @@ const useLogin = () => {
       }
     }
   };
-  
+
   return { formData, errors, handleChange, handleSubmit, serverError, success };
 };
 
