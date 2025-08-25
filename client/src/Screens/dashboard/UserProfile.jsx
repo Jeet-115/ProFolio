@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ThemedInput from "../../Components/Common/ThemedInput";
 import PreferenceForm from "../../Components/Common/PreferenceForm";
 import GlassButton from "../../Components/Common/GlassButton";
+import GlassCard from "../../Components/Common/GlassCard";
 import {
   getUserProfile,
   updateUserProfile,
@@ -140,7 +141,7 @@ export default function UserProfile() {
       <h2 className="text-2xl font-bold mb-6">👤 Profile</h2>
 
       {/* Basic Info */}
-      <div className="mb-6 space-y-4">
+      <div className="mb-6 space-y-8">
         <ThemedInput
           name="fullName"
           label="Full Name"
@@ -184,59 +185,50 @@ export default function UserProfile() {
 
       {/* Candidate Fields */}
       <h3 className="text-xl font-semibold mb-2">💼 Candidate Info</h3>
-      <div className="mb-6 space-y-4">
-        <input
-          type="text"
+      <GlassCard className="mb-6 p-4 rounded-2xl space-y-8">
+        <ThemedInput
           name="headline"
-          placeholder="Headline (e.g. Frontend Developer)"
+          label="Headline"
+          placeholder="e.g. Frontend Developer"
           value={formData.headline}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
+        <ThemedInput
           name="skills"
-          placeholder="Skills (comma separated)"
+          label="Skills"
+          placeholder="Comma separated"
           value={formData.skills}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
+        <ThemedInput
           name="location"
-          placeholder="Location"
+          label="Location"
           value={formData.location}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
+        <ThemedInput
           name="experienceLevel"
-          placeholder="Experience Level (e.g. Junior, Mid, Senior)"
+          label="Experience Level"
+          placeholder="e.g. Junior, Mid, Senior"
           value={formData.experienceLevel}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
+        <ThemedInput
           name="education"
-          placeholder="Education"
+          label="Education"
           value={formData.education}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-      </div>
-
-      <button
-        onClick={handleSaveProfile}
-        className="px-4 py-2 bg-blue-600 text-white rounded mb-6"
-      >
-        Save Profile
-      </button>
+        <div>
+          <GlassButton accent="green" variant="solid" onClick={handleSaveProfile}>
+            Save Profile
+          </GlassButton>
+        </div>
+      </GlassCard>
 
       {/* Social Links */}
-      <h3 className="text-xl font-semibold mb-2">🔗 Social Links</h3>
-      <div className="mb-6 space-y-2">
+      <h3 className="text-xl font-semibold mb-6">🔗 Social Links</h3>
+      <div className="mb-6 space-y-8">
         {["github", "linkedin", "twitter", "behance", "dribbble", "website"].map(
           (key) => (
             <ThemedInput
