@@ -21,7 +21,8 @@ import PortfolioFill from "./Screens/dashboard/PortfolioFill";
 import UserAnalytics from "./Screens/dashboard/UserAnalytics";
 import UserProfile from "./Screens/dashboard/UserProfile";
 import RecruiterLayout from "./layouts/RecruiterLayout";
-import RecruiterHome from "./Components/Recruiter/RecruiterHome";
+import RecruiterDashboardHome from "./Screens/recruiter/RecruiterDashboardHome";
+import CandidateDirectory from "./Screens/recruiter/CandidateDirectory";
 
 const AppRoutes = () => {
   return (
@@ -60,7 +61,8 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       >
-        <Route index element={<RecruiterHome />} />
+        <Route index element={<RecruiterDashboardHome />} />
+        <Route path="candidates" element={<CandidateDirectory />} />
       </Route>
       <Route
         path="/admin"

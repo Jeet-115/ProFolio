@@ -28,6 +28,12 @@ export default function UserProfile() {
           bio: data.bio || "",
           profilePicture: data.profilePicture || "",
           socialLinks: data.socialLinks || {},
+
+          skills: data.skills?.join(", ") || "",
+          location: data.location || "",
+          experienceLevel: data.experienceLevel || "",
+          education: data.education || "",
+          headline: data.headline || "",
         });
         setPreferences(data.preferences || {});
       } catch (err) {
@@ -54,7 +60,14 @@ export default function UserProfile() {
 
   const handleSaveProfile = async () => {
     try {
-      const { data } = await updateUserProfile(formData);
+      // convert skills string back to array
+      const payload = {
+        ...formData,
+        skills: formData.skills
+          ? formData.skills.split(",").map((s) => s.trim())
+          : [],
+      };
+      const { data } = await updateUserProfile(payload);
       setProfile(data.user);
       alert("Profile updated!");
     } catch (err) {
@@ -81,7 +94,10 @@ export default function UserProfile() {
       const [section, key] = name.split(".");
       setPreferences((prev) => ({
         ...prev,
-        [section]: { ...prev[section], [key]: type === "checkbox" ? checked : value },
+        [section]: {
+          ...prev[section],
+          [key]: type === "checkbox" ? checked : value,
+        },
       }));
     } else {
       setPreferences((prev) => ({ ...prev, [name]: value }));
@@ -100,7 +116,12 @@ export default function UserProfile() {
   };
 
   const handleDeleteAccount = async () => {
-    if (!window.confirm("Are you sure? This will delete your account permanently.")) return;
+    if (
+      !window.confirm(
+        "Are you sure? This will delete your account permanently."
+      )
+    )
+      return;
     try {
       await deleteMyAccount();
       alert("Account deleted. Logging out...");
@@ -160,6 +181,58 @@ export default function UserProfile() {
           Save Profile
         </GlassButton>
       </div>
+
+      {/* Candidate Fields */}
+      <h3 className="text-xl font-semibold mb-2">💼 Candidate Info</h3>
+      <div className="mb-6 space-y-4">
+        <input
+          type="text"
+          name="headline"
+          placeholder="Headline (e.g. Frontend Developer)"
+          value={formData.headline}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="text"
+          name="skills"
+          placeholder="Skills (comma separated)"
+          value={formData.skills}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          value={formData.location}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="text"
+          name="experienceLevel"
+          placeholder="Experience Level (e.g. Junior, Mid, Senior)"
+          value={formData.experienceLevel}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+        <input
+          type="text"
+          name="education"
+          placeholder="Education"
+          value={formData.education}
+          onChange={handleChange}
+          className="w-full p-2 border rounded"
+        />
+      </div>
+
+      <button
+        onClick={handleSaveProfile}
+        className="px-4 py-2 bg-blue-600 text-white rounded mb-6"
+      >
+        Save Profile
+      </button>
 
       {/* Social Links */}
       <h3 className="text-xl font-semibold mb-2">🔗 Social Links</h3>

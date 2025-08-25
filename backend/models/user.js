@@ -8,7 +8,11 @@ const SocialLinksSchema = new mongoose.Schema({
   behance: String,
   dribbble: String,
   website: String,
-  primary: { type: String, enum: ["github", "linkedin", "twitter", "behance", "dribbble", "website", null], default: null }
+  primary: { 
+    type: String, 
+    enum: ["github", "linkedin", "twitter", "behance", "dribbble", "website", null], 
+    default: null 
+  }
 }, { _id: false });
 
 const PreferencesSchema = new mongoose.Schema({
@@ -25,6 +29,23 @@ const PreferencesSchema = new mongoose.Schema({
   }
 }, { _id: false });
 
+const ViewedCandidateSchema = new mongoose.Schema({
+  candidateId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  viewedAt: { type: Date, default: Date.now }
+}, { _id: false });
+
+const BookmarkedCandidateSchema = new mongoose.Schema({
+  candidateId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  notes: { type: String },
+  bookmarkedAt: { type: Date, default: Date.now }
+}, { _id: false });
+
+const ContactedCandidateSchema = new mongoose.Schema({
+  candidateId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  contactedAt: { type: Date, default: Date.now },
+  method: { type: String, enum: ["message", "email"], default: "message" }
+}, { _id: false });
+
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   username: { type: String }, // optional username for portfolio URLs
@@ -36,7 +57,23 @@ const UserSchema = new mongoose.Schema({
   preferences: PreferencesSchema,
 
   authProvider: { type: String, enum: ["local", "google", "github"], default: "local" },
-  role: { type: String, enum: ["user", "recruiter", "admin"], default: "user" }
+  role: { type: String, enum: ["user", "recruiter", "admin"], default: "user" },
+
+  // Candidate fields (only meaningful if role === "user")
+  skills: [String], // ["React", "Node.js", "Figma"]
+  location: { type: String },
+  experienceLevel: { 
+    type: String, 
+    enum: ["Fresher", "1-3 years", "3-5 years", "5+ years"] 
+  },
+  education: { type: String }, // highest qualification / certification
+  headline: { type: String }, // short role headline
+
+  // Recruiter fields (only meaningful if role === "recruiter")
+  viewedCandidates: [ViewedCandidateSchema],
+  bookmarkedCandidates: [BookmarkedCandidateSchema],
+  contactedCandidates: [ContactedCandidateSchema]
+
 }, { timestamps: true });
 
 UserSchema.plugin(passportLocalMongoose, { usernameField: "email" });
