@@ -3,12 +3,14 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
-  FaFileExcel,
+  FaFileAlt,
   FaChartBar,
   FaHistory,
-  FaDownload,
+  FaLayerGroup,
   FaCog,
   FaThLarge,
+  FaPalette,
+  FaFolderOpen,
 } from "react-icons/fa";
 import LoadingOverlay from "./LoadingOverlay";
 import UserAnalytics from "../../Screens/dashboard/UserAnalytics";
@@ -52,7 +54,15 @@ function DashboardHome() {
 
   const navigationItems = [
     {
-      icon: <FaFileExcel className="text-3xl" />,
+      icon: (
+        <motion.span
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
+          <FaFileAlt className="text-3xl" />
+        </motion.span>
+      ),
       title: "Resume Builder",
       description: "Create a polished, professional resume in minutes.\nAdd your skills, experience, and achievements with ease.",
       path: "/dashboard/resume-builder",
@@ -60,7 +70,15 @@ function DashboardHome() {
       loadingMessage: "Loading Resume Builder...",
     },
     {
-      icon: <FaDownload className="text-3xl" />,
+      icon: (
+        <motion.span
+          animate={{ rotate: [0, 8, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
+          <FaThLarge className="text-3xl" />
+        </motion.span>
+      ),
       title: "Portfolio Builder",
       description: "Design a dynamic online portfolio to showcase your work.\nHighlight projects, skills, and achievements visually.",
       path: "/dashboard/portfolio-techstack",
@@ -68,7 +86,15 @@ function DashboardHome() {
       loadingMessage: "Loading Portfolio Builder...",
     },
     {
-      icon: <FaFileExcel className="text-3xl" />,
+      icon: (
+        <motion.span
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
+          <FaLayerGroup className="text-3xl" />
+        </motion.span>
+      ),
       title: "Resume Templates",
       description: "Choose from modern, ATS-friendly templates.\nCustomize layouts to match your professional style.",
       path: "/dashboard/templates/resumes",
@@ -76,7 +102,15 @@ function DashboardHome() {
       loadingMessage: "Loading Resume Templates...",
     },
     {
-      icon: <FaDownload className="text-3xl" />,
+      icon: (
+        <motion.span
+          animate={{ x: [0, 6, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
+          <FaPalette className="text-3xl" />
+        </motion.span>
+      ),
       title: "Portfolio Templates",
       description: "Pick sleek and responsive portfolio designs.\nPersonalize them to reflect your unique professional identity.",
       path: "/dashboard/portfolio-templates",
@@ -84,7 +118,15 @@ function DashboardHome() {
       loadingMessage: "Loading Portfolio Templates...",
     },
     {
-      icon: <FaHistory className="text-3xl" />,
+      icon: (
+        <motion.span
+          animate={{ rotate: [-6, 6, -6] }}
+          transition={{ duration: 1.8, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
+          <FaHistory className="text-3xl" />
+        </motion.span>
+      ),
       title: "My Resumes",
       description: "Access and edit your saved resumes anytime.\nKeep them updated with your latest experience and skills.",
       path: "/dashboard/resume-history",
@@ -92,7 +134,15 @@ function DashboardHome() {
       loadingMessage: "Loading Your Resumes...",
     },
     {
-      icon: <FaHistory className="text-3xl" />,
+      icon: (
+        <motion.span
+          animate={{ y: [0, -3, 0], rotate: [-3, 3, -3] }}
+          transition={{ duration: 2.2, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
+          <FaFolderOpen className="text-3xl" />
+        </motion.span>
+      ),
       title: "My Portfolios",
       description: "Manage and update your existing portfolios.\nShare your best work instantly with recruiters or clients.",
       path: "/dashboard/portfolio-history",
@@ -100,7 +150,15 @@ function DashboardHome() {
       loadingMessage: "Loading Your Portfolios...",
     },
     {
-      icon: <FaChartBar className="text-3xl" />,
+      icon: (
+        <motion.span
+          animate={{ opacity: [1, 0.7, 1] }}
+          transition={{ duration: 1.6, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
+          <FaChartBar className="text-3xl" />
+        </motion.span>
+      ),
       title: "Analytics",
       description: "Track views, downloads, and engagement on your resumes and portfolios.\nGain insights to improve visibility.",
       path: "/dashboard/analytics",
@@ -108,7 +166,15 @@ function DashboardHome() {
       loadingMessage: "Loading Analytics...",
     },
     {
-      icon: <FaCog className="text-3xl" />,
+      icon: (
+        <motion.span
+          animate={{ rotate: 360 }}
+          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          className="inline-flex"
+        >
+          <FaCog className="text-3xl" />
+        </motion.span>
+      ),
       title: "Profile & Settings",
       description: "Manage your account preferences and personal information.\nControl privacy, theme, and notification settings.",
       path: "/dashboard/profile",

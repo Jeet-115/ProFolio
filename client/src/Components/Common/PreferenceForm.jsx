@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import ThemedSelect from "./ThemedSelect";
 import GlassButton from "./GlassButton";
+import SaveCloudButton from "./SaveCloudButton";
+import ToggleCheckbox from "./ToggleCheckbox";
 
 /*
   PreferenceForm
@@ -53,31 +55,35 @@ const PreferenceForm = ({ preferences = {}, onChange, onSave }) => {
       </div>
 
       {/* Privacy visibility */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <label className="flex items-center gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="flex items-center gap-3">
           <span className="text-white font-bold">Portfolio Visibility:</span>
-          <ThemedSelect
+          <ToggleCheckbox
             name="privacy.portfolioVisibility"
-            value={preferences.privacy?.portfolioVisibility || "private"}
-            onChange={onChange}
-            options={[
-              { value: "private", label: "Private" },
-              { value: "public", label: "Public" },
-            ]}
+            checked={(preferences.privacy?.portfolioVisibility || "private") === "public"}
+            onChange={(e) => {
+              const next = e.target.checked ? "public" : "private";
+              onChange({ target: { name: "privacy.portfolioVisibility", value: next, type: "text" } });
+            }}
           />
-        </label>
-        <label className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-white ml-2">
+            {(preferences.privacy?.portfolioVisibility || "private").toUpperCase()}
+          </span>
+        </div>
+        <div className="flex items-center gap-3">
           <span className="text-white font-bold">Resume Visibility:</span>
-          <ThemedSelect
+          <ToggleCheckbox
             name="privacy.resumeVisibility"
-            value={preferences.privacy?.resumeVisibility || "private"}
-            onChange={onChange}
-            options={[
-              { value: "private", label: "Private" },
-              { value: "public", label: "Public" },
-            ]}
+            checked={(preferences.privacy?.resumeVisibility || "private") === "public"}
+            onChange={(e) => {
+              const next = e.target.checked ? "public" : "private";
+              onChange({ target: { name: "privacy.resumeVisibility", value: next, type: "text" } });
+            }}
           />
-        </label>
+          <span className="text-xs font-semibold text-white ml-2">
+            {(preferences.privacy?.resumeVisibility || "private").toUpperCase()}
+          </span>
+        </div>
       </div>
 
       {/* Recruiter consent - inline animated checkbox */}
@@ -92,9 +98,19 @@ const PreferenceForm = ({ preferences = {}, onChange, onSave }) => {
         <label htmlFor="privacy_recruiterConsent">Allow Recruiters to View My Profile</label>
       </InlineChecklist>
 
-      <GlassButton accent="green" variant="solid" onClick={onSave}>
-        Save Preferences
-      </GlassButton>
+      <SaveCloudButton
+        onClick={onSave}
+        label="SAVE"
+        textColor="#ffffff"
+        fillColor="#ffffff"
+        bg="#3b82f6" /* blue-500 */
+        hoverBg="#2563eb" /* blue-600 */
+        fontSize="14px"
+        paddingY="0.375rem"
+        paddingX="0.75rem"
+        borderRadius="9999px"
+        iconSize={18}
+      />
     </div>
   );
 };

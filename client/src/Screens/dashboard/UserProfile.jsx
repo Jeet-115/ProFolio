@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import ThemedInput from "../../Components/Common/ThemedInput";
 import PreferenceForm from "../../Components/Common/PreferenceForm";
-import GlassButton from "../../Components/Common/GlassButton";
+import DeleteAccountButton from "../../Components/Common/DeleteAccountButton";
+import SaveCloudButton from "../../Components/Common/SaveCloudButton";
+import GlassCard from "../../Components/Common/GlassCard";
 import {
   getUserProfile,
   updateUserProfile,
@@ -140,7 +142,7 @@ export default function UserProfile() {
       <h2 className="text-2xl font-bold mb-6">👤 Profile</h2>
 
       {/* Basic Info */}
-      <div className="mb-6 space-y-4">
+      <div className="mb-6 space-y-8">
         <ThemedInput
           name="fullName"
           label="Full Name"
@@ -177,66 +179,94 @@ export default function UserProfile() {
         ) : (
           <p>No profile picture set</p>
         )}
-        <GlassButton accent="green" variant="solid" onClick={handleSaveProfile}>
-          Save Profile
-        </GlassButton>
+        <SaveCloudButton
+          onClick={handleSaveProfile}
+          label="SAVE"
+          textColor="#ffffff"
+          fillColor="#ffffff"
+          bg="#3b82f6" /* blue-500 */
+          hoverBg="#2563eb" /* blue-600 */
+          fontSize="14px"
+          paddingY="0.375rem"
+          paddingX="0.75rem"
+          borderRadius="9999px"
+          iconSize={18}
+        />
       </div>
 
       {/* Candidate Fields */}
       <h3 className="text-xl font-semibold mb-2">💼 Candidate Info</h3>
-      <div className="mb-6 space-y-4">
-        <input
-          type="text"
+      <GlassCard className="mb-6 p-4 rounded-2xl space-y-8">
+        <ThemedInput
           name="headline"
-          placeholder="Headline (e.g. Frontend Developer)"
+          label="Headline"
+          placeholder="e.g. Frontend Developer"
           value={formData.headline}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
+        <ThemedInput
           name="skills"
-          placeholder="Skills (comma separated)"
+          label="Skills"
+          placeholder="Comma separated"
           value={formData.skills}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
+        <ThemedInput
           name="location"
-          placeholder="Location"
+          label="Location"
           value={formData.location}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
-          name="experienceLevel"
-          placeholder="Experience Level (e.g. Junior, Mid, Senior)"
-          value={formData.experienceLevel}
-          onChange={handleChange}
-          className="w-full p-2 border rounded"
-        />
-        <input
-          type="text"
+        <div className="space-y-2">
+          <div className="text-white font-semibold">Experience Level</div>
+          <div className="flex flex-wrap gap-2">
+            {["Fresher", "1-3 years", "3-5 years", "5+ years"].map((opt) => (
+              <label
+                key={opt}
+                className={`cursor-pointer select-none px-3 py-1 rounded-lg border backdrop-blur text-sm transition-colors ${
+                  formData.experienceLevel === opt
+                    ? "bg-teal-500/20 border-teal-300 text-white"
+                    : "bg-white/5 border-white/20 text-white/80 hover:bg-white/10"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  className="hidden"
+                  checked={formData.experienceLevel === opt}
+                  onChange={() => setFormData((p) => ({ ...p, experienceLevel: opt }))}
+                />
+                {opt}
+              </label>
+            ))}
+          </div>
+        </div>
+        
+        <ThemedInput
           name="education"
-          placeholder="Education"
+          label="Education"
           value={formData.education}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-      </div>
-
-      <button
-        onClick={handleSaveProfile}
-        className="px-4 py-2 bg-blue-600 text-white rounded mb-6"
-      >
-        Save Profile
-      </button>
+        <div>
+          <SaveCloudButton
+            onClick={handleSaveProfile}
+            label="SAVE"
+            textColor="#ffffff"
+            fillColor="#ffffff"
+            bg="#3b82f6" /* blue-500 */
+            hoverBg="#2563eb" /* blue-600 */
+            fontSize="14px"
+            paddingY="0.375rem"
+            paddingX="0.75rem"
+            borderRadius="9999px"
+            iconSize={18}
+          />
+        </div>
+      </GlassCard>
 
       {/* Social Links */}
-      <h3 className="text-xl font-semibold mb-2">🔗 Social Links</h3>
-      <div className="mb-6 space-y-2">
+      <h3 className="text-xl font-semibold mb-6">🔗 Social Links</h3>
+      <div className="mb-6 space-y-8">
         {["github", "linkedin", "twitter", "behance", "dribbble", "website"].map(
           (key) => (
             <ThemedInput
@@ -258,9 +288,7 @@ export default function UserProfile() {
       />
 
       {/* Danger Zone heading removed as requested */}
-      <GlassButton accent="red" variant="solid" onClick={handleDeleteAccount}>
-        Delete My Account
-      </GlassButton>
+      <DeleteAccountButton onClick={handleDeleteAccount} size="sm" />
     </div>
   );
 }

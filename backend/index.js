@@ -18,6 +18,10 @@ import analyticsRoutes from "./routes/analytics.js";
 import recruiterDashboardRoutes from "./routes/recruiterDashboardRoutes.js";
 import candidateDirectoryRoutes from "./routes/candidateDirectoryRoutes.js";
 import candidateProfileRoutes from "./routes/candidateProfileRoutes.js";
+import bookmarkRoutes from "./routes/bookmarkRoutes.js";
+import invitationRoutes from "./routes/invitationRoutes.js";
+import recruiterActionsRoutes from "./routes/recruiterActionsRoutes.js";
+import recruiterSettingsRoutes from "./routes/recruiterSettingsRoutes.js";
 import "./config/passportConfig.js";
 
 dotenv.config();
@@ -72,6 +76,10 @@ app.use("/api/analytics", analyticsRoutes);
 app.use("/api/recruiter/dashboard", recruiterDashboardRoutes);
 app.use("/api/candidates", candidateDirectoryRoutes);
 app.use("/api/candidate", candidateProfileRoutes);
+app.use("/api/bookmarks", bookmarkRoutes);
+app.use("/api/invitations", invitationRoutes);
+app.use("/api/recruiter", recruiterActionsRoutes);
+app.use("/api/recruiter/settings", recruiterSettingsRoutes);
 
 // Check
 app.get("/", (req, res) => {

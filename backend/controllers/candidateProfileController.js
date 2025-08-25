@@ -49,16 +49,29 @@ export const reportCandidate = async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const { id } = req.params;
+  const { id } = req.params; // candidate id
   const { reason } = req.body;
 
   const candidate = await User.findById(id);
+  const recruiter = await User.findById(req.user._id);
+
   if (!candidate || candidate.role !== "user") {
     return res.status(404).json({ error: "Candidate not found" });
   }
 
-  // 🔥 For now, just log reports — later you can add Report model
-  console.log(`Candidate ${id} reported by ${req.user._id}: ${reason}`);
+  // 📌 Add report to candidate
+  candidate.reportsReceived.push({
+    recruiterId: recruiter._id,
+    message: reason,
+  });
+
+  // 📌 Add report to recruiter
+  recruiter.reportsMade.push({
+    candidateId: candidate._id,
+    message: reason,
+  });
+
+  await Promise.all([candidate.save(), recruiter.save()]);
 
   res.json({ message: "Candidate reported successfully" });
 };

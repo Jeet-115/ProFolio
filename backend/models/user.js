@@ -18,6 +18,24 @@ const SocialLinksSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const ReportedByRecruiterSchema = new mongoose.Schema(
+  {
+    recruiterId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    message: { type: String, required: true },
+    reportedAt: { type: Date, default: Date.now },
+  },
+  { _id: true }
+);
+
+const ReportedCandidateSchema = new mongoose.Schema(
+  {
+    candidateId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    message: { type: String, required: true },
+    reportedAt: { type: Date, default: Date.now },
+  },
+  { _id: true }
+);
+
 const PreferencesSchema = new mongoose.Schema(
   {
     theme: { type: String, enum: ["light", "dark", "system"], default: "system" },
@@ -40,7 +58,7 @@ const ViewedCandidateSchema = new mongoose.Schema(
     candidateId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     viewedAt: { type: Date, default: Date.now },
   },
-  { _id: false }
+  { _id: true }
 );
 
 const BookmarkedCandidateSchema = new mongoose.Schema(
@@ -49,7 +67,7 @@ const BookmarkedCandidateSchema = new mongoose.Schema(
     notes: { type: String },
     bookmarkedAt: { type: Date, default: Date.now },
   },
-  { _id: false }
+  { _id: true }
 );
 
 const ContactedCandidateSchema = new mongoose.Schema(
@@ -58,7 +76,7 @@ const ContactedCandidateSchema = new mongoose.Schema(
     contactedAt: { type: Date, default: Date.now },
     method: { type: String, enum: ["message", "email"], default: "message" },
   },
-  { _id: false }
+  { _id: true }
 );
 
 const UserSchema = new mongoose.Schema(
@@ -72,12 +90,12 @@ const UserSchema = new mongoose.Schema(
     socialLinks: { type: SocialLinksSchema, default: () => ({}) },
     preferences: { type: PreferencesSchema, default: () => ({}) },
 
-      authProvider: {
+    authProvider: {
       type: String,
       enum: ["local", "google", "github"],
       default: "local",
     },
-      role: {
+    role: {
       type: String,
       enum: ["user", "recruiter", "admin"],
       default: "user",
@@ -94,10 +112,26 @@ const UserSchema = new mongoose.Schema(
     education: { type: String }, // highest qualification / certification
     headline: { type: String }, // short role headline
 
+    // 🔹 Recruiter additional fields
+    companyDetails: {
+      companyName: { type: String, default: "" },
+      logo: { type: String, default: "" }, // Cloudinary URL
+      website: { type: String, default: "" },
+      hrName: { type: String, default: "" },
+    },
+
+    recruiterPreferences: {
+      jobRoles: { type: [String], default: [] }, // ["Frontend Dev", "UI/UX Designer"]
+    },
+
     // Recruiter fields (only meaningful if role === "recruiter")
     viewedCandidates: { type: [ViewedCandidateSchema], default: [] },
     bookmarkedCandidates: { type: [BookmarkedCandidateSchema], default: [] },
     contactedCandidates: { type: [ContactedCandidateSchema], default: [] },
+
+    // 📌 Reporting system
+    reportsReceived: { type: [ReportedByRecruiterSchema], default: [] }, // for candidates
+    reportsMade: { type: [ReportedCandidateSchema], default: [] },       // for recruiters
   },
   { timestamps: true }
 );

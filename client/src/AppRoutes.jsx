@@ -25,6 +25,9 @@ import RecruiterLayout from "./layouts/RecruiterLayout";
 import RecruiterDashboardHome from "./Screens/recruiter/RecruiterDashboardHome";
 import CandidateDirectory from "./Screens/recruiter/CandidateDirectory";
 import CandidateProfile from "./Screens/recruiter/CandidateProfile";
+import Bookmarks from "./Screens/recruiter/Bookmarks";
+import RecruiterActivity from "./Screens/recruiter/RecruiterActivity";
+import RecruiterSettings from "./Screens/recruiter/RecruiterSettings";
 
 const AppRoutes = () => {
   return (
@@ -67,6 +70,9 @@ const AppRoutes = () => {
         <Route index element={<RecruiterDashboardHome />} />
         <Route path="candidates" element={<CandidateDirectory />} />
         <Route path="candidates/:id" element={<CandidateProfile />} />
+        <Route path="bookmarks" element={<Bookmarks />} />
+        <Route path="reported-contacted" element={<RecruiterActivity />} />
+        <Route path="settings" element={<RecruiterSettings />} />
       </Route>
       <Route
         path="/admin"
