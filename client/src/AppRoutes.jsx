@@ -2,6 +2,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./Screens/Home";
 import Login from "./Screens/Login";
 import Signup from "./Screens/SignUp";
+import RecruiterSignup from "./Screens/RecruiterSignup";
 import ProtectedRoute from "./protection/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardHome from "./Components/Dashboard/DashboardHome";
@@ -23,6 +24,7 @@ import UserProfile from "./Screens/dashboard/UserProfile";
 import RecruiterLayout from "./layouts/RecruiterLayout";
 import RecruiterDashboardHome from "./Screens/recruiter/RecruiterDashboardHome";
 import CandidateDirectory from "./Screens/recruiter/CandidateDirectory";
+import CandidateProfile from "./Screens/recruiter/CandidateProfile";
 
 const AppRoutes = () => {
   return (
@@ -30,6 +32,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/recruiter/signup" element={<RecruiterSignup />} />
       <Route
         path="/dashboard"
         element={
@@ -63,6 +66,7 @@ const AppRoutes = () => {
       >
         <Route index element={<RecruiterDashboardHome />} />
         <Route path="candidates" element={<CandidateDirectory />} />
+        <Route path="candidates/:id" element={<CandidateProfile />} />
       </Route>
       <Route
         path="/admin"

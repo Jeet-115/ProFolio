@@ -23,7 +23,9 @@ router.post("/login", (req, res, next) => {
     req.login(user, (err) => {
       if (err) return next(err);
 
-      const redirect = user.role === "admin" ? "/admin" : "/dashboard";
+      let redirect = "/dashboard";
+      if (user.role === "admin") redirect = "/admin/dashboard";
+      else if (user.role === "recruiter") redirect = "/recruiter/dashboard";
 
       return res.status(200).json({
         message: "Login successful!",
@@ -66,10 +68,14 @@ router.post(
 );
 
 // Google OAuth
-router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+router.get("/auth/google", (req, res, next) => {
+  // Get role from query, default to 'user'
+  const role = req.query.role === "recruiter" ? "recruiter" : "user";
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    state: role, // Pass role as state
+  })(req, res, next);
+});
 
 router.get(
   "/auth/google/callback",
@@ -90,7 +96,10 @@ router.get(
             username: req.user.username,
             role: req.user.role,
           },
-          redirect: "/dashboard",
+          redirect:
+            req.user.role === "recruiter"
+              ? "/recruiter/dashboard"
+              : "/dashboard",
         });
       }
       res.send(`
@@ -102,7 +111,10 @@ router.get(
               role: req.user.role,
             },
             message: "Google login successful!",
-            redirect: "/dashboard",
+            redirect:
+              req.user.role === "recruiter"
+                ? "/recruiter/dashboard"
+                : "/dashboard",
           })};
           if (window.opener) {
             window.opener.postMessage(data, "${
@@ -113,7 +125,9 @@ router.get(
             window.addEventListener('DOMContentLoaded', function() {
               window.location.href = "${
                 process.env.CLIENT_URL || "http://localhost:5173"
-              }/dashboard";
+              }${
+        req.user.role === "recruiter" ? "/recruiter/dashboard" : "/dashboard"
+      }";
             });
           }
         </script>
@@ -123,10 +137,14 @@ router.get(
 );
 
 // GitHub OAuth
-router.get(
-  "/auth/github",
-  passport.authenticate("github", { scope: ["user:email"] })
-);
+router.get("/auth/github", (req, res, next) => {
+  // Get role from query, default to 'user'
+  const role = req.query.role === "recruiter" ? "recruiter" : "user";
+  passport.authenticate("github", {
+    scope: ["user:email"],
+    state: role, // Pass role as state
+  })(req, res, next);
+});
 
 router.get(
   "/auth/github/callback",
@@ -147,7 +165,10 @@ router.get(
             username: req.user.username,
             role: req.user.role,
           },
-          redirect: "/dashboard",
+          redirect:
+            req.user.role === "recruiter"
+              ? "/recruiter/dashboard"
+              : "/dashboard",
         });
       }
       res.send(`
@@ -159,7 +180,10 @@ router.get(
               role: req.user.role,
             },
             message: "GitHub login successful!",
-            redirect: "/dashboard",
+            redirect:
+              req.user.role === "recruiter"
+                ? "/recruiter/dashboard"
+                : "/dashboard",
           })};
           if (window.opener) {
             window.opener.postMessage(data, "${
@@ -170,7 +194,9 @@ router.get(
             window.addEventListener('DOMContentLoaded', function() {
               window.location.href = "${
                 process.env.CLIENT_URL || "http://localhost:5173"
-              }/dashboard";
+              }${
+        req.user.role === "recruiter" ? "/recruiter/dashboard" : "/dashboard"
+      }";
             });
           }
         </script>
