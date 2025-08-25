@@ -6,9 +6,21 @@ export const getCandidates = async (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const { skills, location, experienceLevel, education, search, page = 1, limit = 10 } = req.query;
+  const {
+    skills,
+    location,
+    experienceLevel,
+    education,
+    search,
+    page = 1,
+    limit = 10,
+  } = req.query;
 
-  const query = { role: "user" };
+  // Only show users who have recruiterConsent enabled
+  const query = {
+    role: "user",
+    "preferences.privacy.recruiterConsent": true, // <-- Only candidates who consented
+  };
 
   // 🔍 Apply filters
   if (skills) {
@@ -58,10 +70,18 @@ export const bookmarkCandidate = async (req, res) => {
   const { id } = req.params; // candidateId from URL
   const { notes } = req.body;
 
-  // ensure candidate exists
-  const candidate = await User.findById(id);
-  if (!candidate || candidate.role !== "user") {
-    return res.status(404).json({ error: "Candidate not found" });
+  // ensure candidate exists and has recruiterConsent
+  const candidate = await User.findOne({
+    _id: id,
+    role: "user",
+    "preferences.privacy.recruiterConsent": true,
+  });
+  if (!candidate) {
+    return res
+      .status(404)
+      .json({
+        error: "Candidate not found or has not consented to recruiter viewing",
+      });
   }
 
   // get recruiter
