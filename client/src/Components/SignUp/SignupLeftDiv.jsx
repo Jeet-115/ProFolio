@@ -2,14 +2,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import useSignUp from "./SignUp";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Visibility from "@mui/icons-material/Visibility";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+// Removed Material UI in favor of Tailwind inputs and inline SVG icons
+import RoleRadio from "../Common/RoleRadio";
 
 const fadeInLeft = (delay) => ({
   initial: { opacity: 0, x: -50 },
@@ -52,105 +46,73 @@ const SignupLeftDiv = () => {
         >
           Please Enter Your Details
         </motion.h2>
-        <motion.div className="mb-6" {...fadeInLeft(0.25)}>
-          <RadioGroup
-            row
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="flex justify-center"
-          >
-            <FormControlLabel
-              value="user"
-              control={<Radio sx={{ color: "white" }} />}
-              label={<span className="text-white">User</span>}
-            />
-            <FormControlLabel
-              value="recruiter"
-              control={<Radio sx={{ color: "white" }} />}
-              label={<span className="text-white">Recruiter</span>}
-            />
-          </RadioGroup>
+        <motion.div className="mb-6 flex justify-center" {...fadeInLeft(0.25)}>
+          <RoleRadio name="role" value={formData.role} onChange={handleChange} />
         </motion.div>
 
         <form onSubmit={handleSubmit} noValidate>
           <motion.div className="mb-8" {...fadeInLeft(0.3)}>
-            <TextField
-              label="Username"
-              name="username"
-              type="text"
-              value={formData.username}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                style: { backgroundColor: "white", borderRadius: "20px" },
-              }}
-              sx={{
-                "& label": { color: "#808080" },
-                "& label.Mui-focused": { color: "black" },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": { borderColor: "black" },
-                },
-              }}
-              error={!!errors.username}
-              helperText={errors.username}
-            />
+            <div>
+              <input
+                className="w-full px-4 py-3 rounded-2xl bg-white text-black focus:outline-none focus:ring-2 focus:ring-black placeholder-gray-500"
+                placeholder="Username"
+                name="username"
+                type="text"
+                value={formData.username}
+                onChange={handleChange}
+              />
+              {errors.username && (
+                <p className="text-red-500 text-xs mt-1">{errors.username}</p>
+              )}
+            </div>
           </motion.div>
 
           <motion.div className="mb-8" {...fadeInLeft(0.4)}>
-            <TextField
-              label="Email ID"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                style: { backgroundColor: "white", borderRadius: "20px" },
-              }}
-              sx={{
-                "& label": { color: "#808080" },
-                "& label.Mui-focused": { color: "black" },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": { borderColor: "black" },
-                },
-              }}
-              error={!!errors.email}
-              helperText={errors.email}
-            />
+            <div>
+              <input
+                className="w-full px-4 py-3 rounded-2xl bg-white text-black focus:outline-none focus:ring-2 focus:ring-black placeholder-gray-500"
+                placeholder="Email ID"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
+            </div>
           </motion.div>
 
           <motion.div className="mb-4" {...fadeInLeft(0.5)}>
-            <TextField
-              label="Password"
-              name="password"
-              type={showPassword ? "text" : "password"}
-              value={formData.password}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-              InputProps={{
-                style: { backgroundColor: "white", borderRadius: "20px" },
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)}>
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              sx={{
-                "& label": { color: "#808080" },
-                "& label.Mui-focused": { color: "black" },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": { borderColor: "black" },
-                },
-              }}
-              error={!!errors.password}
-              helperText={errors.password}
-            />
+            <div className="relative">
+              <input
+                className="w-full px-4 py-3 rounded-2xl bg-white text-black focus:outline-none focus:ring-2 focus:ring-black placeholder-gray-500 pr-12"
+                placeholder="Password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 focus:outline-none"
+                onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
+              >
+                {showPassword ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12.01c2.12 4.06 6.36 6.99 10.066 6.99 1.676 0 3.303-.37 4.757-1.04M21.07 15.977A10.45 10.45 0 0022.066 12c-2.12-4.06-6.36-6.99-10.066-6.99-1.13 0-2.23.15-3.28.43M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.808 2.808a1 1 0 011.414 0l16.97 16.97a1 1 0 01-1.414 1.414l-2.122-2.122A10.477 10.477 0 0112 19c-3.706 0-7.946-2.93-10.066-6.99a10.45 10.45 0 012.122-3.757M9.88 9.88A3 3 0 0115 12m-3 3a3 3 0 01-3-3c0-.795.312-1.52.818-2.06" />
+                  </svg>
+                )}
+              </button>
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password}</p>
+              )}
+            </div>
           </motion.div>
 
           <motion.div

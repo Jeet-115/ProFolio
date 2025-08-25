@@ -48,8 +48,11 @@ const SidebarItem = ({ icon, label, active, onClick }) => (
   </div>
 );
 
-function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
+function Sidebar({ mobileOpen, setMobileOpen, showInlineToggle = true }) {
+  const isControlled = typeof mobileOpen === "boolean" && typeof setMobileOpen === "function";
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const isOpen = isControlled ? mobileOpen : uncontrolledOpen;
+  const setIsOpen = isControlled ? setMobileOpen : setUncontrolledOpen;
   const [isLoading, setIsLoading] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState("");
   const location = useLocation();
@@ -125,20 +128,22 @@ function Sidebar() {
 
   return (
     <>
-      {/* Mobile Toggle Button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="md:hidden text-[#E0F7FA] text-2xl m-4 fixed top-6 left-5 z-50"
-      >
-        <FaBars />
-      </button>
+      {/* Mobile Toggle Button (can be hidden if Topbar controls it) */}
+      {showInlineToggle && (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="md:hidden text-[#E0F7FA] text-2xl m-4 fixed top-6 left-5 z-50"
+        >
+          <FaBars />
+        </button>
+      )}
 
       {/* Mobile Sidebar */}
       <AnimatePresence>
         {isOpen && (
           <>
             <motion.div
-              className="fixed inset-0 backdrop-blur-lg bg-black/30 z-40"
+              className="fixed inset-0 backdrop-blur-lg bg-black/30 z-50"
               onClick={() => setIsOpen(false)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -150,7 +155,7 @@ function Sidebar() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed inset-y-0 left-0 z-50 w-64 bg-white/10 backdrop-blur-xl border-r border-white/20 text-white p-6 flex flex-col gap-6 shadow-xl rounded-tr-3xl rounded-br-3xl md:hidden"
+              className="fixed inset-y-0 left-0 z-60 w-64 bg-white/10 backdrop-blur-xl border-r border-white/20 text-white p-6 flex flex-col gap-6 shadow-xl rounded-tr-3xl rounded-br-3xl md:hidden"
             >
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold tracking-wide outfit">
@@ -164,7 +169,10 @@ function Sidebar() {
                 </button>
               </div>
 
-              {items.map((item, index) => (
+              {items
+                // Hide Analytics on mobile sidebar
+                .filter((it) => it.path !== "/dashboard/analytics")
+                .map((item, index) => (
                 <motion.div key={index} variants={itemVariants}>
                   <SidebarItem
                     icon={item.icon}

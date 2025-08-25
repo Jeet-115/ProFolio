@@ -11,6 +11,7 @@ import {
   FaThLarge,
 } from "react-icons/fa";
 import LoadingOverlay from "./LoadingOverlay";
+import UserAnalytics from "../../Screens/dashboard/UserAnalytics";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -53,7 +54,7 @@ function DashboardHome() {
     {
       icon: <FaFileExcel className="text-3xl" />,
       title: "Resume Builder",
-      description: "Create professional resumes",
+      description: "Create a polished, professional resume in minutes.\nAdd your skills, experience, and achievements with ease.",
       path: "/dashboard/resume-builder",
       color: "from-blue-500 to-blue-600",
       loadingMessage: "Loading Resume Builder...",
@@ -61,7 +62,7 @@ function DashboardHome() {
     {
       icon: <FaDownload className="text-3xl" />,
       title: "Portfolio Builder",
-      description: "Build stunning portfolios",
+      description: "Design a dynamic online portfolio to showcase your work.\nHighlight projects, skills, and achievements visually.",
       path: "/dashboard/portfolio-techstack",
       color: "from-green-500 to-green-600",
       loadingMessage: "Loading Portfolio Builder...",
@@ -69,7 +70,7 @@ function DashboardHome() {
     {
       icon: <FaFileExcel className="text-3xl" />,
       title: "Resume Templates",
-      description: "Choose from templates",
+      description: "Choose from modern, ATS-friendly templates.\nCustomize layouts to match your professional style.",
       path: "/dashboard/templates/resumes",
       color: "from-purple-500 to-purple-600",
       loadingMessage: "Loading Resume Templates...",
@@ -77,7 +78,7 @@ function DashboardHome() {
     {
       icon: <FaDownload className="text-3xl" />,
       title: "Portfolio Templates",
-      description: "Explore portfolio designs",
+      description: "Pick sleek and responsive portfolio designs.\nPersonalize them to reflect your unique professional identity.",
       path: "/dashboard/portfolio-templates",
       color: "from-pink-500 to-pink-600",
       loadingMessage: "Loading Portfolio Templates...",
@@ -85,7 +86,7 @@ function DashboardHome() {
     {
       icon: <FaHistory className="text-3xl" />,
       title: "My Resumes",
-      description: "View saved resumes",
+      description: "Access and edit your saved resumes anytime.\nKeep them updated with your latest experience and skills.",
       path: "/dashboard/resume-history",
       color: "from-orange-500 to-orange-600",
       loadingMessage: "Loading Your Resumes...",
@@ -93,7 +94,7 @@ function DashboardHome() {
     {
       icon: <FaHistory className="text-3xl" />,
       title: "My Portfolios",
-      description: "Manage portfolios",
+      description: "Manage and update your existing portfolios.\nShare your best work instantly with recruiters or clients.",
       path: "/dashboard/portfolio-history",
       color: "from-teal-500 to-teal-600",
       loadingMessage: "Loading Your Portfolios...",
@@ -101,7 +102,7 @@ function DashboardHome() {
     {
       icon: <FaChartBar className="text-3xl" />,
       title: "Analytics",
-      description: "Track performance",
+      description: "Track views, downloads, and engagement on your resumes and portfolios.\nGain insights to improve visibility.",
       path: "/dashboard/analytics",
       color: "from-indigo-500 to-indigo-600",
       loadingMessage: "Loading Analytics...",
@@ -109,7 +110,7 @@ function DashboardHome() {
     {
       icon: <FaCog className="text-3xl" />,
       title: "Profile & Settings",
-      description: "Manage your account",
+      description: "Manage your account preferences and personal information.\nControl privacy, theme, and notification settings.",
       path: "/dashboard/profile",
       color: "from-gray-500 to-gray-600",
       loadingMessage: "Loading Profile Settings...",
@@ -161,6 +162,13 @@ function DashboardHome() {
           </motion.p>
         </motion.div>
 
+        {/* Mobile Analytics (below welcome) */}
+        <motion.div className="md:hidden" variants={fadeUp} custom={2.5}>
+          <div className="mt-2">
+            <UserAnalytics />
+          </div>
+        </motion.div>
+
         {/* Navigation Cards - Hidden on mobile, shown on tablet and up */}
         <motion.div
           className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
@@ -191,19 +199,16 @@ function DashboardHome() {
               <div className="hidden lg:block flip-card">
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
-                    <div className="flex items-center justify-center h-full text-center">
-                      <div className="p-3 bg-white/20 rounded-full">
-                        {item.icon}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flip-card-back">
                     <div className="flex flex-col items-center justify-center h-full text-center space-y-3">
                       <div className="p-3 bg-white/20 rounded-full">
                         {item.icon}
                       </div>
                       <h3 className="font-semibold text-lg">{item.title}</h3>
-                      <p className="text-sm opacity-90 px-4">{item.description}</p>
+                    </div>
+                  </div>
+                  <div className="flip-card-back">
+                    <div className="flex items-center justify-center h-full text-center">
+                      <p className="text-sm opacity-90 px-6 whitespace-pre-line max-w-[90%] mx-auto">{item.description}</p>
                     </div>
                   </div>
                 </div>
