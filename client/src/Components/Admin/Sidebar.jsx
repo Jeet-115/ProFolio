@@ -53,7 +53,7 @@ function Sidebar() {
   const items = [
     { icon: <FaThLarge />, label: "Admin Dashboard", path: "/admin" },
     { icon: <FaUserCog />, label: "Manage Users", path: "/admin/users" },
-    { icon: <FaDatabase />, label: "Manage Files", path: "/admin/files" },
+    { icon: <FaDatabase />, label: "Manage Recruiters", path: "/admin/recruiters" },
     { icon: <FaCog />, label: "Settings", path: "/admin/settings" },
   ];
 
