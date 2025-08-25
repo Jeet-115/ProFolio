@@ -3,23 +3,15 @@ import passportLocalMongoose from "passport-local-mongoose";
 
 const SocialLinksSchema = new mongoose.Schema(
   {
-    github: String,
-    linkedin: String,
-    twitter: String,
-    behance: String,
-    dribbble: String,
-    website: String,
+    github: { type: String, default: "" },
+    linkedin: { type: String, default: "" },
+    twitter: { type: String, default: "" },
+    behance: { type: String, default: "" },
+    dribbble: { type: String, default: "" },
+    website: { type: String, default: "" },
     primary: {
       type: String,
-      enum: [
-        "github",
-        "linkedin",
-        "twitter",
-        "behance",
-        "dribbble",
-        "website",
-        null,
-      ],
+      enum: ["github", "linkedin", "twitter", "behance", "dribbble", "website"],
       default: null,
     },
   },
@@ -28,27 +20,15 @@ const SocialLinksSchema = new mongoose.Schema(
 
 const PreferencesSchema = new mongoose.Schema(
   {
-    theme: {
-      type: String,
-      enum: ["light", "dark", "system"],
-      default: "system",
-    },
+    theme: { type: String, enum: ["light", "dark", "system"], default: "system" },
     notifications: {
       email: { type: Boolean, default: true },
       activityAlerts: { type: Boolean, default: true },
       weeklyAnalytics: { type: Boolean, default: false },
     },
     privacy: {
-      portfolioVisibility: {
-        type: String,
-        enum: ["public", "private"],
-        default: "private",
-      },
-      resumeVisibility: {
-        type: String,
-        enum: ["public", "private"],
-        default: "private",
-      },
+      portfolioVisibility: { type: String, enum: ["public", "private"], default: "private" },
+      resumeVisibility: { type: String, enum: ["public", "private"], default: "private" },
       recruiterConsent: { type: Boolean, default: false },
     },
   },
@@ -84,20 +64,20 @@ const ContactedCandidateSchema = new mongoose.Schema(
 const UserSchema = new mongoose.Schema(
   {
     email: { type: String, required: true, unique: true },
-    username: { type: String }, // optional username for portfolio URLs
-    fullName: { type: String },
-    bio: { type: String, maxlength: 300 },
-    profilePicture: { type: String }, // Cloudinary URL
+    username: { type: String, default: "" }, // optional
+    fullName: { type: String, default: "" },
+    bio: { type: String, maxlength: 300, default: "" },
+    profilePicture: { type: String, default: "" }, // Cloudinary URL
 
-    socialLinks: SocialLinksSchema,
-    preferences: PreferencesSchema,
+    socialLinks: { type: SocialLinksSchema, default: () => ({}) },
+    preferences: { type: PreferencesSchema, default: () => ({}) },
 
-    authProvider: {
+      authProvider: {
       type: String,
       enum: ["local", "google", "github"],
       default: "local",
     },
-    role: {
+      role: {
       type: String,
       enum: ["user", "recruiter", "admin"],
       default: "user",
@@ -115,9 +95,9 @@ const UserSchema = new mongoose.Schema(
     headline: { type: String }, // short role headline
 
     // Recruiter fields (only meaningful if role === "recruiter")
-    viewedCandidates: [ViewedCandidateSchema],
-    bookmarkedCandidates: [BookmarkedCandidateSchema],
-    contactedCandidates: [ContactedCandidateSchema],
+    viewedCandidates: { type: [ViewedCandidateSchema], default: [] },
+    bookmarkedCandidates: { type: [BookmarkedCandidateSchema], default: [] },
+    contactedCandidates: { type: [ContactedCandidateSchema], default: [] },
   },
   { timestamps: true }
 );

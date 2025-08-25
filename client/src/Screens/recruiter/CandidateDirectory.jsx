@@ -129,7 +129,7 @@ Best regards,%0D%0A
                 </p>
 
                 {/* Actions */}
-                <div className="flex gap-2 mt-3">
+                <div className="flex gap-2 mt-3 flex-wrap justify-center">
                   <button
                     onClick={() => handleBookmark(c._id)}
                     className="px-3 py-1 bg-blue-500 text-white rounded"
@@ -141,6 +141,14 @@ Best regards,%0D%0A
                     className="px-3 py-1 bg-green-500 text-white rounded"
                   >
                     Contact
+                  </button>
+                  <button
+                    onClick={() =>
+                      (window.location.href = `/recruiter/dashboard/candidates/${c._id}`)
+                    }
+                    className="px-3 py-1 bg-gray-700 text-white rounded"
+                  >
+                    View Profile
                   </button>
                 </div>
               </div>
