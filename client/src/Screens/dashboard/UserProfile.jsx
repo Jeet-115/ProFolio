@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import ThemedInput from "../../Components/Common/ThemedInput";
+import PreferenceForm from "../../Components/Common/PreferenceForm";
+import GlassButton from "../../Components/Common/GlassButton";
 import {
   getUserProfile,
   updateUserProfile,
@@ -117,28 +120,24 @@ export default function UserProfile() {
 
       {/* Basic Info */}
       <div className="mb-6 space-y-4">
-        <input
-          type="text"
+        <ThemedInput
           name="fullName"
-          placeholder="Full Name"
+          label="Full Name"
           value={formData.fullName}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <input
-          type="text"
+        <ThemedInput
           name="username"
-          placeholder="Username"
+          label="Username"
           value={formData.username}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
         />
-        <textarea
+        <ThemedInput
           name="bio"
-          placeholder="Bio"
+          label="Bio"
           value={formData.bio}
           onChange={handleChange}
-          className="w-full p-2 border rounded"
+          type="textarea"
         />
         {formData.profilePicture ? (
           <div>
@@ -157,12 +156,9 @@ export default function UserProfile() {
         ) : (
           <p>No profile picture set</p>
         )}
-        <button
-          onClick={handleSaveProfile}
-          className="px-4 py-2 bg-blue-600 text-white rounded"
-        >
+        <GlassButton accent="green" variant="solid" onClick={handleSaveProfile}>
           Save Profile
-        </button>
+        </GlassButton>
       </div>
 
       {/* Social Links */}
@@ -170,128 +166,28 @@ export default function UserProfile() {
       <div className="mb-6 space-y-2">
         {["github", "linkedin", "twitter", "behance", "dribbble", "website"].map(
           (key) => (
-            <input
+            <ThemedInput
               key={key}
-              type="text"
               name={key}
-              placeholder={`${key} link`}
+              label={`${key} link`}
               value={formData.socialLinks?.[key] || ""}
               onChange={handleSocialChange}
-              className="w-full p-2 border rounded"
             />
           )
         )}
       </div>
 
       {/* Preferences */}
-      <h3 className="text-xl font-semibold mb-2">⚙️ Preferences</h3>
-      <div className="mb-6 space-y-2">
-        <label>
-          Theme:
-          <select
-            name="theme"
-            value={preferences.theme || "system"}
-            onChange={handlePreferencesChange}
-            className="ml-2 p-1 border rounded"
-          >
-            <option value="system">System</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </label>
+      <PreferenceForm
+        preferences={preferences}
+        onChange={handlePreferencesChange}
+        onSave={handleSavePreferences}
+      />
 
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              name="notifications.email"
-              checked={preferences.notifications?.email || false}
-              onChange={handlePreferencesChange}
-            />
-            Email Notifications
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              name="notifications.activityAlerts"
-              checked={preferences.notifications?.activityAlerts || false}
-              onChange={handlePreferencesChange}
-            />
-            Resume/Portfolio Activity Alerts
-          </label>
-        </div>
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              name="notifications.weeklyAnalytics"
-              checked={preferences.notifications?.weeklyAnalytics || false}
-              onChange={handlePreferencesChange}
-            />
-            Weekly Analytics Report
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Portfolio Visibility:
-            <select
-              name="privacy.portfolioVisibility"
-              value={preferences.privacy?.portfolioVisibility || "private"}
-              onChange={handlePreferencesChange}
-              className="ml-2 p-1 border rounded"
-            >
-              <option value="private">Private</option>
-              <option value="public">Public</option>
-            </select>
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Resume Visibility:
-            <select
-              name="privacy.resumeVisibility"
-              value={preferences.privacy?.resumeVisibility || "private"}
-              onChange={handlePreferencesChange}
-              className="ml-2 p-1 border rounded"
-            >
-              <option value="private">Private</option>
-              <option value="public">Public</option>
-            </select>
-          </label>
-        </div>
-
-        <div>
-          <label>
-            <input
-              type="checkbox"
-              name="privacy.recruiterConsent"
-              checked={preferences.privacy?.recruiterConsent || false}
-              onChange={handlePreferencesChange}
-            />
-            Allow Recruiters to View My Profile
-          </label>
-        </div>
-
-        <button
-          onClick={handleSavePreferences}
-          className="px-4 py-2 bg-green-600 text-white rounded mt-2"
-        >
-          Save Preferences
-        </button>
-      </div>
-
-      {/* Danger Zone */}
-      <h3 className="text-xl font-semibold text-red-600 mb-2">⚠️ Danger Zone</h3>
-      <button
-        onClick={handleDeleteAccount}
-        className="px-4 py-2 bg-red-600 text-white rounded"
-      >
+      {/* Danger Zone heading removed as requested */}
+      <GlassButton accent="red" variant="solid" onClick={handleDeleteAccount}>
         Delete My Account
-      </button>
+      </GlassButton>
     </div>
   );
 }

@@ -32,6 +32,7 @@ export default function PortfolioBuilder() {
   const [projectName, setProjectName] = useState("");
   const [files, setFiles] = useState(defaultFiles);
   const [activeFile, setActiveFile] = useState("index.html");
+  const [editorVisible, setEditorVisible] = useState(false);
 
   // If editing, fetch current project
   useEffect(() => {
@@ -113,13 +114,16 @@ export default function PortfolioBuilder() {
         </div>
       </div>
 
-      {/* Laptop-only quick file buttons */}
+      {/* File buttons (all devices) */}
       {techStack === "HTML-CSS-JS" && (
         <div className="flex gap-4 overflow-x-auto">
           {/* HTML Button */}
           <button
             type="button"
-            onClick={() => setActiveFile("index.html")}
+            onClick={() => {
+              setActiveFile("index.html");
+              setEditorVisible(true);
+            }}
             className={`group relative flex items-center justify-start w-[45px] h-[45px] rounded-full overflow-hidden transition-all duration-300 shadow-[2px_2px_10px_rgba(0,0,0,0.2)] bg-[#E34F26] active:translate-x-[2px] active:translate-y-[2px] focus:outline-none border-0`}
             aria-label="Select index.html"
             aria-pressed={activeFile === "index.html"}
@@ -139,7 +143,10 @@ export default function PortfolioBuilder() {
           {/* CSS Button */}
           <button
             type="button"
-            onClick={() => setActiveFile("style.css")}
+            onClick={() => {
+              setActiveFile("style.css");
+              setEditorVisible(true);
+            }}
             className={`group relative flex items-center justify-start w-[45px] h-[45px] rounded-full overflow-hidden transition-all duration-300 shadow-[2px_2px_10px_rgba(0,0,0,0.2)] bg-[#1572B6] active:translate-x-[2px] active:translate-y-[2px] focus:outline-none border-0`}
             aria-label="Select style.css"
             aria-pressed={activeFile === "style.css"}
@@ -159,7 +166,10 @@ export default function PortfolioBuilder() {
           {/* JS Button */}
           <button
             type="button"
-            onClick={() => setActiveFile("script.js")}
+            onClick={() => {
+              setActiveFile("script.js");
+              setEditorVisible(true);
+            }}
             className={`group relative flex items-center justify-start w-[45px] h-[45px] rounded-full overflow-hidden transition-all duration-300 shadow-[2px_2px_10px_rgba(0,0,0,0.2)] bg-[#F7DF1E] active:translate-x-[2px] active:translate-y-[2px] focus:outline-none border-0`}
             aria-label="Select script.js"
             aria-pressed={activeFile === "script.js"}
@@ -180,8 +190,8 @@ export default function PortfolioBuilder() {
 
       
 
-      {/* Editor */}
-      {currentFile && (
+      {/* Editor: visible only after a file button is clicked */}
+      {editorVisible && currentFile && (
         <Editor
           height="70vh"
           theme="vs-dark"

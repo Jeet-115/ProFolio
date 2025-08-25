@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { motion } from "framer-motion";
 import Sidebar from "../Components/Dashboard/Sidebar";
 import Topbar from "../Components/Dashboard/Topbar";
 
 function DashboardLayout() {
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   return (
     <motion.div
       className="min-h-screen w-full bg-[linear-gradient(to_bottom,_#1F2D3C_0%,_#1BA089_26%,_#1ABC9C_100%)] flex transition-all duration-500"
@@ -14,11 +15,11 @@ function DashboardLayout() {
     >
       {/* Sidebar - Only show on mobile */}
       <div className="md:hidden">
-        <Sidebar />
+        <Sidebar mobileOpen={mobileSidebarOpen} setMobileOpen={setMobileSidebarOpen} showInlineToggle={false} />
       </div>
       
       <div className="flex-1 md:p-6">
-        <Topbar />
+        <Topbar onOpenMenu={() => setMobileSidebarOpen(true)} />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
