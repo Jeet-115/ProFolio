@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import ThemedInput from "../../Components/Common/ThemedInput";
 import PreferenceForm from "../../Components/Common/PreferenceForm";
-import GlassButton from "../../Components/Common/GlassButton";
+import DeleteAccountButton from "../../Components/Common/DeleteAccountButton";
+import SaveCloudButton from "../../Components/Common/SaveCloudButton";
 import GlassCard from "../../Components/Common/GlassCard";
 import {
   getUserProfile,
@@ -178,9 +179,19 @@ export default function UserProfile() {
         ) : (
           <p>No profile picture set</p>
         )}
-        <GlassButton accent="green" variant="solid" onClick={handleSaveProfile}>
-          Save Profile
-        </GlassButton>
+        <SaveCloudButton
+          onClick={handleSaveProfile}
+          label="SAVE"
+          textColor="#ffffff"
+          fillColor="#ffffff"
+          bg="#3b82f6" /* blue-500 */
+          hoverBg="#2563eb" /* blue-600 */
+          fontSize="14px"
+          paddingY="0.375rem"
+          paddingX="0.75rem"
+          borderRadius="9999px"
+          iconSize={18}
+        />
       </div>
 
       {/* Candidate Fields */}
@@ -206,13 +217,30 @@ export default function UserProfile() {
           value={formData.location}
           onChange={handleChange}
         />
-        <ThemedInput
-          name="experienceLevel"
-          label="Experience Level"
-          placeholder="e.g. Junior, Mid, Senior"
-          value={formData.experienceLevel}
-          onChange={handleChange}
-        />
+        <div className="space-y-2">
+          <div className="text-white font-semibold">Experience Level</div>
+          <div className="flex flex-wrap gap-2">
+            {["Fresher", "1-3 years", "3-5 years", "5+ years"].map((opt) => (
+              <label
+                key={opt}
+                className={`cursor-pointer select-none px-3 py-1 rounded-lg border backdrop-blur text-sm transition-colors ${
+                  formData.experienceLevel === opt
+                    ? "bg-teal-500/20 border-teal-300 text-white"
+                    : "bg-white/5 border-white/20 text-white/80 hover:bg-white/10"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  className="hidden"
+                  checked={formData.experienceLevel === opt}
+                  onChange={() => setFormData((p) => ({ ...p, experienceLevel: opt }))}
+                />
+                {opt}
+              </label>
+            ))}
+          </div>
+        </div>
+        
         <ThemedInput
           name="education"
           label="Education"
@@ -220,9 +248,19 @@ export default function UserProfile() {
           onChange={handleChange}
         />
         <div>
-          <GlassButton accent="green" variant="solid" onClick={handleSaveProfile}>
-            Save Profile
-          </GlassButton>
+          <SaveCloudButton
+            onClick={handleSaveProfile}
+            label="SAVE"
+            textColor="#ffffff"
+            fillColor="#ffffff"
+            bg="#3b82f6" /* blue-500 */
+            hoverBg="#2563eb" /* blue-600 */
+            fontSize="14px"
+            paddingY="0.375rem"
+            paddingX="0.75rem"
+            borderRadius="9999px"
+            iconSize={18}
+          />
         </div>
       </GlassCard>
 
@@ -250,9 +288,7 @@ export default function UserProfile() {
       />
 
       {/* Danger Zone heading removed as requested */}
-      <GlassButton accent="red" variant="solid" onClick={handleDeleteAccount}>
-        Delete My Account
-      </GlassButton>
+      <DeleteAccountButton onClick={handleDeleteAccount} size="sm" />
     </div>
   );
 }

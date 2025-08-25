@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ThemedSelect from "./ThemedSelect";
 import GlassButton from "./GlassButton";
+import SaveCloudButton from "./SaveCloudButton";
 import ToggleCheckbox from "./ToggleCheckbox";
 
 /*
@@ -97,9 +98,19 @@ const PreferenceForm = ({ preferences = {}, onChange, onSave }) => {
         <label htmlFor="privacy_recruiterConsent">Allow Recruiters to View My Profile</label>
       </InlineChecklist>
 
-      <GlassButton accent="green" variant="solid" onClick={onSave}>
-        Save Preferences
-      </GlassButton>
+      <SaveCloudButton
+        onClick={onSave}
+        label="SAVE"
+        textColor="#ffffff"
+        fillColor="#ffffff"
+        bg="#3b82f6" /* blue-500 */
+        hoverBg="#2563eb" /* blue-600 */
+        fontSize="14px"
+        paddingY="0.375rem"
+        paddingX="0.75rem"
+        borderRadius="9999px"
+        iconSize={18}
+      />
     </div>
   );
 };

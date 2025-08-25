@@ -12,6 +12,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import GlassCard from "../../Components/Common/GlassCard";
 import GlassButton from "../../Components/Common/GlassButton";
+import DeleteButton from "../../Components/Common/DeleteButton";
+import EditButton from "../../Components/Common/EditButton";
 
 function ResumeHistory() {
   const [resumes, setResumes] = useState([]);
@@ -107,13 +109,9 @@ function ResumeHistory() {
                   <p className="text-white text-sm mb-4">
                     Last updated: {new Date(resume.updatedAt).toLocaleString()}
                   </p>
-                  <div className="flex gap-2">
-                    <GlassButton variant="solid" accent="blue" onClick={() => handleEdit(resume)}>
-                      Edit
-                    </GlassButton>
-                    <GlassButton variant="solid" accent="red" onClick={() => handleDelete(resume)}>
-                      Delete
-                    </GlassButton>
+                  <div className="flex items-center gap-3">
+                    <EditButton onClick={() => handleEdit(resume)} />
+                    <DeleteButton onClick={() => handleDelete(resume)} />
                   </div>
                 </GlassCard>
               </motion.div>

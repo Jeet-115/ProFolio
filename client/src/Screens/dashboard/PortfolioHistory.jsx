@@ -11,6 +11,8 @@ import {
 } from "../../services/templatePortfolioService";
 import { motion, AnimatePresence } from "framer-motion";
 import GlassButton from "../../Components/Common/GlassButton";
+import DeleteButton from "../../Components/Common/DeleteButton";
+import EditButton from "../../Components/Common/EditButton";
 import GlassCard from "../../Components/Common/GlassCard";
 
 export default function PortfolioHistory() {
@@ -110,13 +112,9 @@ export default function PortfolioHistory() {
                   <p className="text-white text-sm mb-4">
                     Last updated: {new Date(p.updatedAt).toLocaleString()}
                   </p>
-                  <div className="flex gap-2">
-                    <GlassButton variant="solid" accent="blue" onClick={() => handleEdit(p)}>
-                      Edit
-                    </GlassButton>
-                    <GlassButton variant="solid" accent="red" onClick={() => handleDelete(p)}>
-                      Delete
-                    </GlassButton>
+                  <div className="flex items-center gap-3">
+                    <EditButton onClick={() => handleEdit(p)} />
+                    <DeleteButton onClick={() => handleDelete(p)} />
                   </div>
                 </GlassCard>
               </motion.div>
