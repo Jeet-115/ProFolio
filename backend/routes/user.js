@@ -61,16 +61,26 @@ router.delete(
   wrapAsync(userController.deleteUser)
 );
 
-// Dev-only helper to promote current user to admin
-router.post(
-  "/admin/dev/promote",
-  wrapAsync(userController.devPromoteMeToAdmin)
-);
+
+// Get user reports
+router.get("/admin/users/:id/reports", isAdmin, wrapAsync(userController.getUserReports));
+
+function getRedirectPath(role) {
+  if (role === "admin") return "/admin";
+  if (role === "recruiter") return "/recruiter/dashboard";
+  return "/dashboard"; // default for user
+}
 
 // Google OAuth
 router.get("/auth/google", (req, res, next) => {
   // Get role from query, default to 'user'
-  const role = req.query.role === "recruiter" ? "recruiter" : "user";
+  const role =
+    req.query.role === "recruiter"
+      ? "recruiter"
+      : req.query.role === "admin"
+      ? "admin"
+      : "user";
+
   passport.authenticate("google", {
     scope: ["profile", "email"],
     state: role, // Pass role as state
@@ -85,6 +95,8 @@ router.get(
   }),
   (req, res) => {
     req.session.save(() => {
+      const redirectPath = getRedirectPath(req.user.role);
+
       if (
         req.headers.accept &&
         req.headers.accept.includes("application/json")
@@ -96,12 +108,10 @@ router.get(
             username: req.user.username,
             role: req.user.role,
           },
-          redirect:
-            req.user.role === "recruiter"
-              ? "/recruiter/dashboard"
-              : "/dashboard",
+          redirect: redirectPath,
         });
       }
+
       res.send(`
         <script>
           const data = ${JSON.stringify({
@@ -111,10 +121,7 @@ router.get(
               role: req.user.role,
             },
             message: "Google login successful!",
-            redirect:
-              req.user.role === "recruiter"
-                ? "/recruiter/dashboard"
-                : "/dashboard",
+            redirect: redirectPath,
           })};
           if (window.opener) {
             window.opener.postMessage(data, "${
@@ -125,9 +132,7 @@ router.get(
             window.addEventListener('DOMContentLoaded', function() {
               window.location.href = "${
                 process.env.CLIENT_URL || "http://localhost:5173"
-              }${
-        req.user.role === "recruiter" ? "/recruiter/dashboard" : "/dashboard"
-      }";
+              }${redirectPath}";
             });
           }
         </script>
@@ -139,7 +144,13 @@ router.get(
 // GitHub OAuth
 router.get("/auth/github", (req, res, next) => {
   // Get role from query, default to 'user'
-  const role = req.query.role === "recruiter" ? "recruiter" : "user";
+  const role =
+    req.query.role === "recruiter"
+      ? "recruiter"
+      : req.query.role === "admin"
+      ? "admin"
+      : "user";
+
   passport.authenticate("github", {
     scope: ["user:email"],
     state: role, // Pass role as state
@@ -154,6 +165,8 @@ router.get(
   }),
   (req, res) => {
     req.session.save(() => {
+      const redirectPath = getRedirectPath(req.user.role);
+
       if (
         req.headers.accept &&
         req.headers.accept.includes("application/json")
@@ -165,12 +178,10 @@ router.get(
             username: req.user.username,
             role: req.user.role,
           },
-          redirect:
-            req.user.role === "recruiter"
-              ? "/recruiter/dashboard"
-              : "/dashboard",
+          redirect: redirectPath,
         });
       }
+
       res.send(`
         <script>
           const data = ${JSON.stringify({
@@ -180,10 +191,7 @@ router.get(
               role: req.user.role,
             },
             message: "GitHub login successful!",
-            redirect:
-              req.user.role === "recruiter"
-                ? "/recruiter/dashboard"
-                : "/dashboard",
+            redirect: redirectPath,
           })};
           if (window.opener) {
             window.opener.postMessage(data, "${
@@ -194,9 +202,7 @@ router.get(
             window.addEventListener('DOMContentLoaded', function() {
               window.location.href = "${
                 process.env.CLIENT_URL || "http://localhost:5173"
-              }${
-        req.user.role === "recruiter" ? "/recruiter/dashboard" : "/dashboard"
-      }";
+              }${redirectPath}";
             });
           }
         </script>

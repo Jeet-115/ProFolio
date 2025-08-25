@@ -38,15 +38,27 @@ const ReportedCandidateSchema = new mongoose.Schema(
 
 const PreferencesSchema = new mongoose.Schema(
   {
-    theme: { type: String, enum: ["light", "dark", "system"], default: "system" },
+    theme: {
+      type: String,
+      enum: ["light", "dark", "system"],
+      default: "system",
+    },
     notifications: {
       email: { type: Boolean, default: true },
       activityAlerts: { type: Boolean, default: true },
       weeklyAnalytics: { type: Boolean, default: false },
     },
     privacy: {
-      portfolioVisibility: { type: String, enum: ["public", "private"], default: "private" },
-      resumeVisibility: { type: String, enum: ["public", "private"], default: "private" },
+      portfolioVisibility: {
+        type: String,
+        enum: ["public", "private"],
+        default: "private",
+      },
+      resumeVisibility: {
+        type: String,
+        enum: ["public", "private"],
+        default: "private",
+      },
       recruiterConsent: { type: Boolean, default: false },
     },
   },
@@ -131,7 +143,8 @@ const UserSchema = new mongoose.Schema(
 
     // 📌 Reporting system
     reportsReceived: { type: [ReportedByRecruiterSchema], default: [] }, // for candidates
-    reportsMade: { type: [ReportedCandidateSchema], default: [] },       // for recruiters
+    reportsMade: { type: [ReportedCandidateSchema], default: [] }, // for recruiters
+
   },
   { timestamps: true }
 );
