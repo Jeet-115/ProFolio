@@ -10,6 +10,8 @@ import {
   deleteTemplatePortfolio,
 } from "../../services/templatePortfolioService";
 import { motion, AnimatePresence } from "framer-motion";
+import GlassButton from "../../Components/Common/GlassButton";
+import GlassCard from "../../Components/Common/GlassCard";
 
 export default function PortfolioHistory() {
   const [portfolios, setPortfolios] = useState([]);
@@ -96,31 +98,27 @@ export default function PortfolioHistory() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
-                className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow hover:shadow-lg transition"
+                className="transition"
               >
-                <h2 className="text-xl font-semibold mb-2">{p.name}</h2>
-                {p.type === "template" && (
-                  <p className="text-sm text-gray-500 mb-2">
-                    Template: {p.templateName}
+                <GlassCard className="p-4 rounded-2xl">
+                  <h2 className="text-xl font-semibold mb-2">{p.name}</h2>
+                  {p.type === "template" && (
+                    <p className="text-sm text-gray-300 mb-2">
+                      Template: {p.templateName}
+                    </p>
+                  )}
+                  <p className="text-white text-sm mb-4">
+                    Last updated: {new Date(p.updatedAt).toLocaleString()}
                   </p>
-                )}
-                <p className="text-gray-500 text-sm mb-4">
-                  Last updated: {new Date(p.updatedAt).toLocaleString()}
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleEdit(p)}
-                    className="px-3 py-1 bg-blue-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300 hover:bg-blue-700"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDelete(p)}
-                    className="px-3 py-1 bg-red-600 text-white rounded-lg font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300 hover:bg-red-700"
-                  >
-                    Delete
-                  </button>
-                </div>
+                  <div className="flex gap-2">
+                    <GlassButton variant="solid" accent="blue" onClick={() => handleEdit(p)}>
+                      Edit
+                    </GlassButton>
+                    <GlassButton variant="solid" accent="red" onClick={() => handleDelete(p)}>
+                      Delete
+                    </GlassButton>
+                  </div>
+                </GlassCard>
               </motion.div>
             ))}
           </div>
