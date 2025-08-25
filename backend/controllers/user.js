@@ -6,27 +6,52 @@ export const renderSignupForm = (req, res) => {
 
 export const signupPage = async (req, res, next) => {
   try {
+    console.log('=== SIGNUP DEBUG START ===');
+    console.log('Signup request body:', req.body);
     const { email, username, password, role } = req.body;
+    console.log('Extracted role from request:', role);
+    
     let assignedRole = role;
     if (!["user", "recruiter"].includes(role)) {
+      console.log('Invalid role detected, falling back to user. Original role was:', role);
       assignedRole = "user"; // fallback
     }
+    console.log('Final assigned role:', assignedRole);
 
-    const user = new User({ email, username, role: assignedRole });
+    // Create user instance WITHOUT role first (let passport-local-mongoose handle registration)
+    const user = new User({ email, username });
+    console.log('Created user instance without role initially');
+    
+    // Register user with passport-local-mongoose
     const registeredUser = await User.register(user, password);
+    console.log('After User.register(), role is:', registeredUser.role);
+    
+    // Use findByIdAndUpdate to FORCE role assignment after registration
+    // This bypasses any middleware or defaults that might interfere
+    const updatedUser = await User.findByIdAndUpdate(
+      registeredUser._id,
+      { role: assignedRole },
+      { new: true, runValidators: false } // Skip validators to avoid conflicts
+    );
+    console.log('After findByIdAndUpdate with role:', updatedUser.role);
+    
+    // Double-check by fetching the user from DB
+    const verificationUser = await User.findById(updatedUser._id);
+    console.log('Verification fetch - role in database:', verificationUser.role);
+    console.log('=== SIGNUP DEBUG END ===');
 
-    req.login(registeredUser, (err) => {
+    req.login(updatedUser, (err) => {
       if (err) return next(err);
       let redirect = "/dashboard";
-      if (registeredUser.role === "admin") redirect = "/admin/dashboard";
-      else if (registeredUser.role === "recruiter")
+      if (updatedUser.role === "admin") redirect = "/admin/dashboard";
+      else if (updatedUser.role === "recruiter")
         redirect = "/recruiter/dashboard";
       return res.status(201).json({
         message: "Signup successful!",
         user: {
-          id: registeredUser._id,
-          username: registeredUser.username,
-          role: registeredUser.role,
+          id: updatedUser._id,
+          username: updatedUser.username,
+          role: updatedUser.role,
         },
         redirect,
       });

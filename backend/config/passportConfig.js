@@ -42,17 +42,18 @@ passport.use(
       clientSecret:
         process.env.GOOGLE_CLIENT_SECRET || "GOOGLE_CLIENT_SECRET_PLACEHOLDER",
       callbackURL: process.env.GOOGLE_CALLBACK_URL || "/auth/google/callback",
-      passReqToCallback: true, // 👈 allow reading req.query.role
+      passReqToCallback: true,
     },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
+        // Read role from state param (OAuth best practice)
+        const roleFromState = req.query.state || req.body.state;
+        let assignedRole = ["user", "recruiter"].includes(roleFromState)
+          ? roleFromState
+          : "user";
+
         let user = await User.findOne({ email: profile.emails[0].value });
         if (!user) {
-          // role toggle from frontend (query param)
-          let assignedRole = ["user", "recruiter"].includes(req.query.role)
-            ? req.query.role
-            : "user";
-
           user = new User({
             email: profile.emails[0].value,
             username: profile.displayName || profile.emails[0].value,
@@ -78,7 +79,7 @@ passport.use(
         process.env.GITHUB_CLIENT_SECRET || "GITHUB_CLIENT_SECRET_PLACEHOLDER",
       callbackURL: process.env.GITHUB_CALLBACK_URL || "/auth/github/callback",
       scope: ["user:email"],
-      passReqToCallback: true, // 👈 allow reading req.query.role
+      passReqToCallback: true,
     },
     async (req, accessToken, refreshToken, profile, done) => {
       try {
@@ -87,12 +88,14 @@ passport.use(
             ? profile.emails[0].value
             : `${profile.username}@github.com`;
 
+        // Read role from state param
+        const roleFromState = req.query.state || req.body.state;
+        let assignedRole = ["user", "recruiter"].includes(roleFromState)
+          ? roleFromState
+          : "user";
+
         let user = await User.findOne({ email });
         if (!user) {
-          let assignedRole = ["user", "recruiter"].includes(req.query.role)
-            ? req.query.role
-            : "user";
-
           user = new User({
             email,
             username: profile.username,

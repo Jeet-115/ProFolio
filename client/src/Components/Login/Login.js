@@ -40,9 +40,10 @@ const useLogin = () => {
 
         setSuccess(res.data.message || "Login successful!");
 
-        // 👇 Redirect based on role
         let redirectPath = "/dashboard";
-        if (res.data.user?.role === "recruiter") {
+        if (res.data.user?.role === "admin") {
+          redirectPath = "/admin";
+        } else if (res.data.user?.role === "recruiter") {
           redirectPath = "/recruiter/dashboard";
         }
         setTimeout(() => navigate(redirectPath), 1000);

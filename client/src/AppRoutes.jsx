@@ -2,6 +2,7 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./Screens/Home";
 import Login from "./Screens/Login";
 import Signup from "./Screens/SignUp";
+import RecruiterSignup from "./Screens/RecruiterSignup";
 import ProtectedRoute from "./protection/ProtectedRoute";
 import DashboardLayout from "./layouts/DashboardLayout";
 import DashboardHome from "./Components/Dashboard/DashboardHome";
@@ -31,6 +32,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/recruiter/signup" element={<RecruiterSignup />} />
       <Route
         path="/dashboard"
         element={

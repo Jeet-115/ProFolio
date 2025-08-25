@@ -165,16 +165,24 @@ const LoginLeftDiv = () => {
             )}
           </motion.div>
 
-          {/* Submit Button with New User Link */}
+          {/* Submit Button with New User Links */}
           <motion.div
-            className="mb-4 flex justify-between items-center"
+            className="mb-4 space-y-2"
             {...animationSettings}
             transition={animationSettings.transition(0.5)}
           >
-            <div></div>
-            <Link to="/signup" className="text-white text-sm hover:underline">
-              New User? Sign In
-            </Link>
+            <div className="flex justify-center space-x-4 text-white text-sm">
+              <Link to="/signup" className="hover:underline transition-all hover:text-white/80">
+                Sign up as User
+              </Link>
+              <span className="text-white/50">•</span>
+              <Link to="/recruiter/signup" className="hover:underline transition-all hover:text-white/80 flex items-center space-x-1">
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+                </svg>
+                <span>Join as Recruiter</span>
+              </Link>
+            </div>
           </motion.div>
 
           <motion.button

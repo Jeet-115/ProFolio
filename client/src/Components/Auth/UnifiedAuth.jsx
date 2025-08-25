@@ -329,6 +329,36 @@ const UnifiedAuth = () => {
           </button>
         </motion.div>
 
+        {/* Additional Navigation - Only show for signup mode */}
+        {!isLogin && (
+          <motion.div
+            className="mt-6 text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+          >
+            <div className="flex items-center justify-center mb-3">
+              <div className="flex-1 border-t border-dashed border-white/30"></div>
+              <span className="px-3 text-white/60 text-xs">Looking to hire?</span>
+              <div className="flex-1 border-t border-dashed border-white/30"></div>
+            </div>
+            <Link
+              to="/recruiter/signup"
+              className="inline-flex items-center space-x-2 text-white/80 hover:text-white text-sm font-medium transition-colors group"
+            >
+              <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+                </svg>
+              </div>
+              <span>Join as Recruiter</span>
+              <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </motion.div>
+        )}
+
       </motion.div>
     </div>
   );
