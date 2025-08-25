@@ -9,6 +9,8 @@ import {
   getTemplateFileById,
   renderTemplate,
 } from "../../services/templateFiles";
+import ThemedInput from "../../Components/Common/ThemedInput";
+import GlassButton from "../../Components/Common/GlassButton";
 
 export default function TemplateFill() {
   const { templateId, resumeId } = useParams();
@@ -153,49 +155,45 @@ export default function TemplateFill() {
       <div className="flex-1">
         <h2 className="text-xl font-bold mb-4">Fill {schema.name} Template</h2>
         <div className="mb-6">
-          <label className="block mb-2 font-semibold">Resume Name</label>
-          <input
-            type="text"
+          <ThemedInput
+            label="Resume Name"
             value={resumeName}
             onChange={(e) => setResumeName(e.target.value)}
-            placeholder={`My ${schema.name} Resume`}
-            className="block w-full p-2 rounded text-black"
+            required
+            name="resumeName"
           />
         </div>
         {schema.fields.map((f) => (
           <div key={f.name} className="mb-6">
-            <label className="block mb-2 font-semibold">{f.label}</label>
-
             {f.type === "text" || f.type === "textarea" ? (
-              <input
-                type="text"
+              <ThemedInput
+                label={f.label}
                 required={f.required}
                 value={formData[f.name] || ""}
                 onChange={(e) => handleChange(f.name, e.target.value)}
-                className="block w-full p-2 rounded text-black"
+                name={f.name}
+                type={f.type === "textarea" ? "textarea" : "text"}
               />
             ) : f.type === "list" ? (
               <div>
+                <label className="block mb-2 font-semibold">{f.label}</label>
                 {(formData[f.name] || [""]).map((item, idx) => (
-                  <input
-                    key={idx}
-                    value={item}
-                    onChange={(e) =>
-                      updateListItem(f.name, idx, e.target.value)
-                    }
-                    className="block w-full mb-2 p-2 rounded text-black"
-                  />
+                  <div key={idx} className="mb-2">
+                    <ThemedInput
+                      label={`${f.label} ${idx + 1}`}
+                      value={item}
+                      onChange={(e) => updateListItem(f.name, idx, e.target.value)}
+                      name={`${f.name}_${idx}`}
+                    />
+                  </div>
                 ))}
-                <button
-                  type="button"
-                  onClick={() => addListItem(f.name)}
-                  className="bg-green-500 px-3 py-1 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
-                >
+                <GlassButton accent="green" type="button" onClick={() => addListItem(f.name)}>
                   + Add {f.label}
-                </button>
+                </GlassButton>
               </div>
             ) : f.type === "repeatable" ? (
               <div className="space-y-4">
+                <label className="block mb-2 font-semibold">{f.label}</label>
                 {(formData[f.name] || []).map((item, idx) => (
                   <div
                     key={idx}
@@ -204,38 +202,33 @@ export default function TemplateFill() {
                     {f.fields.map((sf) =>
                       sf.type === "list" ? (
                         <div key={sf.name}>
-                          <label className="block text-sm">{sf.label}</label>
+                          <label className="block text-sm mb-1">{sf.label}</label>
                           {(item[sf.name] || [""]).map((val, li) => (
-                            <input
-                              key={li}
-                              value={val}
-                              onChange={(e) =>
-                                updateRepeatableListItem(
-                                  f.name,
-                                  idx,
-                                  sf.name,
-                                  li,
-                                  e.target.value
-                                )
-                              }
-                              className="block w-full mb-1 p-2 rounded text-black"
-                            />
+                            <div key={li} className="mb-1">
+                              <ThemedInput
+                                label={`${sf.label} ${li + 1}`}
+                                value={val}
+                                onChange={(e) =>
+                                  updateRepeatableListItem(
+                                    f.name,
+                                    idx,
+                                    sf.name,
+                                    li,
+                                    e.target.value
+                                  )
+                                }
+                                name={`${sf.name}_${li}`}
+                              />
+                            </div>
                           ))}
-                          <button
-                            type="button"
-                            onClick={() =>
-                              addRepeatableListItem(f.name, idx, sf.name)
-                            }
-                            className="bg-green-500 px-2 py-1 rounded-lg text-white text-sm font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
-                          >
+                          <GlassButton accent="green" type="button" onClick={() => addRepeatableListItem(f.name, idx, sf.name)}>
                             + Add {sf.label}
-                          </button>
+                          </GlassButton>
                         </div>
                       ) : (
                         <div key={sf.name}>
-                          <label className="block text-sm">{sf.label}</label>
-                          <input
-                            type="text"
+                          <ThemedInput
+                            label={sf.label}
                             value={item[sf.name] || ""}
                             onChange={(e) =>
                               updateRepeatableItem(
@@ -245,53 +238,32 @@ export default function TemplateFill() {
                                 e.target.value
                               )
                             }
-                            className="block w-full p-2 rounded text-black"
+                            name={sf.name}
                           />
                         </div>
                       )
                     )}
                   </div>
                 ))}
-                <button
-                  type="button"
-                  onClick={() => addRepeatableItem(f.name, f.fields)}
-                  className="bg-blue-500 px-3 py-1 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
-                >
+                <GlassButton accent="blue" type="button" onClick={() => addRepeatableItem(f.name, f.fields)}>
                   + Add {f.label}
-                </button>
+                </GlassButton>
               </div>
             ) : null}
           </div>
         ))}
 
         <div className="mt-4 flex gap-3 flex-wrap">
-          <button
-            onClick={handleSubmit}
-            className="bg-blue-600 px-4 py-2 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
-          >
-            Save Resume
-          </button>
-          <button
-            type="button"
-            onClick={() => downloadFile("pdf")}
-            className="bg-emerald-600 px-4 py-2 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
-          >
+          <GlassButton accent="blue" onClick={handleSubmit}>Save Resume</GlassButton>
+          <GlassButton accent="green" type="button" onClick={() => downloadFile("pdf")}>
             Download PDF
-          </button>
-          <button
-            type="button"
-            onClick={() => downloadFile("tex")}
-            className="bg-indigo-600 px-4 py-2 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
-          >
+          </GlassButton>
+          <GlassButton accent="indigo" type="button" onClick={() => downloadFile("tex")}>
             Download .tex
-          </button>
-          <button
-            type="button"
-            onClick={() => downloadFile("txt")}
-            className="bg-gray-700 px-4 py-2 rounded-lg text-white font-semibold shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
-          >
+          </GlassButton>
+          <GlassButton accent="gray" type="button" onClick={() => downloadFile("txt")}>
             Download .txt
-          </button>
+          </GlassButton>
         </div>
       </div>
 

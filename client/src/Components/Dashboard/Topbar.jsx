@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaBars } from "react-icons/fa";
 import axios from "axios";
 
 const itemVariants = {
@@ -8,7 +8,7 @@ const itemVariants = {
   visible: { y: 0, opacity: 1, transition: { duration: 0.4 } },
 };
 
-function Topbar() {
+function Topbar({ onOpenMenu }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,7 +36,7 @@ function Topbar() {
 
   return (
     <motion.div
-      className="flex justify-between items-center mb-6 px-4 py-2 border border-white/10 bg-white/10 backdrop-blur rounded-xl shadow-sm text-white"
+      className="sticky top-0 z-40 flex justify-between items-center mb-6 px-4 py-2 border border-white/10 bg-white/20 backdrop-blur rounded-xl shadow-sm text-white"
       variants={{
         hidden: { opacity: 0 },
         visible: {
@@ -48,6 +48,15 @@ function Topbar() {
       animate="visible"
     >
       <div className="flex items-center gap-4">
+        {/* Mobile Menu Button */}
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/20 text-white"
+          aria-label="Open menu"
+        >
+          <FaBars />
+        </button>
         {/* Back Button - Only show when not on dashboard home and not on mobile */}
         {!isDashboardHome && (
           <motion.button
