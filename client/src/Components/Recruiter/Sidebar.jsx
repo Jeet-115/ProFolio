@@ -53,6 +53,9 @@ function Sidebar() {
   const items = [
     { icon: <FaThLarge />, label: "Recruiter Dashboard", path: "/recruiter/dashboard" },
     { icon: <FaUserCog />, label: "Candidate Directory", path: "/recruiter/dashboard/candidates" },
+    { icon: <FaDatabase />, label: "Bookmarked Candidates", path: "/recruiter/dashboard/bookmarks" },
+    { icon: <FaUserCog />, label: "Reported/Contacted Candidates", path: "/recruiter/dashboard/reported-contacted" },
+    { icon: <FaCog />, label: "Settings", path: "/recruiter/dashboard/settings" },
   ];
 
   const handleNavigate = (path) => {
