@@ -22,6 +22,7 @@ import bookmarkRoutes from "./routes/bookmarkRoutes.js";
 import invitationRoutes from "./routes/invitationRoutes.js";
 import recruiterActionsRoutes from "./routes/recruiterActionsRoutes.js";
 import recruiterSettingsRoutes from "./routes/recruiterSettingsRoutes.js";
+import recruiterRoutes from "./routes/recruiterRoutes.js";
 import "./config/passportConfig.js";
 
 dotenv.config();
@@ -80,6 +81,7 @@ app.use("/api/bookmarks", bookmarkRoutes);
 app.use("/api/invitations", invitationRoutes);
 app.use("/api/recruiter", recruiterActionsRoutes);
 app.use("/api/recruiter/settings", recruiterSettingsRoutes);
+app.use("/api/admin/recruiters", recruiterRoutes);
 
 // Check
 app.get("/", (req, res) => {
