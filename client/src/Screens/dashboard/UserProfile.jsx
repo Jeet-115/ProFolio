@@ -19,6 +19,8 @@ export default function UserProfile() {
   const [formData, setFormData] = useState({});
   const [preferences, setPreferences] = useState({});
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
 
   // Fetch profile on mount
   useEffect(() => {
@@ -30,7 +32,7 @@ export default function UserProfile() {
           fullName: data.fullName || "",
           username: data.username || "",
           bio: data.bio || "",
-          profilePicture: data.profilePicture || "",
+          profilePicture: data.profilePicture?.url || "",
           socialLinks: data.socialLinks || {},
 
           skills: data.skills?.join(", ") || "",
@@ -115,17 +117,37 @@ export default function UserProfile() {
       return;
     }
 
+    setSelectedPhoto(file);
+
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setPhotoPreview(previewUrl);
+  };
+
+  const handleSavePhoto = async () => {
+    if (!selectedPhoto) return;
+
     setUploadingPhoto(true);
     try {
-      const { data } = await uploadProfilePicture(file);
+      const { data } = await uploadProfilePicture(selectedPhoto);
       setProfile(data.user);
       setFormData((p) => ({ ...p, profilePicture: data.profilePicture }));
+      setSelectedPhoto(null);
+      setPhotoPreview(null);
       alert("Profile picture uploaded successfully!");
     } catch (err) {
       console.error(err);
       alert("Failed to upload picture");
     } finally {
       setUploadingPhoto(false);
+    }
+  };
+
+  const handleCancelPhoto = () => {
+    setSelectedPhoto(null);
+    if (photoPreview) {
+      URL.revokeObjectURL(photoPreview);
+      setPhotoPreview(null);
     }
   };
 
@@ -205,7 +227,43 @@ export default function UserProfile() {
           <label className="block text-white font-semibold">
             Profile Picture
           </label>
-          {formData.profilePicture ? (
+          {photoPreview ? (
+            <div className="space-y-3">
+              <img
+                src={photoPreview}
+                alt="Preview"
+                className="w-24 h-24 rounded-full object-cover border-2 border-blue-400"
+              />
+              <p className="text-blue-400 text-sm">
+                Preview - Click save to upload
+              </p>
+              <div className="flex gap-2">
+                <SaveCloudButton
+                  onClick={handleSavePhoto}
+                  label="SAVE PHOTO"
+                  textColor="#ffffff"
+                  fillColor="#ffffff"
+                  bg="#10b981" /* green-500 */
+                  hoverBg="#059669" /* green-600 */
+                  fontSize="12px"
+                  paddingY="0.25rem"
+                  paddingX="0.5rem"
+                  borderRadius="6px"
+                  iconSize={14}
+                  disabled={uploadingPhoto}
+                />
+                <button
+                  onClick={handleCancelPhoto}
+                  className="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+              {uploadingPhoto && (
+                <p className="text-blue-400 text-sm">Uploading...</p>
+              )}
+            </div>
+          ) : formData.profilePicture ? (
             <div className="space-y-3">
               <img
                 src={formData.profilePicture}
@@ -230,9 +288,6 @@ export default function UserProfile() {
                   Remove
                 </button>
               </div>
-              {uploadingPhoto && (
-                <p className="text-blue-400 text-sm">Uploading...</p>
-              )}
             </div>
           ) : (
             <div className="space-y-3">
@@ -249,9 +304,6 @@ export default function UserProfile() {
                   disabled={uploadingPhoto}
                 />
               </label>
-              {uploadingPhoto && (
-                <p className="text-blue-400 text-sm">Uploading...</p>
-              )}
             </div>
           )}
         </div>

@@ -15,8 +15,11 @@ export const getRecruiterProfile = async (req, res) => {
   res.json({
     fullName: recruiter.fullName,
     email: recruiter.email,
-    company: recruiter.username, // OR add dedicated companyName field later
-    profilePicture: recruiter.profilePicture,
+    company:
+      recruiter.companyDetails?.companyName ||
+      recruiter.username ||
+      "Your Company",
+    profilePicture: recruiter.profilePicture?.url || null,
     socialLinks: recruiter.socialLinks,
   });
 };
