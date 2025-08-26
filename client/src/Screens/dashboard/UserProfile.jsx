@@ -7,6 +7,7 @@ import GlassCard from "../../Components/Common/GlassCard";
 import {
   getUserProfile,
   updateUserProfile,
+  uploadProfilePicture,
   removeProfilePicture,
   updateUserPreferences,
   deleteMyAccount,
@@ -17,6 +18,7 @@ export default function UserProfile() {
   const [profile, setProfile] = useState(null);
   const [formData, setFormData] = useState({});
   const [preferences, setPreferences] = useState({});
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   // Fetch profile on mount
   useEffect(() => {
@@ -87,6 +89,43 @@ export default function UserProfile() {
     } catch (err) {
       console.error(err);
       alert("Failed to remove picture");
+    }
+  };
+
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please select a valid image file (JPEG, PNG, GIF, or WebP)");
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size must be less than 5MB");
+      return;
+    }
+
+    setUploadingPhoto(true);
+    try {
+      const { data } = await uploadProfilePicture(file);
+      setProfile(data.user);
+      setFormData((p) => ({ ...p, profilePicture: data.profilePicture }));
+      alert("Profile picture uploaded successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload picture");
+    } finally {
+      setUploadingPhoto(false);
     }
   };
 
@@ -162,23 +201,60 @@ export default function UserProfile() {
           onChange={handleChange}
           type="textarea"
         />
-        {formData.profilePicture ? (
-          <div>
-            <img
-              src={formData.profilePicture}
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover"
-            />
-            <button
-              onClick={handleRemovePicture}
-              className="text-red-600 text-sm mt-2"
-            >
-              Remove Picture
-            </button>
-          </div>
-        ) : (
-          <p>No profile picture set</p>
-        )}
+        <div className="space-y-4">
+          <label className="block text-white font-semibold">
+            Profile Picture
+          </label>
+          {formData.profilePicture ? (
+            <div className="space-y-3">
+              <img
+                src={formData.profilePicture}
+                alt="Profile"
+                className="w-24 h-24 rounded-full object-cover border-2 border-white/20"
+              />
+              <div className="flex gap-2">
+                <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors">
+                  Change Photo
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                    disabled={uploadingPhoto}
+                  />
+                </label>
+                <button
+                  onClick={handleRemovePicture}
+                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-lg text-sm transition-colors"
+                >
+                  Remove
+                </button>
+              </div>
+              {uploadingPhoto && (
+                <p className="text-blue-400 text-sm">Uploading...</p>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="w-24 h-24 rounded-full bg-gray-600 flex items-center justify-center border-2 border-white/20">
+                <span className="text-gray-400 text-2xl">👤</span>
+              </div>
+              <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors inline-block">
+                Upload Photo
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                  disabled={uploadingPhoto}
+                />
+              </label>
+              {uploadingPhoto && (
+                <p className="text-blue-400 text-sm">Uploading...</p>
+              )}
+            </div>
+          )}
+        </div>
         <SaveCloudButton
           onClick={handleSaveProfile}
           label="SAVE"
@@ -233,14 +309,15 @@ export default function UserProfile() {
                   type="checkbox"
                   className="hidden"
                   checked={formData.experienceLevel === opt}
-                  onChange={() => setFormData((p) => ({ ...p, experienceLevel: opt }))}
+                  onChange={() =>
+                    setFormData((p) => ({ ...p, experienceLevel: opt }))
+                  }
                 />
                 {opt}
               </label>
             ))}
           </div>
         </div>
-        
         <ThemedInput
           name="education"
           label="Education"
@@ -267,17 +344,22 @@ export default function UserProfile() {
       {/* Social Links */}
       <h3 className="text-xl font-semibold mb-6">🔗 Social Links</h3>
       <div className="mb-6 space-y-8">
-        {["github", "linkedin", "twitter", "behance", "dribbble", "website"].map(
-          (key) => (
-            <ThemedInput
-              key={key}
-              name={key}
-              label={`${key} link`}
-              value={formData.socialLinks?.[key] || ""}
-              onChange={handleSocialChange}
-            />
-          )
-        )}
+        {[
+          "github",
+          "linkedin",
+          "twitter",
+          "behance",
+          "dribbble",
+          "website",
+        ].map((key) => (
+          <ThemedInput
+            key={key}
+            name={key}
+            label={`${key} link`}
+            value={formData.socialLinks?.[key] || ""}
+            onChange={handleSocialChange}
+          />
+        ))}
       </div>
 
       {/* Preferences */}

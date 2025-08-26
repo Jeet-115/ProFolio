@@ -3,12 +3,23 @@ import axios from "./axiosInstance"; // ✅ using your pre-configured axios inst
 // ---------------- PROFILE ----------------
 
 // Get logged-in user profile
-export const getUserProfile = () =>
-  axios.get("/me", { withCredentials: true });
+export const getUserProfile = () => axios.get("/me", { withCredentials: true });
 
 // Update profile info (name, username, bio, pic, social links)
 export const updateUserProfile = (data) =>
   axios.put("/me", data, { withCredentials: true });
+
+// Upload profile picture
+export const uploadProfilePicture = (file) => {
+  const formData = new FormData();
+  formData.append("profilePicture", file);
+  return axios.post("/me/profile-picture", formData, {
+    withCredentials: true,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
 
 // Remove profile picture
 export const removeProfilePicture = () =>
