@@ -14,7 +14,7 @@ import templateFilesRouter from "./routes/templateFiles.js";
 import portfolioRoutes from "./routes/portfolio.js";
 import portfolioTemplateFiles from "./routes/portfolioTemplateFiles.js";
 import templatePortfolioRoutes from "./routes/templatePortfolio.js";
-import analyticsRoutes from "./routes/analytics.js";
+import analytics from "./routes/analytics.js";
 import recruiterDashboardRoutes from "./routes/recruiterDashboardRoutes.js";
 import candidateDirectoryRoutes from "./routes/candidateDirectoryRoutes.js";
 import candidateProfileRoutes from "./routes/candidateProfileRoutes.js";
@@ -22,6 +22,8 @@ import bookmarkRoutes from "./routes/bookmarkRoutes.js";
 import invitationRoutes from "./routes/invitationRoutes.js";
 import recruiterActionsRoutes from "./routes/recruiterActionsRoutes.js";
 import recruiterSettingsRoutes from "./routes/recruiterSettingsRoutes.js";
+import recruiterRoutes from "./routes/recruiterRoutes.js";
+import analyticsRoutes from "./routes/analyticsRoutes.js";
 import "./config/passportConfig.js";
 
 dotenv.config();
@@ -72,7 +74,7 @@ app.use("/api/template-files", templateFilesRouter);
 app.use("/api/portfolio", portfolioRoutes);
 app.use("/api/portfolio-templates", portfolioTemplateFiles);
 app.use("/api/template-portfolios", templatePortfolioRoutes);
-app.use("/api/analytics", analyticsRoutes);
+app.use("/api/analytics", analytics);
 app.use("/api/recruiter/dashboard", recruiterDashboardRoutes);
 app.use("/api/candidates", candidateDirectoryRoutes);
 app.use("/api/candidate", candidateProfileRoutes);
@@ -80,6 +82,8 @@ app.use("/api/bookmarks", bookmarkRoutes);
 app.use("/api/invitations", invitationRoutes);
 app.use("/api/recruiter", recruiterActionsRoutes);
 app.use("/api/recruiter/settings", recruiterSettingsRoutes);
+app.use("/api/admin/recruiters", recruiterRoutes);
+app.use("/api/admin/analytics", analyticsRoutes);
 
 // Check
 app.get("/", (req, res) => {

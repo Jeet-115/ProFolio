@@ -9,7 +9,6 @@ import DashboardHome from "./Components/Dashboard/DashboardHome";
 import AdminRoute from "./protection/AdminRoute";
 import AdminDashboard from "./layouts/AdminLayout";
 import AdminHome from "./Components/Admin/AdminHome";
-import ManageUsers from "./Components/Admin/ManageUsers";
 import ResumeBuilder from "./Screens/dashboard/ResumeBuilder";
 import TemplatesList from "./Screens/dashboard/TemplatesList";
 import TemplateFill from "./Screens/dashboard/TemplateFill";
@@ -28,6 +27,9 @@ import CandidateProfile from "./Screens/recruiter/CandidateProfile";
 import Bookmarks from "./Screens/recruiter/Bookmarks";
 import RecruiterActivity from "./Screens/recruiter/RecruiterActivity";
 import RecruiterSettings from "./Screens/recruiter/RecruiterSettings";
+import UserManagement from "./Screens/admin/UserManagement";
+import RecruiterManagement from "./Screens/admin/RecruiterManagement";
+import AdminAnalytics from "./Screens/admin/AdminAnalytics";
 
 const AppRoutes = () => {
   return (
@@ -85,7 +87,9 @@ const AppRoutes = () => {
         }
       >
         <Route index element={<AdminHome />} />
-        <Route path="users" element={<ManageUsers />} />
+        <Route path="users" element={<UserManagement />} />
+        <Route path="recruiters" element={<RecruiterManagement />} />
+        <Route path="analytics" element={<AdminAnalytics />} />
       </Route>
     </Routes>
   );
