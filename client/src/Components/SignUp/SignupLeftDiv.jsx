@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import useSignUp from "./SignUp";
 // Removed Material UI in favor of Tailwind inputs and inline SVG icons
-import RoleRadio from "../Common/RoleRadio";
 
 const fadeInLeft = (delay) => ({
   initial: { opacity: 0, x: -50 },
@@ -40,15 +39,32 @@ const SignupLeftDiv = () => {
           Sign Up
         </motion.h1>
 
+        {/* OR + Recruiter Card (next to title) */}
+        <motion.div
+          className="flex items-center justify-center gap-3 mb-4"
+          {...fadeInLeft(0.15)}
+        >
+          <span className="text-white/70 text-xs">OR</span>
+          <Link
+            to="/recruiter/signup"
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl py-2 px-3 text-sm transition-all"
+          >
+            <span className="bg-orange-500 p-1.5 rounded-lg">
+              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+              </svg>
+            </span>
+            <span>Join as Recruiter</span>
+          </Link>
+        </motion.div>
+
         <motion.h2
           className="text-white text-sm text-center mb-8 inter"
           {...fadeInLeft(0.2)}
         >
           Please Enter Your Details
         </motion.h2>
-        <motion.div className="mb-6 flex justify-center" {...fadeInLeft(0.25)}>
-          <RoleRadio name="role" value={formData.role} onChange={handleChange} />
-        </motion.div>
+        {/* RoleRadio removed per request */}
 
         <form onSubmit={handleSubmit} noValidate>
           <motion.div className="mb-8" {...fadeInLeft(0.3)}>
@@ -166,37 +182,7 @@ const SignupLeftDiv = () => {
           </button>
         </motion.div>
 
-        {/* Recruiter Signup Option */}
-        <motion.div
-          className="mt-8 text-center"
-          {...fadeInLeft(1.0)}
-        >
-          <div className="flex items-center justify-center mb-4">
-            <div className="flex-1 border-t border-dashed border-white/30"></div>
-            <span className="px-4 text-white/60 text-xs font-medium">LOOKING TO HIRE?</span>
-            <div className="flex-1 border-t border-dashed border-white/30"></div>
-          </div>
-          
-          <Link
-            to="/recruiter/signup"
-            className="inline-flex items-center justify-center w-full max-w-xs bg-white/10 hover:bg-white/20 text-white py-3 px-6 rounded-2xl font-medium transition-all group border border-white/20 hover:border-white/40"
-          >
-            <div className="flex items-center space-x-3">
-              <div className="bg-orange-500 p-2 rounded-xl group-hover:bg-orange-400 transition-colors">
-                <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
-                </svg>
-              </div>
-              <div className="text-left">
-                <div className="text-sm font-semibold">Join as Recruiter</div>
-                <div className="text-xs text-white/70">Find & hire candidates</div>
-              </div>
-              <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </div>
-          </Link>
-        </motion.div>
+        {/* Removed duplicate recruiter CTA at bottom */}
       </motion.div>
     </div>
   );

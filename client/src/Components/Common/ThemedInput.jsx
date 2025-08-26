@@ -7,7 +7,7 @@ import styled from "styled-components";
   - Supports type 'text' and 'textarea'
   - Floating label, glassmorphism, full-width
 */
-const ThemedInput = ({ label = "", value = "", onChange, required = false, name, type = "text" }) => {
+const ThemedInput = ({ label = "", value = "", onChange, required = false, name, type = "text", compact = false, ...rest }) => {
   const [focused, setFocused] = useState(false);
   const filled = value !== undefined && value !== null && String(value).trim().length > 0;
 
@@ -19,15 +19,16 @@ const ThemedInput = ({ label = "", value = "", onChange, required = false, name,
     onChange,
     onFocus: () => setFocused(true),
     onBlur: () => setFocused(false),
+    ...rest,
   };
 
   return (
     <StyledWrapper>
-      <div className={`container ${filled ? "filled" : ""} ${focused ? "focused" : ""}`}>
+      <div className={`container ${filled ? "filled" : ""} ${focused ? "focused" : ""} ${compact ? "compact" : ""}`}>
         {type === "textarea" ? (
           <textarea {...commonProps} rows={4} />
         ) : (
-          <input {...commonProps} type="text" />
+          <input {...commonProps} type={type} />
         )}
         {label ? <label className="label">{label}</label> : null}
       </div>
@@ -80,6 +81,24 @@ const StyledWrapper = styled.div`
     min-height: 100px;
   }
 
+  /* Compact mode: smaller inputs for tight spaces */
+  .container.compact .label {
+    font-size: 0.8rem;
+    top: 10px;
+  }
+  .container.compact .input {
+    min-height: 34px;
+    padding: 6px 10px;
+    font-size: 0.85rem;
+  }
+  .container.compact.focused .label {
+    transform: translateY(-28px);
+    font-size: 0.7rem;
+  }
+  .container.compact.filled:not(.focused) .label {
+    transform: translateY(-28px);
+  }
+
   .input:focus {
     color: #fff;
     border-color: rgba(255, 255, 255, 0.45);
@@ -96,11 +115,12 @@ const StyledWrapper = styled.div`
     opacity: 0.95;
   }
 
-  /* Hide label once field has value and not focused */
+  /* Keep label above when field has value and not focused */
   .container.filled:not(.focused) .label {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-34px); /* keep space consistent during transition */
+    opacity: 0.9;
+    visibility: visible;
+    transform: translateY(-34px);
+    font-size: 0.8rem;
   }
 `;
 

@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  FaUserCog,
+  FaUsers,
   FaDatabase,
   FaThLarge,
   FaCog,
   FaBars,
   FaTimes,
+  FaFlag,
 } from "react-icons/fa";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -36,8 +37,8 @@ const SidebarItem = ({ icon, label, active, onClick }) => (
     className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer transition-all duration-300 outfit
       ${
         active
-          ? "bg-white text-[#2E3C43] font-semibold"
-          : "text-white hover:bg-gradient-to-r hover:from-white hover:to-[#E0F7FA] hover:text-[#2E3C43]"
+          ? "bg-amber-500 text-white font-semibold"
+          : "text-white hover:bg-amber-400/20 hover:text-amber-200"
       }`}
   >
     <div className="text-lg">{icon}</div>
@@ -45,16 +46,37 @@ const SidebarItem = ({ icon, label, active, onClick }) => (
   </div>
 );
 
-function Sidebar() {
+function Sidebar({ showMobileToggle = true }) {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
+  // Allow external trigger (from Topbar) to open mobile sidebar
+  useEffect(() => {
+    const onOpen = () => setIsOpen(true);
+    window.addEventListener("open-mobile-sidebar", onOpen);
+    return () => window.removeEventListener("open-mobile-sidebar", onOpen);
+  }, []);
+
+  // Broadcast open/close and toggle a body class for global styling hooks
+  useEffect(() => {
+    if (isOpen) {
+      window.dispatchEvent(new Event("mobile-sidebar-open"));
+      document.body.classList.add("recruiter-mobile-sidebar-open");
+    } else {
+      window.dispatchEvent(new Event("mobile-sidebar-close"));
+      document.body.classList.remove("recruiter-mobile-sidebar-open");
+    }
+    return () => {
+      document.body.classList.remove("recruiter-mobile-sidebar-open");
+    };
+  }, [isOpen]);
+
   const items = [
     { icon: <FaThLarge />, label: "Recruiter Dashboard", path: "/recruiter/dashboard" },
-    { icon: <FaUserCog />, label: "Candidate Directory", path: "/recruiter/dashboard/candidates" },
+    { icon: <FaUsers />, label: "Candidate Directory", path: "/recruiter/dashboard/candidates" },
     { icon: <FaDatabase />, label: "Bookmarked Candidates", path: "/recruiter/dashboard/bookmarks" },
-    { icon: <FaUserCog />, label: "Reported/Contacted Candidates", path: "/recruiter/dashboard/reported-contacted" },
+    { icon: <FaFlag />, label: "Reported/Contacted Candidates", path: "/recruiter/dashboard/reported-contacted" },
     { icon: <FaCog />, label: "Settings", path: "/recruiter/dashboard/settings" },
   ];
 
@@ -68,12 +90,15 @@ function Sidebar() {
   return (
     <>
       {/* Mobile toggle button */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="md:hidden text-[#00ACC1] text-2xl m-4 fixed top-4 left-4 z-50"
-      >
-        <FaBars />
-      </button>
+      {showMobileToggle && (
+        <button
+          id="mobileSidebarOpenBtn"
+          onClick={() => setIsOpen(true)}
+          className="md:hidden text-amber-300 text-2xl m-4 fixed top-4 left-4 z-50"
+        >
+          <FaBars />
+        </button>
+      )}
 
       {/* Mobile overlay and sidebar */}
       <AnimatePresence>
@@ -91,7 +116,7 @@ function Sidebar() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed inset-y-0 left-0 z-50 w-64 bg-[#00ACC1] text-white p-6 flex flex-col gap-6 shadow-lg rounded-tr-3xl rounded-br-3xl md:hidden"
+              className="fixed inset-y-0 left-0 z-50 w-64 bg-white/10 border border-white/20 text-white p-6 flex flex-col gap-6 shadow-lg rounded-tr-3xl rounded-br-3xl md:hidden"
             >
               <div className="flex justify-end">
                 <button
@@ -102,22 +127,13 @@ function Sidebar() {
                 </button>
               </div>
 
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center gap-3 mb-8"
-              >
-                <div className="bg-white/20 p-2 rounded-full shadow-lg">
-                  <img src="/logo.png" alt="logo" className="w-8 h-8" />
-                </div>
-                <h2 className="text-xl font-bold tracking-wide outfit text-white">
-                  PROFOLIO
-                </h2>
-              </motion.div>
+              {/* Brand header removed on mobile per request; keep spacer to preserve layout */}
+              <div aria-hidden="true" className="h-10 mb-8" />
 
               {items.map((item, index) => (
                 <motion.div key={index} variants={itemVariants}>
                   <SidebarItem
-                    icon={item.icon}
+                    icon={null}
                     label={item.label}
                     active={location.pathname === item.path}
                     onClick={() => handleNavigate(item.path)}
@@ -134,13 +150,13 @@ function Sidebar() {
         variants={sidebarVariants}
         initial="hidden"
         animate="visible"
-        className="hidden md:flex w-64 bg-[#00ACC1] text-white p-6 flex-col gap-6 shadow-lg rounded-tr-3xl rounded-br-3xl"
+        className="hidden md:flex w-64 bg-white/10 border border-white/20 text-white p-6 flex-col gap-6 shadow-lg rounded-tr-3xl rounded-br-3xl"
       >
         <motion.div
           variants={itemVariants}
           className="flex items-center gap-3 mb-8"
         >
-          <div className="bg-white/20 p-2 rounded-full shadow-lg">
+          <div className="bg-amber-500/30 p-2 rounded-full shadow-lg">
             <img src="/logo.png" alt="logo" className="w-8 h-8" />
           </div>
           <h2 className="text-xl font-bold outfit tracking-wide text-white">

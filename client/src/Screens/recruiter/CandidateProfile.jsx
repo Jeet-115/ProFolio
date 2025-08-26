@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ThemedInput from "../../Components/Common/ThemedInput";
 import { getCandidateProfile, reportCandidate } from "../../services/candidateProfileService";
-import { Mail, Flag, Github, Linkedin, Globe } from "lucide-react";
+import { Mail, Flag, Github, Linkedin, Globe, MapPin, ArrowLeft } from "lucide-react";
 
 // ✅ Simple reusable Button component
 function Button({ children, onClick, disabled, variant = "default" }) {
@@ -77,59 +78,95 @@ export default function CandidateProfile() {
     }
   };
 
-  if (loading) return <div className="p-6">Loading candidate profile...</div>;
-  if (!profile) return <div className="p-6">Candidate not found</div>;
+  if (loading) return <div className="p-6 text-white/90">Loading candidate profile...</div>;
+  if (!profile) return <div className="p-6 text-white/90">Candidate not found</div>;
 
   const { candidate, resumes, templateResumes, portfolios, templatePortfolios } = profile;
 
   return (
     <div className="p-6 max-w-5xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center gap-6">
+      {/* Top bar */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => navigate(-1)}
+          className="inline-flex items-center gap-2 text-sm text-white/80 hover:text-white"
+        >
+          <ArrowLeft className="w-4 h-4" /> Back
+        </button>
+      </div>
+
+      {/* Header card */}
+      <div className="p-5 sm:p-6 rounded-2xl border border-white/15 bg-white/10 backdrop-blur-md shadow-lg/20 flex items-center gap-5">
         <img
           src={candidate.profilePicture || "/default-avatar.png"}
           alt={candidate.fullName}
-          className="w-24 h-24 rounded-full object-cover border"
+          className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border border-white/20"
         />
-        <div>
-          <h1 className="text-2xl font-bold">{candidate.fullName}</h1>
-          <p className="text-gray-600">{candidate.headline}</p>
-          <p className="text-gray-500 text-sm">{candidate.location}</p>
-          <div className="flex gap-2 mt-2">
-            {candidate.socialLinks?.github && (
-              <a href={candidate.socialLinks.github} target="_blank" rel="noreferrer">
-                <Github className="w-5 h-5" />
-              </a>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-xl sm:text-2xl font-bold text-white truncate">{candidate.fullName}</h1>
+          {candidate.headline && (
+            <p className="text-white/80 text-sm sm:text-base truncate">{candidate.headline}</p>
+          )}
+          <div className="flex flex-wrap items-center gap-3 mt-2 text-sm">
+            {candidate.location && (
+              <span className="inline-flex items-center gap-1 text-white/70">
+                <MapPin className="w-4 h-4" /> {candidate.location}
+              </span>
             )}
-            {candidate.socialLinks?.linkedin && (
-              <a href={candidate.socialLinks.linkedin} target="_blank" rel="noreferrer">
-                <Linkedin className="w-5 h-5" />
-              </a>
-            )}
-            {candidate.socialLinks?.website && (
-              <a href={candidate.socialLinks.website} target="_blank" rel="noreferrer">
-                <Globe className="w-5 h-5" />
-              </a>
-            )}
+            <div className="flex items-center gap-3">
+              {candidate.socialLinks?.github && (
+                <a
+                  className="text-white/80 hover:text-white"
+                  href={candidate.socialLinks.github}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Github className="w-5 h-5" />
+                </a>
+              )}
+              {candidate.socialLinks?.linkedin && (
+                <a
+                  className="text-white/80 hover:text-white"
+                  href={candidate.socialLinks.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Linkedin className="w-5 h-5" />
+                </a>
+              )}
+              {candidate.socialLinks?.website && (
+                <a
+                  className="text-white/80 hover:text-white"
+                  href={candidate.socialLinks.website}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Globe className="w-5 h-5" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Bio */}
       {candidate.bio && (
-        <div className="bg-gray-50 p-4 rounded-xl shadow-sm">
-          <h2 className="font-semibold mb-2">About</h2>
-          <p className="text-gray-700">{candidate.bio}</p>
+        <div className="p-5 rounded-2xl border border-white/15 bg-white/5 text-white/90">
+          <h2 className="font-semibold mb-2 text-white">About</h2>
+          <p className="text-white/80 leading-relaxed">{candidate.bio}</p>
         </div>
       )}
 
       {/* Skills */}
       {candidate.skills?.length > 0 && (
         <div>
-          <h2 className="font-semibold mb-2">Skills</h2>
+          <h2 className="font-semibold mb-2 text-white">Skills</h2>
           <div className="flex flex-wrap gap-2">
             {candidate.skills.map((skill, i) => (
-              <span key={i} className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+              <span
+                key={i}
+                className="px-3 py-1 rounded-full text-sm bg-amber-500/15 text-amber-300 border border-amber-500/20"
+              >
                 {skill}
               </span>
             ))}
@@ -139,47 +176,105 @@ export default function CandidateProfile() {
 
       {/* Resumes */}
       <div>
-        <h2 className="font-semibold mb-2">Resumes</h2>
-        <ul className="list-disc list-inside text-gray-700">
+        <h2 className="font-semibold mb-3 text-white">Resumes</h2>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {resumes.map((r) => (
-            <li key={r._id}>{r.name}</li>
+            <li
+              key={r._id}
+              className="p-4 rounded-xl border border-white/15 bg-white/5 text-white/90"
+            >
+              <div className="font-medium">{r.name}</div>
+            </li>
           ))}
           {templateResumes.map((r) => (
-            <li key={r._id}>{r.name} (Template: {r.templateName})</li>
+            <li
+              key={r._id}
+              className="p-4 rounded-xl border border-white/15 bg-white/5 text-white/90"
+            >
+              <div className="font-medium">{r.name}</div>
+              <div className="text-xs text-white/70 mt-1">Template: {r.templateName}</div>
+            </li>
           ))}
         </ul>
       </div>
 
       {/* Portfolios */}
       <div>
-        <h2 className="font-semibold mb-2">Portfolios</h2>
-        <ul className="list-disc list-inside text-gray-700">
+        <h2 className="font-semibold mb-3 text-white">Portfolios</h2>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {portfolios.map((p) => (
-            <li key={p._id}>{p.name}</li>
+            <li
+              key={p._id}
+              className="p-4 rounded-xl border border-white/15 bg-white/5 text-white/90"
+            >
+              <div className="font-medium">{p.name}</div>
+            </li>
           ))}
           {templatePortfolios.map((p) => (
-            <li key={p._id}>{p.name} (Template: {p.templateName})</li>
+            <li
+              key={p._id}
+              className="p-4 rounded-xl border border-white/15 bg-white/5 text-white/90"
+            >
+              <div className="font-medium">{p.name}</div>
+              <div className="text-xs text-white/70 mt-1">Template: {p.templateName}</div>
+            </li>
           ))}
         </ul>
       </div>
 
       {/* Actions */}
-      <div className="flex gap-4">
-        <Button onClick={handleContact}>
-          <Mail className="w-4 h-4 mr-2" /> Contact
-        </Button>
+      <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:gap-3 sm:items-center">
+        {/* Contact button (gradient style) */}
+        <div className="order-2 sm:order-none bg-gradient-to-b from-stone-300/40 to-transparent p-[2px] rounded-[10px] w-auto">
+          <button
+            onClick={handleContact}
+            className="group p-[2px] rounded-[8px] bg-gradient-to-b from-white to-stone-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.45)] active:shadow-[0_0px_1px_rgba(0,0,0,0.45)] active:scale-[0.997] w-auto focus-visible:outline-none"
+          >
+            <div className="bg-gradient-to-b from-stone-200/40 to-white/80 rounded-[6px] h-[36px] w-auto sm:w-[110px] px-3 py-1 flex items-center justify-center focus-visible:ring-2 focus-visible:ring-white/50">
+              <div className="flex gap-1.5 items-center text-stone-900">
+                <Mail className="w-[14px] h-[14px] sm:w-[12px] sm:h-[12px]" />
+                <span className="font-semibold text-[14px] sm:text-[12px] leading-none">Contact</span>
+              </div>
+            </div>
+          </button>
+        </div>
 
-        <div className="flex items-center gap-2">
-          <input
-            type="text"
-            value={reportReason}
-            onChange={(e) => setReportReason(e.target.value)}
-            placeholder="Reason to report"
-            className="border rounded-lg px-3 py-2 text-sm"
-          />
-          <Button variant="destructive" onClick={handleReport} disabled={reporting}>
-            <Flag className="w-4 h-4 mr-2" /> Report
-          </Button>
+        {/* Report reason + gradient report button */}
+        <div className="order-1 sm:order-none col-span-2 flex items-center gap-2 w-full sm:w-auto">
+          <div className="flex-1 sm:flex-none min-w-[160px]">
+            {/* Hidden dummy input to steer browser autofill away from the reason field */}
+            <input type="text" name="username" autoComplete="username" className="hidden" aria-hidden="true" tabIndex={-1} />
+            <ThemedInput
+              label="Reason to report"
+              name="reportReasonInput"
+              type="text"
+              compact
+              value={reportReason}
+              onChange={(e) => setReportReason(e.target.value)}
+              maxLength={300}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+              spellCheck={false}
+              inputMode="text"
+            />
+            <div className="mt-1 text-[10px] text-white/60 text-right">{reportReason.length}/300</div>
+          </div>
+
+          <div className={`order-2 sm:order-none bg-gradient-to-b from-stone-300/40 to-transparent p-[2px] rounded-[10px] w-auto ${reporting ? 'opacity-60 cursor-not-allowed' : ''}`}>
+            <button
+              onClick={handleReport}
+              disabled={reporting}
+              className="group p-[2px] rounded-[8px] bg-gradient-to-b from-white to-stone-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.45)] active:shadow-[0_0px_1px_rgba(0,0,0,0.45)] active:scale-[0.997] w-auto"
+            >
+              <div className="bg-gradient-to-b from-stone-200/40 to-white/80 rounded-[6px] h-[36px] w-auto sm:w-[110px] px-3 py-1 flex items-center justify-center">
+                <div className="flex gap-1.5 items-center text-stone-900">
+                  <Flag className="w-[14px] h-[14px] sm:w-[12px] sm:h-[12px]" />
+                  <span className="font-semibold text-[14px] sm:text-[12px] leading-none">Report</span>
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>

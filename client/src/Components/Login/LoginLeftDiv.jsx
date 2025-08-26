@@ -77,6 +77,26 @@ const LoginLeftDiv = () => {
           Login
         </motion.h1>
 
+        {/* OR + Recruiter Card (next to title) */}
+        <motion.div
+          className="flex items-center justify-center gap-3 mb-4"
+          {...animationSettings}
+          transition={animationSettings.transition(0.15)}
+        >
+          <span className="text-white/70 text-xs">OR</span>
+          <Link
+            to="/recruiter/signup"
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl py-2 px-3 text-sm transition-all"
+          >
+            <span className="bg-orange-500 p-1.5 rounded-lg">
+              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+              </svg>
+            </span>
+            <span>Join as Recruiter</span>
+          </Link>
+        </motion.div>
+
         <motion.h2
           className="text-white text-sm text-center mb-8 inter"
           {...animationSettings}
@@ -174,13 +194,6 @@ const LoginLeftDiv = () => {
             <div className="flex justify-center space-x-4 text-white text-sm">
               <Link to="/signup" className="hover:underline transition-all hover:text-white/80">
                 Sign up as User
-              </Link>
-              <span className="text-white/50">•</span>
-              <Link to="/recruiter/signup" className="hover:underline transition-all hover:text-white/80 flex items-center space-x-1">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
-                </svg>
-                <span>Join as Recruiter</span>
               </Link>
             </div>
           </motion.div>

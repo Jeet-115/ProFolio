@@ -1,7 +1,7 @@
 import CTA from "../Components/Home/CTA";
 import Info from "../Components/Home/Info";
 import AboutTeam from "../Components/Home/about team/AboutTeam.jsx";
-import Logo from "../components/Logo";
+import Logo from "../Components/Logo";
 
 
 const Home = () => {
