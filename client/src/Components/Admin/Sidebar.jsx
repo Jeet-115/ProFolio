@@ -54,6 +54,7 @@ function Sidebar() {
     { icon: <FaThLarge />, label: "Admin Dashboard", path: "/admin" },
     { icon: <FaUserCog />, label: "Manage Users", path: "/admin/users" },
     { icon: <FaDatabase />, label: "Manage Recruiters", path: "/admin/recruiters" },
+    { icon: <FaThLarge />, label: "Manage Templates", path: "/admin/analytics" },
     { icon: <FaCog />, label: "Settings", path: "/admin/settings" },
   ];
 
