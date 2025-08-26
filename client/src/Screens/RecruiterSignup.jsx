@@ -68,7 +68,7 @@ const RecruiterSignup = () => {
   };
 
   return (
-    <div className="bg-[linear-gradient(to_bottom,_#2C3E50_0%,_#E67E22_26%,_#F39C12_100%)] min-h-screen">
+    <div className="bg-[linear-gradient(180deg,_#111026_0%,_#1E1B4B_55%,_#312E81_100%)] min-h-screen">
       <Logo />
       
       <div className="flex items-center justify-center w-full mt-14 px-4">
@@ -86,7 +86,7 @@ const RecruiterSignup = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="flex items-center justify-center mb-4">
-              <div className="bg-orange-500 p-3 rounded-2xl mr-3">
+              <div className="bg-amber-500 p-3 rounded-2xl mr-3">
                 <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
                 </svg>
@@ -136,7 +136,7 @@ const RecruiterSignup = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                 placeholder="Enter your username"
               />
               {errors.username && (
@@ -158,7 +158,7 @@ const RecruiterSignup = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                 placeholder="Enter your work email"
               />
               {errors.email && (
@@ -181,7 +181,7 @@ const RecruiterSignup = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 pr-12 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 pr-12 bg-white/20 backdrop-blur-sm border border-white/30 rounded-xl text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent transition-all"
                   placeholder="Create a password"
                 />
                 <button
@@ -245,7 +245,7 @@ const RecruiterSignup = () => {
             {/* Submit Button */}
             <motion.button
               type="submit"
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-orange-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg"
+              className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-white py-3 rounded-xl font-semibold hover:from-amber-600 hover:to-amber-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.7 }}
@@ -306,13 +306,13 @@ const RecruiterSignup = () => {
             <div className="space-y-2">
               <p className="text-white/70 text-sm">
                 Already have an account?{" "}
-                <Link to="/login" className="text-orange-300 hover:text-orange-200 font-medium underline">
+                <Link to="/login" className="text-amber-300 hover:text-amber-200 font-medium underline">
                   Sign In
                 </Link>
               </p>
               <p className="text-white/70 text-sm">
                 Looking to build a portfolio?{" "}
-                <Link to="/signup" className="text-orange-300 hover:text-orange-200 font-medium underline">
+                <Link to="/signup" className="text-amber-300 hover:text-amber-200 font-medium underline">
                   Join as User
                 </Link>
               </p>

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import useLogin from "../Login/Login";
 import useSignUp from "../SignUp/SignUp";
 // Removed Material UI in favor of Tailwind + inline SVG icons
-import RoleRadio from "../Common/RoleRadio";
+// RoleRadio removed per request to hide role selection on signup
 
 const UnifiedAuth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -126,6 +126,27 @@ const UnifiedAuth = () => {
           {isLogin ? "Login" : "Sign Up"}
         </motion.h1>
 
+        {/* OR + Recruiter Card (next to title) */}
+        <motion.div
+          className="flex items-center justify-center gap-3 mb-6"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3, delay: 0.15 }}
+        >
+          <span className="text-white/70 text-xs">OR</span>
+          <Link
+            to="/recruiter/signup"
+            className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl py-2 px-3 text-sm transition-all"
+          >
+            <span className="bg-orange-500 p-1.5 rounded-lg">
+              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+              </svg>
+            </span>
+            <span>Join as Recruiter</span>
+          </Link>
+        </motion.div>
+
         <motion.h2
           className="text-white text-sm text-center mb-8 inter"
           {...animationSettings}
@@ -143,16 +164,6 @@ const UnifiedAuth = () => {
 
         {/* Form */}
         <form onSubmit={currentHook.handleSubmit} noValidate>
-          {/* Role selection for signup */}
-          {!isLogin && (
-            <motion.div className="mb-6 flex justify-center" {...animationSettings} transition={animationSettings.transition(0.28)}>
-              <RoleRadio
-                name="role"
-                value={signupHook.formData.role}
-                onChange={signupHook.handleChange}
-              />
-            </motion.div>
-          )}
 
           {/* Username field for signup */}
           {!isLogin && (
@@ -329,35 +340,7 @@ const UnifiedAuth = () => {
           </button>
         </motion.div>
 
-        {/* Additional Navigation - Only show for signup mode */}
-        {!isLogin && (
-          <motion.div
-            className="mt-6 text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-          >
-            <div className="flex items-center justify-center mb-3">
-              <div className="flex-1 border-t border-dashed border-white/30"></div>
-              <span className="px-3 text-white/60 text-xs">Looking to hire?</span>
-              <div className="flex-1 border-t border-dashed border-white/30"></div>
-            </div>
-            <Link
-              to="/recruiter/signup"
-              className="inline-flex items-center space-x-2 text-white/80 hover:text-white text-sm font-medium transition-colors group"
-            >
-              <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-colors">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
-                </svg>
-              </div>
-              <span>Join as Recruiter</span>
-              <svg className="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </Link>
-          </motion.div>
-        )}
+        {/* Removed duplicate recruiter CTA at bottom */}
 
       </motion.div>
     </div>

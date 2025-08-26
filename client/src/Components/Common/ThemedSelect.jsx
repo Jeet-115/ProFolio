@@ -45,8 +45,8 @@ const Wrapper = styled.div`
   }
 
   .select:focus {
-    border-color: rgba(255, 255, 255, 0.45);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 0 3px rgba(34, 211, 238, 0.25);
+    border-color: rgba(245, 158, 11, 0.55); /* amber */
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35), 0 0 0 3px rgba(245, 158, 11, 0.28);
   }
 
   /* Custom arrow */
@@ -59,8 +59,8 @@ const Wrapper = styled.div`
     height: 10px;
     pointer-events: none;
     transform: translateY(-50%) rotate(45deg);
-    border-right: 2px solid #22d3ee; /* teal-300 */
-    border-bottom: 2px solid #22d3ee;
+    border-right: 2px solid #F59E0B; /* amber */
+    border-bottom: 2px solid #F59E0B;
   }
 
   /* Option styling (limited across browsers) */

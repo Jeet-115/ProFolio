@@ -22,7 +22,7 @@ export default function UserAnalytics() {
   const COLORS = ["#4f46e5", "#10b981", "#f59e0b", "#ef4444"];
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-3 md:p-6 space-y-6 md:space-y-8">
       <h1 className="text-2xl font-bold">📊 User Analytics</h1>
 
       {/* Row 1 - Overview Cards */}
@@ -47,7 +47,7 @@ export default function UserAnalytics() {
 
       {/* Row 2 - Trends */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-black">
-        <div className="bg-white shadow rounded-2xl p-4">
+        <div className="bg-white shadow rounded-2xl p-2 sm:p-4">
           <h2 className="font-semibold mb-2">Resume Downloads Trend</h2>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={analytics.resumes.trend}>
@@ -58,7 +58,7 @@ export default function UserAnalytics() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-        <div className="bg-white shadow rounded-2xl p-4">
+        <div className="bg-white shadow rounded-2xl p-2 sm:p-4">
           <h2 className="font-semibold mb-2">Portfolio Views Trend</h2>
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={analytics.portfolios.trend}>
@@ -73,9 +73,9 @@ export default function UserAnalytics() {
 
       {/* Row 3 - Distribution & Comparative */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-black">
-        <div className="bg-white shadow rounded-2xl p-4">
+        <div className="bg-white shadow rounded-2xl p-2 sm:p-4 -mx-3 md:mx-0">
           <h2 className="font-semibold mb-2">Content Distribution</h2>
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={320}>
             <PieChart>
               <Pie
                 data={[
@@ -87,7 +87,7 @@ export default function UserAnalytics() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                outerRadius={90}
+                outerRadius={110}
                 dataKey="value"
               >
                 {COLORS.map((color, index) => (
@@ -95,14 +95,14 @@ export default function UserAnalytics() {
                 ))}
               </Pie>
               <Tooltip />
-              <Legend />
+              <Legend verticalAlign="bottom" align="center" />
             </PieChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-white shadow rounded-2xl p-4 text-black">
+        <div className="bg-white shadow rounded-2xl p-2 sm:p-4 text-black">
           <h2 className="font-semibold mb-2">Resumes vs Portfolios Activity</h2>
-          <ResponsiveContainer width="100%" height={250}>
+          <ResponsiveContainer width="100%" height={280}>
             <BarChart
               data={[
                 { name: "Resumes", downloads: analytics.comparative.activity.downloads },

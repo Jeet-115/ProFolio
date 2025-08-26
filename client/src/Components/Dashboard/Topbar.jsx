@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import Logo from "../Logo";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaArrowLeft, FaBars } from "react-icons/fa";
 import axios from "axios";
@@ -75,12 +76,9 @@ function Topbar({ onOpenMenu }) {
           </motion.button>
         )}
         
-        <motion.span
-          variants={itemVariants}
-          className="outfit font-semibold text-lg pl-[50px] md:pl-0"
-        >
-          {/* Welcome, {user?.username || user?.name || "User"} */}
-        </motion.span>
+        <motion.div variants={itemVariants} className="pl-[50px] md:pl-0">
+          <Logo compact />
+        </motion.div>
       </div>
 
       <motion.button
