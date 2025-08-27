@@ -56,12 +56,13 @@ export default function RecruiterDashboardHome() {
     let isMounted = true;
     const fetchDashboardData = async () => {
       try {
-        const [profileRes, statsRes, recentRes, suggestedRes] = await Promise.all([
-          getRecruiterProfile(),
-          getRecruiterStats(),
-          getRecentCandidates(),
-          getSuggestedCandidates(),
-        ]);
+        const [profileRes, statsRes, recentRes, suggestedRes] =
+          await Promise.all([
+            getRecruiterProfile(),
+            getRecruiterStats(),
+            getRecentCandidates(),
+            getSuggestedCandidates(),
+          ]);
         if (!isMounted) return;
         setProfile(profileRes.data);
         setStats(statsRes.data);
@@ -82,7 +83,11 @@ export default function RecruiterDashboardHome() {
   const navigationItems = [
     {
       icon: (
-        <motion.span animate={{ rotate: [0, 8, 0] }} transition={{ duration: 2.5, repeat: Infinity, repeatType: "mirror" }} className="inline-flex">
+        <motion.span
+          animate={{ rotate: [0, 8, 0] }}
+          transition={{ duration: 2.5, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
           <FaUsers className="text-3xl" />
         </motion.span>
       ),
@@ -94,7 +99,11 @@ export default function RecruiterDashboardHome() {
     },
     {
       icon: (
-        <motion.span animate={{ scale: [1, 1.1, 1] }} transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }} className="inline-flex">
+        <motion.span
+          animate={{ scale: [1, 1.1, 1] }}
+          transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
           <FaDatabase className="text-3xl" />
         </motion.span>
       ),
@@ -106,7 +115,11 @@ export default function RecruiterDashboardHome() {
     },
     {
       icon: (
-        <motion.span animate={{ x: [0, 6, 0] }} transition={{ duration: 2.2, repeat: Infinity, repeatType: "mirror" }} className="inline-flex">
+        <motion.span
+          animate={{ x: [0, 6, 0] }}
+          transition={{ duration: 2.2, repeat: Infinity, repeatType: "mirror" }}
+          className="inline-flex"
+        >
           <FaFlag className="text-3xl" />
         </motion.span>
       ),
@@ -118,7 +131,11 @@ export default function RecruiterDashboardHome() {
     },
     {
       icon: (
-        <motion.span animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }} className="inline-flex">
+        <motion.span
+          animate={{ rotate: 360 }}
+          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          className="inline-flex"
+        >
           <FaCog className="text-3xl" />
         </motion.span>
       ),
@@ -140,10 +157,22 @@ export default function RecruiterDashboardHome() {
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div initial="hidden" animate="visible" exit="hidden" className="space-y-8">
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+        className="space-y-8"
+      >
         {/* Welcome Section */}
-        <motion.div variants={fadeUp} className="p-6 sm:p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg text-white text-center">
-          <motion.h1 className="text-3xl font-semibold mb-2" variants={fadeUp} custom={1}>
+        <motion.div
+          variants={fadeUp}
+          className="p-6 sm:p-8 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-lg text-white text-center"
+        >
+          <motion.h1
+            className="text-3xl font-semibold mb-2"
+            variants={fadeUp}
+            custom={1}
+          >
             Welcome, Recruiter!
           </motion.h1>
           <motion.p className="text-lg opacity-90" variants={fadeUp} custom={2}>
@@ -164,14 +193,24 @@ export default function RecruiterDashboardHome() {
               {/* Welcome + profile */}
               {profile && (
                 <div className="flex items-center gap-4">
-                  <img
-                    src={profile.profilePicture || "/default-avatar.png"}
-                    alt="Recruiter"
-                    className="w-14 h-14 rounded-full object-cover border border-white/30"
-                  />
+                  {profile.profilePicture ? (
+                    <img
+                      src={profile.profilePicture}
+                      alt="Recruiter"
+                      className="w-14 h-14 rounded-full object-cover border border-white/30"
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-full bg-gray-600 flex items-center justify-center border border-white/30">
+                      <span className="text-gray-400 text-xl">👤</span>
+                    </div>
+                  )}
                   <div>
-                    <h3 className="text-xl font-semibold">Welcome back, {profile.fullName}</h3>
-                    <p className="text-white/70">{profile.company || "Your Company"}</p>
+                    <h3 className="text-xl font-semibold">
+                      Welcome back, {profile.fullName || "Recruiter"}
+                    </h3>
+                    <p className="text-white/70">
+                      {profile.company || "Your Company"}
+                    </p>
                   </div>
                 </div>
               )}
@@ -184,11 +223,15 @@ export default function RecruiterDashboardHome() {
                     <p className="text-white/70">Candidates Viewed</p>
                   </div>
                   <div className="bg-white/10 rounded-xl p-4 border border-white/10 text-center">
-                    <h4 className="text-2xl font-bold">{stats.bookmarkedCount}</h4>
+                    <h4 className="text-2xl font-bold">
+                      {stats.bookmarkedCount}
+                    </h4>
                     <p className="text-white/70">Bookmarked</p>
                   </div>
                   <div className="bg-white/10 rounded-xl p-4 border border-white/10 text-center">
-                    <h4 className="text-2xl font-bold">{stats.contactedCount}</h4>
+                    <h4 className="text-2xl font-bold">
+                      {stats.contactedCount}
+                    </h4>
                     <p className="text-white/70">Contacted</p>
                   </div>
                 </div>
@@ -201,15 +244,26 @@ export default function RecruiterDashboardHome() {
                   {recentCandidates && recentCandidates.length > 0 ? (
                     <div className="space-y-3">
                       {recentCandidates.slice(0, 3).map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-3 bg-white/5 rounded-lg p-3 border border-white/10">
+                        <div
+                          key={idx}
+                          className="flex items-center gap-3 bg-white/5 rounded-lg p-3 border border-white/10"
+                        >
                           <img
-                            src={item.candidateId?.profilePicture || "/default-avatar.png"}
+                            src={
+                              item.candidateId?.profilePicture ||
+                              "/default-avatar.png"
+                            }
                             alt="Candidate"
                             className="w-10 h-10 rounded-full object-cover"
                           />
                           <div>
-                            <p className="font-medium">{item.candidateId?.fullName || "Unnamed Candidate"}</p>
-                            <p className="text-sm text-white/70 truncate max-w-[240px]">{item.candidateId?.bio || "No bio available"}</p>
+                            <p className="font-medium">
+                              {item.candidateId?.fullName ||
+                                "Unnamed Candidate"}
+                            </p>
+                            <p className="text-sm text-white/70 truncate max-w-[240px]">
+                              {item.candidateId?.bio || "No bio available"}
+                            </p>
                           </div>
                         </div>
                       ))}
@@ -225,15 +279,22 @@ export default function RecruiterDashboardHome() {
                   {suggestedCandidates && suggestedCandidates.length > 0 ? (
                     <div className="space-y-3">
                       {suggestedCandidates.slice(0, 3).map((c, idx) => (
-                        <div key={idx} className="flex items-center gap-3 bg-white/5 rounded-lg p-3 border border-white/10">
+                        <div
+                          key={idx}
+                          className="flex items-center gap-3 bg-white/5 rounded-lg p-3 border border-white/10"
+                        >
                           <img
                             src={c.profilePicture || "/default-avatar.png"}
                             alt="Candidate"
                             className="w-10 h-10 rounded-full object-cover"
                           />
                           <div>
-                            <p className="font-medium">{c.fullName || "Unnamed Candidate"}</p>
-                            <p className="text-sm text-white/70 truncate max-w-[240px]">{c.bio || "No bio available"}</p>
+                            <p className="font-medium">
+                              {c.fullName || "Unnamed Candidate"}
+                            </p>
+                            <p className="text-sm text-white/70 truncate max-w-[240px]">
+                              {c.bio || "No bio available"}
+                            </p>
                           </div>
                         </div>
                       ))}
@@ -248,13 +309,28 @@ export default function RecruiterDashboardHome() {
         </motion.div>
 
         {/* Navigation Cards - Hidden on mobile, shown on tablet and up */}
-        <motion.div className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" variants={fadeUp} custom={3}>
+        <motion.div
+          className="hidden md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+          variants={fadeUp}
+          custom={3}
+        >
           {navigationItems.map((item, index) => (
-            <motion.div key={index} variants={cardVariants} custom={index} whileHover="hover" onClick={() => handleNavigate(item.path, item.loadingMessage)} className="cursor-pointer">
+            <motion.div
+              key={index}
+              variants={cardVariants}
+              custom={index}
+              whileHover="hover"
+              onClick={() => handleNavigate(item.path, item.loadingMessage)}
+              className="cursor-pointer"
+            >
               {/* Tablet Cards */}
-              <div className={`lg:hidden bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl shadow-lg text-white`}>
+              <div
+                className={`lg:hidden bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-2xl shadow-lg text-white`}
+              >
                 <div className="flex flex-col items-center text-center space-y-3">
-                  <div className="p-3 bg-white/20 rounded-full">{item.icon}</div>
+                  <div className="p-3 bg-white/20 rounded-full">
+                    {item.icon}
+                  </div>
                   <h3 className="font-semibold text-lg">{item.title}</h3>
                   <p className="text-sm opacity-90">{item.description}</p>
                 </div>
@@ -265,13 +341,17 @@ export default function RecruiterDashboardHome() {
                 <div className="flip-card-inner">
                   <div className="flip-card-front">
                     <div className="flex flex-col items-center justify-center h-full text-center space-y-3">
-                      <div className="p-3 bg-white/20 rounded-full">{item.icon}</div>
+                      <div className="p-3 bg-white/20 rounded-full">
+                        {item.icon}
+                      </div>
                       <h3 className="font-semibold text-lg">{item.title}</h3>
                     </div>
                   </div>
                   <div className="flip-card-back">
                     <div className="flex items-center justify-center h-full text-center">
-                      <p className="text-sm opacity-90 px-6 whitespace-pre-line max-w-[90%] mx-auto">{item.description}</p>
+                      <p className="text-sm opacity-90 px-6 whitespace-pre-line max-w-[90%] mx-auto">
+                        {item.description}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -299,10 +379,15 @@ export default function RecruiterDashboardHome() {
             transform-style: preserve-3d;
           }
 
-          .flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+          .flip-card:hover .flip-card-inner {
+            transform: rotateY(180deg);
+          }
 
-          .flip-card-front, .flip-card-back {
-            box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
+          .flip-card-front,
+          .flip-card-back {
+            box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 2px,
+              rgba(0, 0, 0, 0.3) 0px 7px 13px -3px,
+              rgba(0, 0, 0, 0.2) 0px -1px 0px inset;
             position: absolute;
             display: flex;
             flex-direction: column;
@@ -314,13 +399,25 @@ export default function RecruiterDashboardHome() {
             border-radius: 1rem;
           }
 
-          .flip-card-front { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
-          .flip-card-back { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); transform: rotateY(180deg); }
+          .flip-card-front {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+          }
+          .flip-card-back {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: rotateY(180deg);
+          }
         `}</style>
 
         {/* Mobile Note */}
-        <motion.div className="md:hidden p-4 bg-white/5 rounded-xl border border-white/10 text-white/70 text-center text-sm" variants={fadeUp} custom={4}>
-          Use the menu button (☰) in the top-left to access all features on mobile
+        <motion.div
+          className="md:hidden p-4 bg-white/5 rounded-xl border border-white/10 text-white/70 text-center text-sm"
+          variants={fadeUp}
+          custom={4}
+        >
+          Use the menu button (☰) in the top-left to access all features on
+          mobile
         </motion.div>
 
         {/* Loading Overlay */}

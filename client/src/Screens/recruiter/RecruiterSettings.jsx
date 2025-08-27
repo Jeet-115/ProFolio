@@ -8,11 +8,16 @@ import {
   updateCompanyDetails,
   updateRecruiterPreferences,
   updateRecruiterPassword,
+  uploadRecruiterProfilePicture,
+  removeRecruiterProfilePicture,
 } from "../../services/recruiterSettingsService";
 
 export default function RecruiterSettings() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
 
   const [companyDetails, setCompanyDetails] = useState({
     companyName: "",
@@ -91,22 +96,178 @@ export default function RecruiterSettings() {
     }
   };
 
+  const handlePhotoUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    const allowedTypes = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+      "image/webp",
+    ];
+    if (!allowedTypes.includes(file.type)) {
+      alert("Please select a valid image file (JPEG, PNG, GIF, or WebP)");
+      return;
+    }
+
+    // Validate file size (5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size must be less than 5MB");
+      return;
+    }
+
+    setSelectedPhoto(file);
+
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setPhotoPreview(previewUrl);
+  };
+
+  const handleSavePhoto = async () => {
+    if (!selectedPhoto) return;
+
+    setUploadingPhoto(true);
+    try {
+      const { data } = await uploadRecruiterProfilePicture(selectedPhoto);
+      setSettings(data.user);
+      setSelectedPhoto(null);
+      setPhotoPreview(null);
+      alert("Profile picture uploaded successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to upload picture");
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
+  const handleCancelPhoto = () => {
+    setSelectedPhoto(null);
+    if (photoPreview) {
+      URL.revokeObjectURL(photoPreview);
+      setPhotoPreview(null);
+    }
+  };
+
+  const handleRemovePhoto = async () => {
+    try {
+      const { data } = await removeRecruiterProfilePicture();
+      setSettings(data.user);
+      alert("Profile picture removed!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to remove picture");
+    }
+  };
+
   if (loading) return <p className="text-white">Loading settings...</p>;
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-6 text-white">Recruiter Settings</h1>
 
+      {/* Profile Picture */}
+      <section className="mb-8 p-5 rounded-xl border border-white/15 bg-white/10 backdrop-blur-md shadow-lg/20">
+        <h2 className="text-xl font-semibold mb-4 text-white">
+          Profile Picture
+        </h2>
+        <div className="space-y-4">
+          {photoPreview ? (
+            <div className="space-y-3">
+              <img
+                src={photoPreview}
+                alt="Preview"
+                className="w-24 h-24 rounded-full object-cover border-2 border-blue-400"
+              />
+              <p className="text-blue-400 text-sm">
+                Preview - Click save to upload
+              </p>
+              <div className="flex gap-2">
+                <RecruiterButton
+                  onClick={handleSavePhoto}
+                  variant="solid"
+                  className="bg-green-500 hover:bg-green-600 text-white"
+                  disabled={uploadingPhoto}
+                >
+                  Save Photo
+                </RecruiterButton>
+                <RecruiterButton
+                  onClick={handleCancelPhoto}
+                  variant="outline"
+                  className="text-gray-400 border-gray-400 hover:bg-gray-400 hover:text-white"
+                >
+                  Cancel
+                </RecruiterButton>
+              </div>
+              {uploadingPhoto && (
+                <p className="text-blue-400 text-sm">Uploading...</p>
+              )}
+            </div>
+          ) : settings?.profilePicture?.url ? (
+            <div className="space-y-3">
+              <img
+                src={settings.profilePicture.url}
+                alt="Profile"
+                className="w-24 h-24 rounded-full object-cover border-2 border-white/20"
+              />
+              <div className="flex gap-2">
+                <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors">
+                  Change Photo
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoUpload}
+                    className="hidden"
+                    disabled={uploadingPhoto}
+                  />
+                </label>
+                <RecruiterButton
+                  onClick={handleRemovePhoto}
+                  variant="outline"
+                  className="text-red-400 border-red-400 hover:bg-red-400 hover:text-white"
+                >
+                  Remove
+                </RecruiterButton>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <div className="w-24 h-24 rounded-full bg-gray-600 flex items-center justify-center border-2 border-white/20">
+                <span className="text-gray-400 text-2xl">👤</span>
+              </div>
+              <label className="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm transition-colors inline-block">
+                Upload Photo
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                  disabled={uploadingPhoto}
+                />
+              </label>
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* Company Details */}
       <section className="mb-8 p-5 rounded-xl border border-white/15 bg-white/10 backdrop-blur-md shadow-lg/20">
-        <h2 className="text-xl font-semibold mb-4 text-white">Company Details</h2>
+        <h2 className="text-xl font-semibold mb-4 text-white">
+          Company Details
+        </h2>
         <div className="space-y-6">
           <ThemedInput
             label="Company Name"
             name="companyName"
             value={companyDetails.companyName}
             onChange={(e) =>
-              setCompanyDetails({ ...companyDetails, companyName: e.target.value })
+              setCompanyDetails({
+                ...companyDetails,
+                companyName: e.target.value,
+              })
             }
           />
           <ThemedInput
@@ -114,7 +275,10 @@ export default function RecruiterSettings() {
             name="companyLogo"
             value={companyDetails.companyLogo}
             onChange={(e) =>
-              setCompanyDetails({ ...companyDetails, companyLogo: e.target.value })
+              setCompanyDetails({
+                ...companyDetails,
+                companyLogo: e.target.value,
+              })
             }
           />
           <ThemedInput
@@ -122,7 +286,10 @@ export default function RecruiterSettings() {
             name="companyWebsite"
             value={companyDetails.companyWebsite}
             onChange={(e) =>
-              setCompanyDetails({ ...companyDetails, companyWebsite: e.target.value })
+              setCompanyDetails({
+                ...companyDetails,
+                companyWebsite: e.target.value,
+              })
             }
           />
           <ThemedInput
@@ -134,7 +301,11 @@ export default function RecruiterSettings() {
             }
           />
         </div>
-        <RecruiterButton onClick={handleCompanySave} variant="solid" className="mt-6">
+        <RecruiterButton
+          onClick={handleCompanySave}
+          variant="solid"
+          className="mt-6"
+        >
           Save Company Details
         </RecruiterButton>
       </section>
@@ -159,7 +330,11 @@ export default function RecruiterSettings() {
             }
           />
         </div>
-        <RecruiterButton onClick={handlePreferencesSave} variant="solid" className="mt-6">
+        <RecruiterButton
+          onClick={handlePreferencesSave}
+          variant="solid"
+          className="mt-6"
+        >
           Save Preferences
         </RecruiterButton>
       </section>
@@ -198,7 +373,10 @@ export default function RecruiterSettings() {
                 name="newPassword"
                 value={passwordData.newPassword}
                 onChange={(e) =>
-                  setPasswordData({ ...passwordData, newPassword: e.target.value })
+                  setPasswordData({
+                    ...passwordData,
+                    newPassword: e.target.value,
+                  })
                 }
               />
             </div>
