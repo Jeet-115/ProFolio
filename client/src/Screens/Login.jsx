@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../components/Logo";
+import Logo from "../Components/Logo";
 import LoginLeftDiv from "../Components/Login/LoginLeftDiv";
 import LoginRightDiv from "../Components/Login/LoginRightDiv";
 import UnifiedAuth from "../Components/Auth/UnifiedAuth";
