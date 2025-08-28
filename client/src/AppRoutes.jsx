@@ -42,50 +42,32 @@ const AppRoutes = () => {
       <Route
         path="/dashboard"
         element={
-          // <ProtectedRoute>
-          <DashboardLayout />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <DashboardLayout />
+          </ProtectedRoute>
         }
       >
         <Route index element={<DashboardHome />} />
         <Route path="resume-builder/:id?" element={<ResumeBuilder />} />
-        <Route
-          path="/dashboard/templates/resumes"
-          element={<TemplatesList />}
-        />
-        <Route
-          path="/dashboard/templates/resumes/:templateId/fill"
-          element={<TemplateFill />}
-        />
-        <Route
-          path="/dashboard/templates/resumes/:templateId/edit/:resumeId"
-          element={<TemplateFill />}
-        />
+        <Route path="/dashboard/templates/resumes" element={<TemplatesList />} />
+        <Route path="/dashboard/templates/resumes/:templateId/fill" element={<TemplateFill />} />
+        <Route path="/dashboard/templates/resumes/:templateId/edit/:resumeId" element={<TemplateFill />} />
         <Route path="portfolio-techstack" element={<TechStackSelection />} />
         <Route path="portfolio-builder/:id?" element={<PortfolioBuilder />} />
         <Route path="resume-history" element={<ResumeHistory />} />
         <Route path="portfolio-history" element={<PortfolioHistory />} />
-        <Route
-          path="portfolio-templates"
-          element={<PortfolioTemplatesList />}
-        />
-        <Route
-          path="portfolio-templates/:templateId/fill"
-          element={<PortfolioFill />}
-        />
-        <Route
-          path="portfolio-templates/:templateId/edit/:portfolioId"
-          element={<PortfolioFill />}
-        />
+        <Route path="portfolio-templates" element={<PortfolioTemplatesList />} />
+        <Route path="portfolio-templates/:templateId/fill" element={<PortfolioFill />} />
+        <Route path="portfolio-templates/:templateId/edit/:portfolioId" element={<PortfolioFill />} />
         <Route path="analytics" element={<UserAnalytics />} />
         <Route path="profile" element={<UserProfile />} />
       </Route>
       <Route
         path="/recruiter/dashboard"
         element={
-          // <ProtectedRoute>
-          <RecruiterLayout />
-          // </ProtectedRoute>
+          <ProtectedRoute>
+            <RecruiterLayout />
+          </ProtectedRoute>
         }
       >
         <Route index element={<RecruiterDashboardHome />} />
@@ -95,7 +77,16 @@ const AppRoutes = () => {
         <Route path="reported-contacted" element={<RecruiterActivity />} />
         <Route path="settings" element={<RecruiterSettings />} />
       </Route>
-      <Route path="/admin" element={<AdminDashboard />}>
+      <Route
+        path="/admin"
+        element={
+          <ProtectedRoute>
+            <AdminRoute>
+              <AdminDashboard />
+            </AdminRoute>
+          </ProtectedRoute>
+        }
+      >
         <Route index element={<AdminHome />} />
         <Route path="users" element={<UserManagement />} />
         <Route path="recruiters" element={<RecruiterManagement />} />
