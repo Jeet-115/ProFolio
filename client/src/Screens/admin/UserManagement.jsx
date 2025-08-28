@@ -63,110 +63,128 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">User Management</h1>
+    <div className="p-6 space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-2xl font-bold luxury-gold-text luxury-heading">User Management</h1>
+        <div className="flex gap-2">
+          <button
+            onClick={fetchUsers}
+            className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white shadow-lg hover:from-[#F57F17] hover:to-[#E65100] transition-all luxury-btn luxury-focus text-sm sm:text-base"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
 
       {loading ? (
-        <p>Loading users...</p>
+        <div className="w-full h-48 rounded-2xl border border-[#F9A825]/20 bg-gradient-to-br from-white to-[#FFFEF7] data-loading" />
       ) : (
-        <table className="w-full border-collapse border border-gray-300">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="border p-2">Name</th>
-              <th className="border p-2">Email</th>
-              <th className="border p-2">Role</th>
-              <th className="border p-2">Status</th>
-              <th className="border p-2">Auth Provider</th>
-              <th className="border p-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u._id} className="text-center">
-                <td className="border p-2">{u.fullName || u.username}</td>
-                <td className="border p-2">{u.email}</td>
-                <td className="border p-2">
-                  <select
-                    value={u.role}
-                    onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                    className="border rounded p-1"
-                  >
-                    <option value="user">User</option>
-                    <option value="recruiter">Recruiter</option>
-                    <option value="admin">Admin</option>
-                  </select>
-                </td>
-                <td className="border p-2">{u.status}</td>
-                <td className="border p-2">{u.authProvider}</td>
-                <td className="border p-2 space-x-2">
-                  <button
-                    onClick={() => handleViewReports(u)}
-                    className="px-2 py-1 bg-blue-500 text-white rounded"
-                  >
-                    Reports
-                  </button>
-                  <button
-                    onClick={() => handleDelete(u._id)}
-                    className="px-2 py-1 bg-red-600 text-white rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <div className="overflow-x-auto rounded-2xl border border-[#F9A825]/30 shadow-xl bg-white">
+          <table className="w-full min-w-[700px]">
+            <thead className="bg-[#FFF8E1]">
+              <tr className="text-left text-[#E65100]">
+                <th className="p-3 text-sm font-semibold">Name</th>
+                <th className="p-3 text-sm font-semibold">Email</th>
+                <th className="p-3 text-sm font-semibold">Role</th>
+                <th className="p-3 text-sm font-semibold">Status</th>
+                <th className="p-3 text-sm font-semibold">Auth Provider</th>
+                <th className="p-3 text-sm font-semibold text-right">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((u, idx) => (
+                <tr
+                  key={u._id}
+                  className={`${idx % 2 === 0 ? "bg-white" : "bg-[#FFFEF7]"} hover:bg-[#FFFDE7] transition-colors`}
+                >
+                  <td className="p-3 text-sm">{u.fullName || u.username}</td>
+                  <td className="p-3 text-sm">{u.email}</td>
+                  <td className="p-3">
+                    <select
+                      value={u.role}
+                      onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                      className="border border-[#F9A825]/40 rounded-lg p-2 text-sm luxury-focus"
+                    >
+                      <option value="user">User</option>
+                      <option value="recruiter">Recruiter</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </td>
+                  <td className="p-3 text-sm">{u.status}</td>
+                  <td className="p-3 text-sm">{u.authProvider}</td>
+                  <td className="p-3">
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => handleViewReports(u)}
+                        className="px-3 py-2 text-sm rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white shadow hover:from-[#F57F17] hover:to-[#E65100] transition-all luxury-btn luxury-focus"
+                      >
+                        Reports
+                      </button>
+                      <button
+                        onClick={() => handleDelete(u._id)}
+                        className="px-3 py-2 text-sm rounded-lg bg-red-600 text-white shadow hover:bg-red-700 transition-all luxury-focus"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* Reports Modal */}
       {reports && selectedUser && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded w-1/2 shadow-lg">
-            <h2 className="text-xl font-bold mb-4">
-              Reports for {selectedUser.fullName || selectedUser.email}
-            </h2>
-
-            <div className="mb-4">
-              <h3 className="font-semibold">Reports Received:</h3>
-              {reports.reportsReceived.length === 0 ? (
-                <p className="text-sm text-gray-500">No reports received.</p>
-              ) : (
-                <ul className="list-disc ml-6">
-                  {reports.reportsReceived.map((r) => (
-                    <li key={r._id}>
-                      From: {r.recruiterId?.fullName || "Unknown"} –{" "}
-                      {r.message} ({new Date(r.reportedAt).toLocaleString()})
-                    </li>
-                  ))}
-                </ul>
-              )}
+        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-white to-[#FFFEF7] p-4 sm:p-6 rounded-2xl w-full max-w-[90vw] sm:max-w-2xl shadow-2xl border border-[#F9A825]/30">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+              <h2 className="text-lg sm:text-xl font-bold luxury-gold-text luxury-heading">
+                Reports for {selectedUser.fullName || selectedUser.email}
+              </h2>
+              <button
+                onClick={() => {
+                  setReports(null);
+                  setSelectedUser(null);
+                }}
+                className="px-3 py-1 rounded-lg bg-[#FFF8E1] text-[#E65100] hover:bg-[#FFE082] transition-colors luxury-focus self-start sm:self-auto"
+              >
+                Close
+              </button>
             </div>
 
-            <div className="mb-4">
-              <h3 className="font-semibold">Reports Made:</h3>
-              {reports.reportsMade.length === 0 ? (
-                <p className="text-sm text-gray-500">No reports made.</p>
-              ) : (
-                <ul className="list-disc ml-6">
-                  {reports.reportsMade.map((r) => (
-                    <li key={r._id}>
-                      Against: {r.candidateId?.fullName || "Unknown"} –{" "}
-                      {r.message} ({new Date(r.reportedAt).toLocaleString()})
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <div className="grid gap-6 sm:grid-cols-2">
+              <div>
+                <h3 className="font-semibold text-[#E65100] mb-2">Reports Received</h3>
+                {reports.reportsReceived.length === 0 ? (
+                  <p className="text-sm text-[#E65100]/70">No reports received.</p>
+                ) : (
+                  <ul className="list-disc ml-6 space-y-1">
+                    {reports.reportsReceived.map((r) => (
+                      <li key={r._id} className="text-sm">
+                        From: {r.recruiterId?.fullName || "Unknown"} – {r.message} ("{new Date(r.reportedAt).toLocaleString()}")
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
 
-            <button
-              onClick={() => {
-                setReports(null);
-                setSelectedUser(null);
-              }}
-              className="mt-4 px-4 py-2 bg-gray-600 text-white rounded"
-            >
-              Close
-            </button>
+              <div>
+                <h3 className="font-semibold text-[#E65100] mb-2">Reports Made</h3>
+                {reports.reportsMade.length === 0 ? (
+                  <p className="text-sm text-[#E65100]/70">No reports made.</p>
+                ) : (
+                  <ul className="list-disc ml-6 space-y-1">
+                    {reports.reportsMade.map((r) => (
+                      <li key={r._id} className="text-sm">
+                        Against: {r.candidateId?.fullName || "Unknown"} – {r.message} ("{new Date(r.reportedAt).toLocaleString()}")
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
