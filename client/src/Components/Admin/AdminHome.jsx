@@ -18,7 +18,7 @@ function AdminUsersCount() {
     };
   }, []);
   return (
-    <div className="text-2xl font-semibold text-[#2E3C43]" aria-live="polite">
+    <div className="text-3xl font-bold luxury-gold-text" aria-live="polite">
       {count == null ? "—" : count}
     </div>
   );
@@ -26,61 +26,79 @@ function AdminUsersCount() {
 
 const AdminHome = () => {
   return (
-    <div className="p-6">
-      <h1 className="text-3xl font-bold mb-6 text-[#2E3C43]">
+    <div className="p-4 md:p-6">
+      <h1 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 luxury-gold-text luxury-heading">
         Welcome, Admin!
       </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-gradient-to-br from-[#E0F7FA] to-[#B2EBF2] rounded-xl p-4 shadow">
-          <div className="text-sm text-[#2E3C43]/70">Total Users</div>
+      <div className="luxury-grid mb-8">
+        <div className="bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl p-6 shadow-2xl border border-[#F9A825]/20 hover:border-[#F9A825]/40 transition-all duration-300 hover:shadow-[#F9A825]/10 hover:shadow-2xl luxury-card glow-border">
+          <div className="text-sm text-[#E65100]/70 mb-2 font-medium luxury-subheading">Total Users</div>
           <AdminUsersCount />
+          <div className="mt-2 text-xs text-[#E65100]/50">Active registered users</div>
         </div>
-        <div className="bg-gradient-to-br from-[#E0F7FA] to-[#B2EBF2] rounded-xl p-4 shadow">
-          <div className="text-sm text-[#2E3C43]/70">Files Stored</div>
-          <div className="text-2xl font-semibold text-[#2E3C43]">—</div>
+        <div className="bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl p-6 shadow-2xl border border-[#F9A825]/20 hover:border-[#F9A825]/40 transition-all duration-300 hover:shadow-[#F9A825]/10 hover:shadow-2xl luxury-card glow-border">
+          <div className="text-sm text-[#E65100]/70 mb-2 font-medium luxury-subheading">Files Stored</div>
+          <div className="text-3xl font-bold luxury-gold-text">—</div>
+          <div className="mt-2 text-xs text-[#E65100]/50">Total files in system</div>
         </div>
-        <div className="bg-gradient-to-br from-[#E0F7FA] to-[#B2EBF2] rounded-xl p-4 shadow">
-          <div className="text-sm text-[#2E3C43]/70">Active Sessions</div>
-          <div className="text-2xl font-semibold text-[#2E3C43]">—</div>
+        <div className="bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl p-6 shadow-2xl border border-[#F9A825]/20 hover:border-[#F9A825]/40 transition-all duration-300 hover:shadow-[#F9A825]/10 hover:shadow-2xl luxury-card glow-border">
+          <div className="text-sm text-[#E65100]/70 mb-2 font-medium luxury-subheading">Active Sessions</div>
+          <div className="text-3xl font-bold luxury-gold-text">—</div>
+          <div className="mt-2 text-xs text-[#E65100]/50">Current user sessions</div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-[#E0F2F1] p-5">
-          <h2 className="text-lg font-semibold mb-3 text-[#2E3C43]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+        <div className="hidden md:block bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl border border-[#F9A825]/20 p-4 md:p-6 shadow-2xl luxury-card">
+          <h2 className="text-lg md:text-xl font-semibold mb-4 md:mb-6 luxury-gold-text border-b border-[#F9A825]/30 pb-3 luxury-heading">
             Quick Actions
           </h2>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
             <a
               href="/admin/users"
-              className="px-4 py-2 rounded bg-[#00ACC1] text-white hover:bg-[#0097A7] transition"
+              className="w-full sm:w-auto text-center px-5 md:px-6 py-3 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-[#FFD54F]/30 luxury-btn luxury-focus"
             >
               Manage Users
             </a>
             <a
-              href="/admin/files"
-              className="px-4 py-2 rounded bg-[#00ACC1] text-white hover:bg-[#0097A7] transition"
+              href="/admin/recruiters"
+              className="w-full sm:w-auto text-center px-5 md:px-6 py-3 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-[#FFD54F]/30 luxury-btn luxury-focus"
             >
-              Manage Files
+              Manage Recruiters
+            </a>
+            <a
+              href="/admin/analytics"
+              className="w-full sm:w-auto text-center px-5 md:px-6 py-3 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-[#FFD54F]/30 luxury-btn luxury-focus"
+            >
+              Analytics
             </a>
             <a
               href="/admin/settings"
-              className="px-4 py-2 rounded bg-[#00ACC1] text-white hover:bg-[#0097A7] transition"
+              className="w-full sm:w-auto text-center px-5 md:px-6 py-3 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-[#FFD54F]/30 luxury-btn luxury-focus"
             >
               Settings
             </a>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl border border-[#E0F2F1] p-5">
-          <h2 className="text-lg font-semibold mb-3 text-[#2E3C43]">
+        <div className="bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl border border-[#F9A825]/20 p-4 md:p-6 shadow-2xl luxury-card">
+          <h2 className="text-lg md:text-xl font-semibold mb-4 md:mb-6 luxury-gold-text border-b border-[#F9A825]/30 pb-3 luxury-heading">
             System Status
           </h2>
-          <ul className="text-sm text-[#2E3C43]/80 space-y-2">
-            <li>API: Online</li>
-            <li>Database: Connected</li>
-            <li>Storage: Healthy</li>
+          <ul className="text-sm text-[#E65100]/80 space-y-3 md:space-y-4">
+            <li className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full status-indicator"></div>
+              <span className="font-medium luxury-subheading">API: Online</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full status-indicator"></div>
+              <span className="font-medium luxury-subheading">Database: Connected</span>
+            </li>
+            <li className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full status-indicator"></div>
+              <span className="font-medium luxury-subheading">Storage: Healthy</span>
+            </li>
           </ul>
         </div>
       </div>
