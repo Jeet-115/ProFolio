@@ -97,7 +97,7 @@ const UserSchema = new mongoose.Schema(
     username: { type: String, default: "" }, // optional
     fullName: { type: String, default: "" },
     bio: { type: String, maxlength: 300, default: "" },
-    profilePicture: { type: String, default: "" }, // Cloudinary URL
+    profilePicture: { url: String, filename: String }, // Cloudinary URL
 
     socialLinks: { type: SocialLinksSchema, default: () => ({}) },
     preferences: { type: PreferencesSchema, default: () => ({}) },
@@ -127,7 +127,7 @@ const UserSchema = new mongoose.Schema(
     // 🔹 Recruiter additional fields
     companyDetails: {
       companyName: { type: String, default: "" },
-      logo: { type: String, default: "" }, // Cloudinary URL
+      logo: { url: String, filename: String }, // Cloudinary URL
       website: { type: String, default: "" },
       hrName: { type: String, default: "" },
     },

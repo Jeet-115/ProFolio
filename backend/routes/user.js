@@ -2,6 +2,7 @@ import express from "express";
 import passport from "passport";
 import wrapAsync from "../utils/wrapAsync.js";
 import * as userController from "../controllers/user.js";
+import { uploadProfilePicture } from "../middleware/multer.js";
 
 const router = express.Router();
 
@@ -61,9 +62,12 @@ router.delete(
   wrapAsync(userController.deleteUser)
 );
 
-
 // Get user reports
-router.get("/admin/users/:id/reports", isAdmin, wrapAsync(userController.getUserReports));
+router.get(
+  "/admin/users/:id/reports",
+  isAdmin,
+  wrapAsync(userController.getUserReports)
+);
 
 function getRedirectPath(role) {
   if (role === "admin") return "/admin";
@@ -214,6 +218,11 @@ router.get(
 // Profile
 router.get("/me", wrapAsync(userController.getProfile));
 router.put("/me", wrapAsync(userController.updateProfile));
+router.post(
+  "/me/profile-picture",
+  uploadProfilePicture.single("profilePicture"),
+  wrapAsync(userController.uploadProfilePicture)
+);
 router.delete(
   "/me/profile-picture",
   wrapAsync(userController.removeProfilePicture)
