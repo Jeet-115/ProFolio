@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import Logo from "../components/Logo";
+import Logo from "../Components/Logo";
 import useRecruiterSignUp from "../Components/SignUp/RecruiterSignUp";
 
 const RecruiterSignup = () => {
