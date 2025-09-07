@@ -29,17 +29,37 @@ import "./config/passportConfig.js";
 dotenv.config();
 const app = express();
 
+// Trust proxy when behind a load balancer (e.g., Render, Railway, Fly.io, Heroku)
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
 // Connect to DB
 await connectDB();
 
 // CORS
+const commaSeparated = (value) =>
+  (value || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+const allowedOrigins = [
+  ...commaSeparated(process.env.CLIENT_URLS),
+  process.env.CLIENT_URL,
+  process.env.VERCEL_URL,
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+].filter(Boolean);
+
 app.use(
   cors({
-    origin: [
-      process.env.CLIENT_URL,
-      process.env.VERCEL_URL,
-      "http://localhost:5173",
-    ],
+    origin: (origin, callback) => {
+      // Allow non-browser requests or same-origin
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   })
 );
@@ -52,10 +72,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true,
-      sameSite: "Strict",
-      secure: false, // set true in production
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+      secure: process.env.NODE_ENV === "production",
     },
   })
 );
