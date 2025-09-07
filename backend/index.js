@@ -116,6 +116,11 @@ app.get("/", (req, res) => {
   res.send("Backend for Profolio is running!");
 });
 
+app.get("/health", (req, res) => {
+  console.log("🩺 Health check at:", new Date().toLocaleString());
+  res.status(200).send("OK");
+});
+
 // Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
