@@ -19,9 +19,10 @@ const LoginLeftDiv = () => {
 
   // OAuth popup handler
   const handleOAuthPopup = (provider) => {
+    const API_BASE = import.meta.env.VITE_API_BASE_URL;
     const OAUTH_URLS = {
-      google: "http://localhost:3000/auth/google",
-      github: "http://localhost:3000/auth/github",
+      google: `${API_BASE}/auth/google`,
+      github: `${API_BASE}/auth/github`,
     };
     const width = 500,
       height = 600;
@@ -35,7 +36,7 @@ const LoginLeftDiv = () => {
     );
 
     const handleMessage = (event) => {
-      if (event.origin !== "http://localhost:3000") return;
+      if (event.origin !== new URL(API_BASE).origin) return;
       if (event.data?.user) {
         navigate(event.data.redirect);
         window.removeEventListener("message", handleMessage);
@@ -89,8 +90,18 @@ const LoginLeftDiv = () => {
             className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl py-2 px-3 text-sm transition-all"
           >
             <span className="bg-orange-500 p-1.5 rounded-lg">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+              <svg
+                className="w-3.5 h-3.5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"
+                />
               </svg>
             </span>
             <span>Join as Recruiter</span>
@@ -192,7 +203,10 @@ const LoginLeftDiv = () => {
             transition={animationSettings.transition(0.5)}
           >
             <div className="flex justify-center space-x-4 text-white text-sm">
-              <Link to="/signup" className="hover:underline transition-all hover:text-white/80">
+              <Link
+                to="/signup"
+                className="hover:underline transition-all hover:text-white/80"
+              >
                 Sign up as User
               </Link>
             </div>

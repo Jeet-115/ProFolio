@@ -24,28 +24,28 @@ const useRecruiterSignUp = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Username validation
     if (!formData.username) {
       newErrors.username = "Username is required";
     } else if (formData.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
     }
-    
+
     // Email validation
     if (!formData.email) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Please enter a valid email address";
     }
-    
+
     // Password validation
     if (!formData.password) {
       newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
       newErrors.password = "Password must be at least 6 characters";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -55,20 +55,23 @@ const useRecruiterSignUp = () => {
     console.log("Recruiter signup form submitted");
     setServerError("");
     setSuccess("");
-    
+
     if (validateForm()) {
       try {
-        console.log('Sending formData to backend:', formData); // Debug log
-        const res = await axios.post("http://localhost:3000/signup", formData, {
+        console.log("Sending formData to backend:", formData); // Debug log
+        const API_BASE = import.meta.env.VITE_API_BASE_URL;
+        const res = await axios.post(`${API_BASE}/signup`, formData, {
           withCredentials: true,
         });
 
-        console.log('Recruiter signup response:', res.data); // Debug log
-        setSuccess(res.data.message || "Recruiter account created successfully!");
-        
+        console.log("Recruiter signup response:", res.data); // Debug log
+        setSuccess(
+          res.data.message || "Recruiter account created successfully!"
+        );
+
         // Use redirect URL from server response
         const redirectUrl = res.data.redirect || "/recruiter/dashboard";
-        console.log('Form signup - Redirecting to:', redirectUrl); // Debug log
+        console.log("Form signup - Redirecting to:", redirectUrl); // Debug log
         setTimeout(() => navigate(redirectUrl), 1500);
       } catch (err) {
         setServerError(
