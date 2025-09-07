@@ -19,6 +19,7 @@
     "@tailwindcss/vite": "^4.0.6",
     "@tinymce/tinymce-react": "^6.2.1",
     "axios": "^1.7.9",
+    "date-fns": "^4.1.0",
     "framer-motion": "^12.4.2",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.3",

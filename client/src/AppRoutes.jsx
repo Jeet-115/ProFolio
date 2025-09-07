@@ -27,10 +27,11 @@ import CandidateProfile from "./Screens/recruiter/CandidateProfile";
 import Bookmarks from "./Screens/recruiter/Bookmarks";
 import RecruiterActivity from "./Screens/recruiter/RecruiterActivity";
 import RecruiterSettings from "./Screens/recruiter/RecruiterSettings";
-import UserManagement from "./Screens/admin/UserManagement";
+import UserManagement from "./Screens/admin/UserManagementNew";
 import RecruiterManagement from "./Screens/admin/RecruiterManagement";
 import AdminAnalytics from "./Screens/admin/AdminAnalytics";
-import AdminSettings from "./Screens/admin/AdminSettings";
+import AdminSettings from "./Screens/admin/Settings";
+import TemplateManagement from "./Screens/admin/TemplateManagement";
 
 const AppRoutes = () => {
   return (
@@ -90,6 +91,7 @@ const AppRoutes = () => {
         <Route index element={<AdminHome />} />
         <Route path="users" element={<UserManagement />} />
         <Route path="recruiters" element={<RecruiterManagement />} />
+        <Route path="templates" element={<TemplateManagement />} />
         <Route path="analytics" element={<AdminAnalytics />} />
         <Route path="settings" element={<AdminSettings />} />
       </Route>

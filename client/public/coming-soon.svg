@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Coming Soon</title>
+  <desc id="desc">A friendly coming soon illustration with a spinning sun in sunset orange theme.</desc>
+  <defs>
+    <linearGradient id="sunset" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F57C00"/>
+      <stop offset="100%" stop-color="#FFB74D"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFE0B2"/>
+      <stop offset="100%" stop-color="#FFF3E0"/>
+    </linearGradient>
+    <style>
+      @keyframes spin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+      .spinner { transform-origin: 256px 170px; animation: spin 6s linear infinite; }
+      .fade { opacity: 0.9; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="24" fill="#FFFFFF"/>
+  <rect y="360" width="512" height="152" fill="url(#ground)"/>
+
+  <!-- Sun -->
+  <circle cx="256" cy="170" r="60" fill="url(#sunset)" class="fade"/>
+  <!-- Sun rays -->
+  <g class="spinner" stroke="#FFB74D" stroke-width="6" stroke-linecap="round">
+    <line x1="256" y1="92" x2="256" y2="52"/>
+    <line x1="256" y1="288" x2="256" y2="328"/>
+    <line x1="178" y1="170" x2="138" y2="170"/>
+    <line x1="374" y1="170" x2="414" y2="170"/>
+    <line x1="208" y1="122" x2="178" y2="92"/>
+    <line x1="334" y1="248" x2="364" y2="278"/>
+    <line x1="304" y1="122" x2="334" y2="92"/>
+    <line x1="178" y1="248" x2="148" y2="278"/>
+  </g>
+
+  <!-- Illustration: panels -->
+  <rect x="96" y="248" width="320" height="180" rx="16" fill="#FFF8E1" stroke="#FFCC80" stroke-width="2"/>
+  <rect x="116" y="268" width="120" height="36" rx="8" fill="#FFFFFF" stroke="#FFCC80"/>
+  <rect x="116" y="314" width="280" height="20" rx="6" fill="#FFFFFF" stroke="#FFCC80"/>
+  <rect x="116" y="344" width="220" height="20" rx="6" fill="#FFFFFF" stroke="#FFCC80"/>
+  
+  <!-- Dots -->
+  <circle cx="372" cy="286" r="5" fill="#F57C00"/>
+  <circle cx="388" cy="286" r="5" fill="#FFB74D"/>
+  <circle cx="404" cy="286" r="5" fill="#E65100"/>
+
+  <!-- Text -->
+  <g fill="#BF360C">
+    <text x="256" y="440" text-anchor="middle" font-family="Poppins, Roboto, Arial, sans-serif" font-size="28" font-weight="700">Coming Soon</text>
+    <text x="256" y="468" text-anchor="middle" font-family="Poppins, Roboto, Arial, sans-serif" font-size="14" opacity="0.8">We are crafting an amazing settings experience</text>
+  </g>
+</svg>
