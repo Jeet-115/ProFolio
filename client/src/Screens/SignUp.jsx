@@ -8,7 +8,7 @@ const Signup = () => {
   return (
     <div className="bg-[linear-gradient(to_bottom,_#1F2D3C_0%,_#1BA089_26%,_#1ABC9C_100%)] min-h-screen">
       <Logo />
-      
+
       {/* Mobile/Tablet: Unified Auth Component */}
       <main className="lg:hidden flex items-center justify-center w-full mt-14">
         <UnifiedAuth />

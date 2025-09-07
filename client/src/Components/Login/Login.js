@@ -34,7 +34,8 @@ const useLogin = () => {
     setSuccess("");
     if (validateForm()) {
       try {
-        const res = await axios.post("http://localhost:3000/login", formData, {
+        const API_BASE = import.meta.env.VITE_API_BASE_URL;
+        const res = await axios.post(`${API_BASE}/login`, formData, {
           withCredentials: true,
         });
 
