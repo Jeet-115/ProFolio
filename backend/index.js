@@ -57,7 +57,13 @@ app.use(
     origin: (origin, callback) => {
       // Allow non-browser requests or same-origin
       if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) return callback(null, true);
+      let isAllowed = allowedOrigins.includes(origin);
+      try {
+        const hostname = new URL(origin).hostname;
+        const isVercelPreview = /\.vercel\.app$/i.test(hostname);
+        if (isVercelPreview) isAllowed = true;
+      } catch {}
+      if (isAllowed) return callback(null, true);
       return callback(new Error(`CORS blocked for origin: ${origin}`));
     },
     credentials: true,
