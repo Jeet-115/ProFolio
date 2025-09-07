@@ -12,7 +12,7 @@ const UnifiedAuth = () => {
 
   // Login hook
   const loginHook = useLogin();
-  
+
   // Signup hook
   const signupHook = useSignUp();
 
@@ -28,14 +28,20 @@ const UnifiedAuth = () => {
 
   // Check if device is mobile/tablet
   const isMobileOrTablet = () => {
-    return window.innerWidth < 1024 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    return (
+      window.innerWidth < 1024 ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
   };
 
   // OAuth handler - uses redirect for mobile/tablet, popup for desktop
   const handleOAuth = (provider) => {
+    const API_BASE = import.meta.env.VITE_API_BASE_URL;
     const OAUTH_URLS = {
-      google: "http://localhost:3000/auth/google",
-      github: "http://localhost:3000/auth/github",
+      google: `${API_BASE}/auth/google`,
+      github: `${API_BASE}/auth/github`,
     };
 
     // Always use redirect for mobile/tablet devices
@@ -46,7 +52,8 @@ const UnifiedAuth = () => {
 
     // Use popup for desktop (login mode only)
     if (isLogin) {
-      const width = 500, height = 600;
+      const width = 500,
+        height = 600;
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2.5;
 
@@ -57,7 +64,7 @@ const UnifiedAuth = () => {
       );
 
       const handleMessage = (event) => {
-        if (event.origin !== "http://localhost:3000") return;
+        if (event.origin !== new URL(API_BASE).origin) return;
         if (event.data?.user) {
           window.removeEventListener("message", handleMessage);
           popup.close();
@@ -95,9 +102,7 @@ const UnifiedAuth = () => {
         >
           <button
             className={`flex-1 py-2 px-4 rounded-full text-sm font-medium transition-all ${
-              isLogin
-                ? "bg-white text-black"
-                : "text-white hover:bg-white/10"
+              isLogin ? "bg-white text-black" : "text-white hover:bg-white/10"
             }`}
             onClick={() => setIsLogin(true)}
           >
@@ -105,9 +110,7 @@ const UnifiedAuth = () => {
           </button>
           <button
             className={`flex-1 py-2 px-4 rounded-full text-sm font-medium transition-all ${
-              !isLogin
-                ? "bg-white text-black"
-                : "text-white hover:bg-white/10"
+              !isLogin ? "bg-white text-black" : "text-white hover:bg-white/10"
             }`}
             onClick={() => setIsLogin(false)}
           >
@@ -139,8 +142,18 @@ const UnifiedAuth = () => {
             className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 rounded-xl py-2 px-3 text-sm transition-all"
           >
             <span className="bg-orange-500 p-1.5 rounded-lg">
-              <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
+              <svg
+                className="w-3.5 h-3.5 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6"
+                />
               </svg>
             </span>
             <span>Join as Recruiter</span>
@@ -156,7 +169,7 @@ const UnifiedAuth = () => {
         </motion.h2>
 
         {/* Error Messages */}
-        {(signupHook.serverError && !isLogin) && (
+        {signupHook.serverError && !isLogin && (
           <div className="mb-4 text-red-500 text-center font-semibold text-sm">
             {signupHook.serverError}
           </div>
@@ -164,7 +177,6 @@ const UnifiedAuth = () => {
 
         {/* Form */}
         <form onSubmit={currentHook.handleSubmit} noValidate>
-
           {/* Username field for signup */}
           {!isLogin && (
             <motion.div
@@ -184,7 +196,9 @@ const UnifiedAuth = () => {
                   onChange={signupHook.handleChange}
                 />
                 {signupHook.errors.username && (
-                  <p className="text-red-500 text-xs mt-1">{signupHook.errors.username}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {signupHook.errors.username}
+                  </p>
                 )}
               </div>
             </motion.div>
@@ -216,12 +230,16 @@ const UnifiedAuth = () => {
                   onChange={signupHook.handleChange}
                 />
                 {signupHook.errors.email && (
-                  <p className="text-red-500 text-xs mt-1">{signupHook.errors.email}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {signupHook.errors.email}
+                  </p>
                 )}
               </div>
             )}
             {loginHook.errors.username && isLogin && (
-              <p className="text-red-500 text-xs mt-1">{loginHook.errors.username}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {loginHook.errors.username}
+              </p>
             )}
           </motion.div>
 
@@ -248,12 +266,34 @@ const UnifiedAuth = () => {
                   tabIndex={-1}
                 >
                   {showPassword ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12.01c2.12 4.06 6.36 6.99 10.066 6.99 1.676 0 3.303-.37 4.757-1.04M21.07 15.977A10.45 10.45 0 0022.066 12c-2.12-4.06-6.36-6.99-10.066-6.99-1.13 0-2.23.15-3.28.43M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3.98 8.223A10.477 10.477 0 001.934 12.01c2.12 4.06 6.36 6.99 10.066 6.99 1.676 0 3.303-.37 4.757-1.04M21.07 15.977A10.45 10.45 0 0022.066 12c-2.12-4.06-6.36-6.99-10.066-6.99-1.13 0-2.23.15-3.28.43M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
                     </svg>
                   ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.808 2.808a1 1 0 011.414 0l16.97 16.97a1 1 0 01-1.414 1.414l-2.122-2.122A10.477 10.477 0 0112 19c-3.706 0-7.946-2.93-10.066-6.99a10.45 10.45 0 012.122-3.757M9.88 9.88A3 3 0 0115 12m-3 3a3 3 0 01-3-3c0-.795.312-1.52.818-2.06" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.808 2.808a1 1 0 011.414 0l16.97 16.97a1 1 0 01-1.414 1.414l-2.122-2.122A10.477 10.477 0 0112 19c-3.706 0-7.946-2.93-10.066-6.99a10.45 10.45 0 012.122-3.757M9.88 9.88A3 3 0 0115 12m-3 3a3 3 0 01-3-3c0-.795.312-1.52.818-2.06"
+                      />
                     </svg>
                   )}
                 </button>
@@ -271,26 +311,54 @@ const UnifiedAuth = () => {
                 <button
                   type="button"
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 focus:outline-none"
-                  onClick={() => signupHook.setShowPassword(!signupHook.showPassword)}
+                  onClick={() =>
+                    signupHook.setShowPassword(!signupHook.showPassword)
+                  }
                   tabIndex={-1}
                 >
                   {signupHook.showPassword ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12.01c2.12 4.06 6.36 6.99 10.066 6.99 1.676 0 3.303-.37 4.757-1.04M21.07 15.977A10.45 10.45 0 0022.066 12c-2.12-4.06-6.36-6.99-10.066-6.99-1.13 0-2.23.15-3.28.43M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M3.98 8.223A10.477 10.477 0 001.934 12.01c2.12 4.06 6.36 6.99 10.066 6.99 1.676 0 3.303-.37 4.757-1.04M21.07 15.977A10.45 10.45 0 0022.066 12c-2.12-4.06-6.36-6.99-10.066-6.99-1.13 0-2.23.15-3.28.43M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
                     </svg>
                   ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.808 2.808a1 1 0 011.414 0l16.97 16.97a1 1 0 01-1.414 1.414l-2.122-2.122A10.477 10.477 0 0112 19c-3.706 0-7.946-2.93-10.066-6.99a10.45 10.45 0 012.122-3.757M9.88 9.88A3 3 0 0115 12m-3 3a3 3 0 01-3-3c0-.795.312-1.52.818-2.06" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M2.808 2.808a1 1 0 011.414 0l16.97 16.97a1 1 0 01-1.414 1.414l-2.122-2.122A10.477 10.477 0 0112 19c-3.706 0-7.946-2.93-10.066-6.99a10.45 10.45 0 012.122-3.757M9.88 9.88A3 3 0 0115 12m-3 3a3 3 0 01-3-3c0-.795.312-1.52.818-2.06"
+                      />
                     </svg>
                   )}
                 </button>
                 {signupHook.errors.password && (
-                  <p className="text-red-500 text-xs mt-1">{signupHook.errors.password}</p>
+                  <p className="text-red-500 text-xs mt-1">
+                    {signupHook.errors.password}
+                  </p>
                 )}
               </div>
             )}
             {loginHook.errors.password && isLogin && (
-              <p className="text-red-500 text-xs mt-1">{loginHook.errors.password}</p>
+              <p className="text-red-500 text-xs mt-1">
+                {loginHook.errors.password}
+              </p>
             )}
           </motion.div>
 
@@ -341,7 +409,6 @@ const UnifiedAuth = () => {
         </motion.div>
 
         {/* Removed duplicate recruiter CTA at bottom */}
-
       </motion.div>
     </div>
   );

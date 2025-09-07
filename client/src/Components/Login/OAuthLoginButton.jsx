@@ -1,8 +1,9 @@
 import React from "react";
 
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const OAUTH_URLS = {
-  google: "http://localhost:3000/auth/google",
-  github: "http://localhost:3000/auth/github",
+  google: `${API_BASE}/auth/google`,
+  github: `${API_BASE}/auth/github`,
 };
 
 const OAuthLoginButton = ({ provider, onSuccess, onError }) => {
@@ -21,7 +22,7 @@ const OAuthLoginButton = ({ provider, onSuccess, onError }) => {
     // Listen for postMessage from popup
     const handleMessage = (event) => {
       // Only accept messages from your backend's origin
-      if (event.origin !== "http://localhost:3000") return;
+      if (event.origin !== new URL(API_BASE).origin) return;
       if (event.data?.user) {
         onSuccess(event.data);
         window.removeEventListener("message", handleMessage);
