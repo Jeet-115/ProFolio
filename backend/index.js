@@ -55,7 +55,7 @@ app.use(
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
       httpOnly: true,
       sameSite: "Strict",
-      secure: true, // set true in production
+      secure: false, // set true in production
     },
   })
 );

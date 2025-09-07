@@ -1,5 +1,5 @@
 import React from "react";
-import Logo from "../Components/Logo";
+import Logo from "../components/Logo";
 import SignupLeftDiv from "../Components/SignUp/SignupLeftDiv";
 import SignupRightDiv from "../Components/SignUp/SignupRightDiv";
 import UnifiedAuth from "../Components/Auth/UnifiedAuth";
