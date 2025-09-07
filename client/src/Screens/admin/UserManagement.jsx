@@ -1,53 +1,205 @@
-// src/pages/admin/UserManagement.jsx
-import { useEffect, useState } from "react";
+import { useState, useEffect, useCallback } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  IconButton,
+  MenuItem,
+  Select,
+  Chip,
+  Tooltip,
+  TextField,
+  InputAdornment,
+  Avatar,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  Grid,
+  Card,
+  CardContent,
+  Divider,
+  useMediaQuery
+} from '@mui/material';
+import {
+  Search as SearchIcon,
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  Visibility as VisibilityIcon,
+  Refresh as RefreshIcon,
+  Person as PersonIcon,
+  Email as EmailIcon,
+  Event as EventIcon,
+  AdminPanelSettings as AdminIcon,
+  PersonOutline as UserIcon,
+  Block as BlockIcon,
+  CheckCircle as ActiveIcon
+} from '@mui/icons-material';
+import { format } from 'date-fns';
 import {
   getAllUsers,
   updateUserRole,
   deleteUserById,
   getUserReports,
-} from "../../services/adminUserService";
+} from '../../services/adminUserService';
+
+const ROLE_OPTIONS = [
+  { value: 'user', label: 'User' },
+  { value: 'admin', label: 'Admin' },
+  { value: 'moderator', label: 'Moderator' },
+];
+
+const STATUS_COLORS = {
+  active: 'success',
+  inactive: 'default',
+  suspended: 'warning',
+  banned: 'error',
+};
 
 export default function UserManagement() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
   const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [reports, setReports] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
 
-  // Fetch users
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
       const { data } = await getAllUsers();
       setUsers(data);
+      setFilteredUsers(data);
     } catch (err) {
-      console.error("Failed to fetch users:", err);
+      console.error('Failed to fetch users:', err);
+      showSnackbar('Failed to load users', 'error');
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [fetchUsers]);
 
-  // Handle role update
-  const handleRoleChange = async (id, role) => {
+  useEffect(() => {
+    const filtered = users.filter(user => 
+      user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.role?.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+    setPage(0); // Reset to first page on search
+  }, [searchTerm, users]);
+
+  const handleRoleChange = async (userId, newRole) => {
     try {
-      await updateUserRole(id, role);
+      await updateUserRole(userId, newRole);
       fetchUsers();
+      showSnackbar('User role updated successfully', 'success');
     } catch (err) {
-      console.error("Failed to update role:", err);
+      console.error('Failed to update role:', err);
+      showSnackbar('Failed to update user role', 'error');
     }
   };
 
-  // Handle delete
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this user?")) return;
+  const handleDelete = async (userId) => {
     try {
-      await deleteUserById(id);
+      await deleteUserById(userId);
       fetchUsers();
+      showSnackbar('User deleted successfully', 'success');
     } catch (err) {
-      console.error("Failed to delete user:", err);
+      console.error('Failed to delete user:', err);
+      showSnackbar('Failed to delete user', 'error');
+    }
+  };
+
+  const showSnackbar = (message, severity = 'success') => {
+    setSnackbar({ open: true, message, severity });
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
+  const handleViewUser = (user) => {
+    setSelectedUser(user);
+    setDialogOpen(true);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const getStatusChip = (status) => (
+    <Chip
+      label={status?.charAt(0).toUpperCase() + status?.slice(1) || 'Active'}
+      color={STATUS_COLORS[status] || 'default'}
+      size="small"
+      variant="outlined"
+    />
+  );
+
+  const getRoleChip = (role) => {
+    const roleConfig = {
+      admin: { icon: <AdminIcon fontSize="small" />, color: 'error' },
+      user: { icon: <UserIcon fontSize="small" />, color: 'primary' },
+      moderator: { icon: <EditIcon fontSize="small" />, color: 'warning' },
+    }[role] || { icon: null, color: 'default' };
+
+    return (
+      <Chip
+        icon={roleConfig.icon}
+        label={role?.charAt(0).toUpperCase() + role?.slice(1) || 'User'}
+        color={roleConfig.color}
+        size="small"
+        variant="outlined"
+        sx={{ minWidth: 90 }}
+      />
+    );
+  };
+
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, filteredUsers.length - page * rowsPerPage);
+  const paginatedUsers = filteredUsers.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
+        <CircularProgress />
+      </Box>
+    );
+  }
     }
   };
 
@@ -63,128 +215,110 @@ export default function UserManagement() {
   };
 
   return (
-    <div className="p-6 space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <h1 className="text-2xl font-bold luxury-gold-text luxury-heading">User Management</h1>
-        <div className="flex gap-2">
-          <button
-            onClick={fetchUsers}
-            className="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white shadow-lg hover:from-[#F57F17] hover:to-[#E65100] transition-all luxury-btn luxury-focus text-sm sm:text-base"
-          >
-            Refresh
-          </button>
-        </div>
-      </div>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">User Management</h1>
 
       {loading ? (
-        <div className="w-full h-48 rounded-2xl border border-[#F9A825]/20 bg-gradient-to-br from-white to-[#FFFEF7] data-loading" />
+        <p>Loading users...</p>
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-[#F9A825]/30 shadow-xl bg-white">
-          <table className="w-full min-w-[700px]">
-            <thead className="bg-[#FFF8E1]">
-              <tr className="text-left text-[#E65100]">
-                <th className="p-3 text-sm font-semibold">Name</th>
-                <th className="p-3 text-sm font-semibold">Email</th>
-                <th className="p-3 text-sm font-semibold">Role</th>
-                <th className="p-3 text-sm font-semibold">Status</th>
-                <th className="p-3 text-sm font-semibold">Auth Provider</th>
-                <th className="p-3 text-sm font-semibold text-right">Actions</th>
+        <table className="w-full border-collapse border border-gray-300">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="border p-2">Name</th>
+              <th className="border p-2">Email</th>
+              <th className="border p-2">Role</th>
+              <th className="border p-2">Status</th>
+              <th className="border p-2">Auth Provider</th>
+              <th className="border p-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((u) => (
+              <tr key={u._id} className="text-center">
+                <td className="border p-2">{u.fullName || u.username}</td>
+                <td className="border p-2">{u.email}</td>
+                <td className="border p-2">
+                  <select
+                    value={u.role}
+                    onChange={(e) => handleRoleChange(u._id, e.target.value)}
+                    className="border rounded p-1"
+                  >
+                    <option value="user">User</option>
+                    <option value="recruiter">Recruiter</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </td>
+                <td className="border p-2">{u.status}</td>
+                <td className="border p-2">{u.authProvider}</td>
+                <td className="border p-2 space-x-2">
+                  <button
+                    onClick={() => handleViewReports(u)}
+                    className="px-2 py-1 bg-blue-500 text-white rounded"
+                  >
+                    Reports
+                  </button>
+                  <button
+                    onClick={() => handleDelete(u._id)}
+                    className="px-2 py-1 bg-red-600 text-white rounded"
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {users.map((u, idx) => (
-                <tr
-                  key={u._id}
-                  className={`${idx % 2 === 0 ? "bg-white" : "bg-[#FFFEF7]"} hover:bg-[#FFFDE7] transition-colors`}
-                >
-                  <td className="p-3 text-sm">{u.fullName || u.username}</td>
-                  <td className="p-3 text-sm">{u.email}</td>
-                  <td className="p-3">
-                    <select
-                      value={u.role}
-                      onChange={(e) => handleRoleChange(u._id, e.target.value)}
-                      className="border border-[#F9A825]/40 rounded-lg p-2 text-sm luxury-focus"
-                    >
-                      <option value="user">User</option>
-                      <option value="recruiter">Recruiter</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </td>
-                  <td className="p-3 text-sm">{u.status}</td>
-                  <td className="p-3 text-sm">{u.authProvider}</td>
-                  <td className="p-3">
-                    <div className="flex justify-end gap-2">
-                      <button
-                        onClick={() => handleViewReports(u)}
-                        className="px-3 py-2 text-sm rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white shadow hover:from-[#F57F17] hover:to-[#E65100] transition-all luxury-btn luxury-focus"
-                      >
-                        Reports
-                      </button>
-                      <button
-                        onClick={() => handleDelete(u._id)}
-                        className="px-3 py-2 text-sm rounded-lg bg-red-600 text-white shadow hover:bg-red-700 transition-all luxury-focus"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </table>
       )}
 
       {/* Reports Modal */}
       {reports && selectedUser && (
-        <div className="fixed inset-0 z-50 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-gradient-to-br from-white to-[#FFFEF7] p-4 sm:p-6 rounded-2xl w-full max-w-[90vw] sm:max-w-2xl shadow-2xl border border-[#F9A825]/30">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-              <h2 className="text-lg sm:text-xl font-bold luxury-gold-text luxury-heading">
-                Reports for {selectedUser.fullName || selectedUser.email}
-              </h2>
-              <button
-                onClick={() => {
-                  setReports(null);
-                  setSelectedUser(null);
-                }}
-                className="px-3 py-1 rounded-lg bg-[#FFF8E1] text-[#E65100] hover:bg-[#FFE082] transition-colors luxury-focus self-start sm:self-auto"
-              >
-                Close
-              </button>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded w-1/2 shadow-lg">
+            <h2 className="text-xl font-bold mb-4">
+              Reports for {selectedUser.fullName || selectedUser.email}
+            </h2>
+
+            <div className="mb-4">
+              <h3 className="font-semibold">Reports Received:</h3>
+              {reports.reportsReceived.length === 0 ? (
+                <p className="text-sm text-gray-500">No reports received.</p>
+              ) : (
+                <ul className="list-disc ml-6">
+                  {reports.reportsReceived.map((r) => (
+                    <li key={r._id}>
+                      From: {r.recruiterId?.fullName || "Unknown"} –{" "}
+                      {r.message} ({new Date(r.reportedAt).toLocaleString()})
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
 
-            <div className="grid gap-6 sm:grid-cols-2">
-              <div>
-                <h3 className="font-semibold text-[#E65100] mb-2">Reports Received</h3>
-                {reports.reportsReceived.length === 0 ? (
-                  <p className="text-sm text-[#E65100]/70">No reports received.</p>
-                ) : (
-                  <ul className="list-disc ml-6 space-y-1">
-                    {reports.reportsReceived.map((r) => (
-                      <li key={r._id} className="text-sm">
-                        From: {r.recruiterId?.fullName || "Unknown"} – {r.message} ("{new Date(r.reportedAt).toLocaleString()}")
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-[#E65100] mb-2">Reports Made</h3>
-                {reports.reportsMade.length === 0 ? (
-                  <p className="text-sm text-[#E65100]/70">No reports made.</p>
-                ) : (
-                  <ul className="list-disc ml-6 space-y-1">
-                    {reports.reportsMade.map((r) => (
-                      <li key={r._id} className="text-sm">
-                        Against: {r.candidateId?.fullName || "Unknown"} – {r.message} ("{new Date(r.reportedAt).toLocaleString()}")
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
+            <div className="mb-4">
+              <h3 className="font-semibold">Reports Made:</h3>
+              {reports.reportsMade.length === 0 ? (
+                <p className="text-sm text-gray-500">No reports made.</p>
+              ) : (
+                <ul className="list-disc ml-6">
+                  {reports.reportsMade.map((r) => (
+                    <li key={r._id}>
+                      Against: {r.candidateId?.fullName || "Unknown"} –{" "}
+                      {r.message} ({new Date(r.reportedAt).toLocaleString()})
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
+
+            <button
+              onClick={() => {
+                setReports(null);
+                setSelectedUser(null);
+              }}
+              className="mt-4 px-4 py-2 bg-gray-600 text-white rounded"
+            >
+              Close
+            </button>
           </div>
         </div>
       )}

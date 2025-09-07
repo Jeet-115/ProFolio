@@ -1,5 +1,31 @@
 import { useEffect, useState } from "react";
 import axios from "../../services/axiosInstance";
+import { useTheme } from "@mui/material/styles";
+import {
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  Button,
+  Chip,
+  Stack,
+} from "@mui/material";
+import PeopleIcon from "@mui/icons-material/People";
+import StorageIcon from "@mui/icons-material/Storage";
+import BoltIcon from "@mui/icons-material/Bolt";
+
+const StatusDot = ({ color = 'success.main' }) => (
+  <Box
+    sx={{
+      width: { xs: 10, md: 12 },
+      height: { xs: 10, md: 12 },
+      borderRadius: '50%',
+      bgcolor: color,
+      boxShadow: (theme) => `0 0 0 3px ${theme.palette.background.paper}`,
+    }}
+  />
+);
 
 function AdminUsersCount() {
   const [count, setCount] = useState(null);
@@ -18,91 +44,94 @@ function AdminUsersCount() {
     };
   }, []);
   return (
-    <div className="text-3xl font-bold luxury-gold-text" aria-live="polite">
+    <Typography
+      fontWeight={700}
+      color="text.primary"
+      aria-live="polite"
+      sx={{ fontSize: { xs: '1.25rem', md: '1.75rem' } }}
+    >
       {count == null ? "—" : count}
-    </div>
+    </Typography>
   );
 }
 
+const MetricCard = ({ icon: Icon, label, children, gradient }) => (
+  <Card sx={{
+    background: gradient,
+    border: (theme) => `1px solid ${theme.palette.divider}`,
+  }}>
+    <CardContent sx={{ p: { xs: 2, md: 3.5 } }}>
+      <Stack direction="row" spacing={{ xs: 2, md: 2.5 }} alignItems="center">
+        <Box sx={{
+          width: { xs: 44, md: 52 }, height: { xs: 44, md: 52 }, borderRadius: '50%', display: 'grid', placeItems: 'center',
+          background: (theme) => theme.palette.background.paper,
+          border: (theme) => `1px solid ${theme.palette.divider}`,
+        }}>
+          <Icon sx={{ fontSize: { xs: 24, md: 28 } }} color="primary" />
+        </Box>
+        <Box>
+          <Typography variant="caption" color="text.secondary" sx={{ fontSize: { xs: '0.75rem', md: '0.85rem' } }}>{label}</Typography>
+          {children}
+        </Box>
+      </Stack>
+    </CardContent>
+  </Card>
+);
+
 const AdminHome = () => {
+  const theme = useTheme();
+  const gradient = `linear-gradient(135deg, ${theme.palette.neutral.main} 0%, ${theme.palette.accent.light} 100%)`;
+
   return (
-    <div className="p-4 md:p-6">
-      <h1 className="text-3xl md:text-4xl font-bold mb-6 md:mb-8 luxury-gold-text luxury-heading">
+    <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
+      <Typography fontWeight={700} sx={{ mb: { xs: 2, md: 3 }, color: 'text.primary', fontSize: { xs: '1.5rem', md: '2rem' } }}>
         Welcome, Admin!
-      </h1>
+      </Typography>
 
-      <div className="luxury-grid mb-8">
-        <div className="bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl p-6 shadow-2xl border border-[#F9A825]/20 hover:border-[#F9A825]/40 transition-all duration-300 hover:shadow-[#F9A825]/10 hover:shadow-2xl luxury-card glow-border">
-          <div className="text-sm text-[#E65100]/70 mb-2 font-medium luxury-subheading">Total Users</div>
-          <AdminUsersCount />
-          <div className="mt-2 text-xs text-[#E65100]/50">Active registered users</div>
-        </div>
-        <div className="bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl p-6 shadow-2xl border border-[#F9A825]/20 hover:border-[#F9A825]/40 transition-all duration-300 hover:shadow-[#F9A825]/10 hover:shadow-2xl luxury-card glow-border">
-          <div className="text-sm text-[#E65100]/70 mb-2 font-medium luxury-subheading">Files Stored</div>
-          <div className="text-3xl font-bold luxury-gold-text">—</div>
-          <div className="mt-2 text-xs text-[#E65100]/50">Total files in system</div>
-        </div>
-        <div className="bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl p-6 shadow-2xl border border-[#F9A825]/20 hover:border-[#F9A825]/40 transition-all duration-300 hover:shadow-[#F9A825]/10 hover:shadow-2xl luxury-card glow-border">
-          <div className="text-sm text-[#E65100]/70 mb-2 font-medium luxury-subheading">Active Sessions</div>
-          <div className="text-3xl font-bold luxury-gold-text">—</div>
-          <div className="mt-2 text-xs text-[#E65100]/50">Current user sessions</div>
-        </div>
-      </div>
+      {/* Metrics */}
+      <Grid container spacing={2} sx={{ mb: 3 }}>
+        <Grid item xs={12} sm={6} md={4}>
+          <MetricCard icon={PeopleIcon} label="Total Users" gradient={gradient}>
+            <AdminUsersCount />
+          </MetricCard>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <MetricCard icon={StorageIcon} label="Files Stored" gradient={gradient}>
+            <Typography fontWeight={700} color="text.primary" sx={{ fontSize: { xs: '1.25rem', md: '1.75rem' } }}>—</Typography>
+          </MetricCard>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <MetricCard icon={BoltIcon} label="Active Sessions" gradient={gradient}>
+            <Typography fontWeight={700} color="text.primary" sx={{ fontSize: { xs: '1.25rem', md: '1.75rem' } }}>—</Typography>
+          </MetricCard>
+        </Grid>
+      </Grid>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
-        <div className="hidden md:block bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl border border-[#F9A825]/20 p-4 md:p-6 shadow-2xl luxury-card">
-          <h2 className="text-lg md:text-xl font-semibold mb-4 md:mb-6 luxury-gold-text border-b border-[#F9A825]/30 pb-3 luxury-heading">
-            Quick Actions
-          </h2>
-          <div className="flex flex-col sm:flex-row flex-wrap gap-3 md:gap-4">
-            <a
-              href="/admin/users"
-              className="w-full sm:w-auto text-center px-5 md:px-6 py-3 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-[#FFD54F]/30 luxury-btn luxury-focus"
-            >
-              Manage Users
-            </a>
-            <a
-              href="/admin/recruiters"
-              className="w-full sm:w-auto text-center px-5 md:px-6 py-3 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-[#FFD54F]/30 luxury-btn luxury-focus"
-            >
-              Manage Recruiters
-            </a>
-            <a
-              href="/admin/analytics"
-              className="w-full sm:w-auto text-center px-5 md:px-6 py-3 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-[#FFD54F]/30 luxury-btn luxury-focus"
-            >
-              Analytics
-            </a>
-            <a
-              href="/admin/settings"
-              className="w-full sm:w-auto text-center px-5 md:px-6 py-3 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] transition-all font-semibold shadow-lg hover:shadow-xl hover:scale-105 border border-[#FFD54F]/30 luxury-btn luxury-focus"
-            >
-              Settings
-            </a>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-white to-[#FFFEF7] rounded-2xl border border-[#F9A825]/20 p-4 md:p-6 shadow-2xl luxury-card">
-          <h2 className="text-lg md:text-xl font-semibold mb-4 md:mb-6 luxury-gold-text border-b border-[#F9A825]/30 pb-3 luxury-heading">
-            System Status
-          </h2>
-          <ul className="text-sm text-[#E65100]/80 space-y-3 md:space-y-4">
-            <li className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-green-500 rounded-full status-indicator"></div>
-              <span className="font-medium luxury-subheading">API: Online</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-green-500 rounded-full status-indicator"></div>
-              <span className="font-medium luxury-subheading">Database: Connected</span>
-            </li>
-            <li className="flex items-center gap-3">
-              <div className="w-3 h-3 bg-green-500 rounded-full status-indicator"></div>
-              <span className="font-medium luxury-subheading">Storage: Healthy</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+      <Grid container spacing={2}>
+        {/* System Status */}
+        <Grid item xs={12}>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" fontWeight={600} sx={{ mb: 2 }}>System Status</Typography>
+              <Stack spacing={{ xs: 1, md: 1.5 }}>
+                <Stack direction="row" spacing={{ xs: 1, md: 1.5 }} alignItems="center">
+                  <StatusDot />
+                  <Typography variant="body2">API</Typography>
+                </Stack>
+                <Stack direction="row" spacing={{ xs: 1, md: 1.5 }} alignItems="center">
+                  <StatusDot />
+                  <Typography variant="body2">Database</Typography>
+                </Stack>
+                <Stack direction="row" spacing={{ xs: 1, md: 1.5 }} alignItems="center">
+                  <StatusDot />
+                  <Typography variant="body2">Storage</Typography>
+                </Stack>
+              </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

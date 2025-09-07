@@ -1,4 +1,32 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from 'react';
+import { useTheme } from '@mui/material/styles';
+import { motion } from 'framer-motion';
+import {
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardActions,
+  Avatar,
+  Button,
+  Chip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Tabs,
+  Tab,
+  TextField,
+  InputAdornment,
+  IconButton,
+  Divider,
+  CircularProgress,
+  Snackbar,
+  Alert,
+  MenuItem,
+  Select
+} from '@mui/material';
+import { Search as SearchIcon, Visibility as VisibilityIcon, Refresh as RefreshIcon, Business as BusinessIcon } from '@mui/icons-material';
 import {
   getAllRecruiters,
   getRecruiterById,
@@ -8,210 +36,240 @@ import {
 } from "../../services/recruiterService";
 
 export default function RecruiterManagement() {
+  const theme = useTheme();
   const [recruiters, setRecruiters] = useState([]);
-  const [selectedRecruiter, setSelectedRecruiter] = useState(null);
+  const [filtered, setFiltered] = useState([]);
+  const [selected, setSelected] = useState(null);
   const [reports, setReports] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
   const [contacted, setContacted] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState("details");
+  const [tab, setTab] = useState(0);
+  const [search, setSearch] = useState('');
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
-  useEffect(() => {
-    fetchRecruiters();
-  }, []);
-
-  const fetchRecruiters = async () => {
+  const fetchRecruiters = useCallback(async () => {
     try {
       setLoading(true);
       const res = await getAllRecruiters();
-      setRecruiters(res.data || []);
+      const list = res.data || [];
+      setRecruiters(list);
+      setFiltered(list);
     } catch (err) {
-      console.error("Error fetching recruiters:", err);
+      console.error('Error fetching recruiters:', err);
+      setSnackbar({ open: true, message: 'Failed to load recruiters', severity: 'error' });
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchRecruiters(); }, [fetchRecruiters]);
+
+  useEffect(() => {
+    const term = search.toLowerCase();
+    const f = recruiters.filter(r =>
+      r.fullName?.toLowerCase().includes(term) ||
+      r.email?.toLowerCase().includes(term) ||
+      r.companyDetails?.companyName?.toLowerCase().includes(term)
+    );
+    setFiltered(f);
+  }, [search, recruiters]);
+
+  const openDetails = async (id) => {
+    try {
+      setLoading(true);
+      const res = await getRecruiterById(id);
+      setSelected(res.data);
+      const [r1, r2, r3] = await Promise.all([
+        getRecruiterReportsMade(id),
+        getRecruiterBookmarks(id),
+        getRecruiterContacted(id),
+      ]);
+      setReports(r1.data?.reportsMade || []);
+      setBookmarks(r2.data || []);
+      setContacted(r3.data || []);
+      setTab(0);
+    } catch (err) {
+      console.error('Error fetching recruiter details:', err);
+      setSnackbar({ open: true, message: 'Failed to load recruiter details', severity: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleViewDetails = async (id) => {
-    try {
-      const res = await getRecruiterById(id);
-      setSelectedRecruiter(res.data);
-
-      // fetch recruiter related data
-      const reportsRes = await getRecruiterReportsMade(id);
-      setReports(reportsRes.data.reportsMade || []);
-
-      const bookmarksRes = await getRecruiterBookmarks(id);
-      setBookmarks(bookmarksRes.data || []);
-
-      const contactedRes = await getRecruiterContacted(id);
-      setContacted(contactedRes.data || []);
-
-      setActiveTab("details");
-    } catch (err) {
-      console.error("Error fetching recruiter details:", err);
-    }
-  };
+  const closeDetails = () => setSelected(null);
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold luxury-gold-text luxury-heading">Recruiter Management</h1>
+    <Box sx={{ p: 2 }}>
+      {/* Header */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: 600 }}>Recruiter Management</Typography>
+        <Typography variant="body2" color="text.secondary">Manage recruiter profiles and review their activity</Typography>
+      </Box>
 
-      {/* Recruiters List */}
-      <div className="grid gap-4">
-        {loading ? (
-          <div className="w-full h-32 rounded-2xl border border-[#F9A825]/20 bg-gradient-to-br from-white to-[#FFFEF7] data-loading" />
-        ) : recruiters.length === 0 ? (
-          <p className="text-[#E65100]/70">No recruiters found.</p>
-        ) : (
-          recruiters.map((rec) => (
-            <div
-              key={rec._id}
-              className="p-4 shadow-xl border border-[#F9A825]/30 rounded-2xl flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 bg-gradient-to-br from-white to-[#FFFEF7] luxury-card"
-            >
-              <div>
-                <h2 className="font-semibold text-[#E65100]">
-                  {rec.fullName || "Unnamed Recruiter"}
-                </h2>
-                <p className="text-sm text-[#E65100]/70 break-all">{rec.email}</p>
-                <p className="text-sm text-[#E65100]/90">
-                  {rec.companyDetails?.companyName || "No company"}
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => handleViewDetails(rec._id)}
-                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-[#F9A825] to-[#F57F17] text-white hover:from-[#F57F17] hover:to-[#E65100] text-sm shadow luxury-btn luxury-focus"
-                >
-                  View
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      {/* Filters/Search */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Grid container spacing={2} alignItems="center">
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                placeholder="Search by name, email or company..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon color="action" />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6} sx={{ display: 'flex', justifyContent: { xs: 'flex-start', md: 'flex-end' }, gap: 1 }}>
+              <Button variant="contained" startIcon={<RefreshIcon />} onClick={fetchRecruiters}>Refresh</Button>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Card>
 
-      {/* Recruiter Details with Tabs */}
-      {selectedRecruiter && (
-        <div className="mt-8 p-4 sm:p-6 border border-[#F9A825]/30 rounded-2xl bg-gradient-to-br from-white to-[#FFFEF7] shadow-2xl">
-          {/* Tabs */}
-          <div className="flex flex-wrap gap-3 border-b border-[#F9A825]/30 mb-4">
-            {["details", "reports", "bookmarks", "contacted"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`pb-2 px-3 text-sm font-medium transition-colors luxury-focus ${
-                  activeTab === tab
-                    ? "border-b-2 border-[#F9A825] text-[#E65100]"
-                    : "text-[#E65100]/60 hover:text-[#E65100]"
-                }`}
-              >
-                {tab === "details"
-                  ? "Details"
-                  : tab === "reports"
-                  ? "Reports Made"
-                  : tab === "bookmarks"
-                  ? "Bookmarked Candidates"
-                  : "Contacted Candidates"}
-              </button>
-            ))}
-          </div>
-
-          {/* Tab Content */}
-          {activeTab === "details" && (
-            <div>
-              <h2 className="text-xl font-bold mb-2 luxury-gold-text luxury-heading">
-                {selectedRecruiter.fullName}
-              </h2>
-              <p className="text-[#E65100] break-all">Email: {selectedRecruiter.email}</p>
-              <p className="text-[#E65100]">
-                Company: {selectedRecruiter.companyDetails?.companyName || "N/A"}
-              </p>
-            </div>
+      {/* Recruiters Grid */}
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" minHeight="40vh"><CircularProgress /></Box>
+      ) : (
+        <Grid container spacing={2}>
+          {filtered.length === 0 ? (
+            <Grid item xs={12}>
+              <Card>
+                <CardContent>
+                  <Typography align="center" color="text.secondary">No recruiters found</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ) : (
+            filtered.map((rec, idx) => (
+              <Grid item xs={12} sm={6} md={4} key={rec._id || rec.id || `rec-${idx}`}>
+                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <CardContent sx={{ flexGrow: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>
+                      <Avatar>{rec.fullName?.charAt(0) || 'R'}</Avatar>
+                      <Box>
+                        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>{rec.fullName || 'Unnamed Recruiter'}</Typography>
+                        <Typography variant="caption" color="text.secondary">{rec.email}</Typography>
+                      </Box>
+                    </Box>
+                    <Chip icon={<BusinessIcon />} label={rec.companyDetails?.companyName || 'No company'} size="small" variant="outlined" />
+                  </CardContent>
+                  <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
+                    <Button variant="outlined" size="small" startIcon={<VisibilityIcon />} onClick={() => openDetails(rec._id)}>View</Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))
           )}
-
-          {activeTab === "reports" && (
-            <div>
-              <h3 className="font-semibold mb-2 text-[#E65100]">Reports Made</h3>
-              {reports.length === 0 ? (
-                <p className="text-[#E65100]/70">No reports made by this recruiter.</p>
-              ) : (
-                <ul className="space-y-2">
-                  {reports.map((rep) => (
-                    <li
-                      key={rep._id}
-                      className="p-3 border border-[#F9A825]/20 rounded-lg shadow-sm bg-[#FFFDE7]"
-                    >
-                      <p className="text-sm">
-                        Candidate: {rep.candidateId?.fullName || "Unknown"} (
-                        {rep.candidateId?.email || "No email"})
-                      </p>
-                      <p className="text-sm">Message: {rep.message}</p>
-                      <p className="text-xs text-[#E65100]/70">
-                        Reported At: {new Date(rep.reportedAt).toLocaleString()}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
-
-          {activeTab === "bookmarks" && (
-            <div>
-              <h3 className="font-semibold mb-2 text-[#E65100]">Bookmarked Candidates</h3>
-              {bookmarks.length === 0 ? (
-                <p className="text-[#E65100]/70">No bookmarks by this recruiter.</p>
-              ) : (
-                <ul className="space-y-2">
-                  {bookmarks.map((bm) => (
-                    <li
-                      key={bm._id}
-                      className="p-3 border border-[#F9A825]/20 rounded-lg shadow-sm bg-[#FFFDE7]"
-                    >
-                      <p className="text-sm font-medium">
-                        {bm.candidateId?.fullName || "Unknown"} (
-                        {bm.candidateId?.email || "No email"})
-                      </p>
-                      <p className="text-xs text-[#E65100]/70">
-                        Bookmarked At: {new Date(bm.bookmarkedAt).toLocaleString()}
-                      </p>
-                      {bm.notes && <p className="text-sm">Notes: {bm.notes}</p>}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
-
-          {activeTab === "contacted" && (
-            <div>
-              <h3 className="font-semibold mb-2 text-[#E65100]">Contacted Candidates</h3>
-              {contacted.length === 0 ? (
-                <p className="text-[#E65100]/70">No candidates contacted by this recruiter.</p>
-              ) : (
-                <ul className="space-y-2">
-                  {contacted.map((ct) => (
-                    <li
-                      key={ct._id}
-                      className="p-3 border border-[#F9A825]/20 rounded-lg shadow-sm bg-[#FFFDE7]"
-                    >
-                      <p className="text-sm font-medium">
-                        {ct.candidateId?.fullName || "Unknown"} (
-                        {ct.candidateId?.email || "No email"})
-                      </p>
-                      <p className="text-xs text-[#E65100]/70">
-                        Contacted At: {new Date(ct.contactedAt).toLocaleString()}
-                      </p>
-                      <p className="text-sm">Method: {ct.method}</p>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          )}
-        </div>
+        </Grid>
       )}
-    </div>
+
+      {/* Details Dialog */}
+      <Dialog open={Boolean(selected)} onClose={closeDetails} fullWidth maxWidth="md">
+        <DialogTitle>Recruiter Details</DialogTitle>
+        <DialogContent dividers>
+          {selected && (
+            <>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+                <Avatar sx={{ width: 56, height: 56 }}>{selected.fullName?.charAt(0) || 'R'}</Avatar>
+                <Box>
+                  <Typography variant="h6">{selected.fullName}</Typography>
+                  <Typography variant="body2" color="text.secondary">{selected.email}</Typography>
+                  <Typography variant="body2" color="text.secondary">{selected.companyDetails?.companyName || 'N/A'}</Typography>
+                </Box>
+              </Box>
+              <Tabs value={tab} onChange={(e, v) => setTab(v)} sx={{ mb: 2 }} variant="scrollable" allowScrollButtonsMobile>
+                <Tab label="Details" />
+                <Tab label={`Reports (${reports.length})`} />
+                <Tab label={`Bookmarks (${bookmarks.length})`} />
+                <Tab label={`Contacted (${contacted.length})`} />
+              </Tabs>
+              {tab === 0 && (
+                <Box>
+                  <Typography variant="subtitle2" color="text.secondary">Company</Typography>
+                  <Typography variant="body1" gutterBottom>{selected.companyDetails?.companyName || 'N/A'}</Typography>
+                  <Divider sx={{ my: 2 }} />
+                  <Typography variant="subtitle2" color="text.secondary">About</Typography>
+                  <Typography variant="body2">{selected.companyDetails?.about || '—'}</Typography>
+                </Box>
+              )}
+              {tab === 1 && (
+                <Box>
+                  {reports.length === 0 ? (
+                    <Typography color="text.secondary">No reports made by this recruiter.</Typography>
+                  ) : (
+                    <Grid container spacing={1}>
+                      {reports.map((rep, rIdx) => (
+                        <Grid item xs={12} key={rep._id || rep.id || `rep-${rIdx}`}>
+                          <Card variant="outlined">
+                            <CardContent>
+                              <Typography variant="subtitle2">Candidate: {rep.candidateId?.fullName || 'Unknown'} ({rep.candidateId?.email || 'No email'})</Typography>
+                              <Typography variant="body2">Message: {rep.message}</Typography>
+                              <Typography variant="caption" color="text.secondary">Reported At: {new Date(rep.reportedAt).toLocaleString()}</Typography>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  )}
+                </Box>
+              )}
+              {tab === 2 && (
+                <Box>
+                  {bookmarks.length === 0 ? (
+                    <Typography color="text.secondary">No bookmarks by this recruiter.</Typography>
+                  ) : (
+                    <Grid container spacing={1}>
+                      {bookmarks.map((bm, bIdx) => (
+                        <Grid item xs={12} key={bm._id || bm.id || `bm-${bIdx}`}>
+                          <Card variant="outlined">
+                            <CardContent>
+                              <Typography variant="subtitle2">{bm.candidateId?.fullName || 'Unknown'} ({bm.candidateId?.email || 'No email'})</Typography>
+                              <Typography variant="caption" color="text.secondary">Bookmarked At: {new Date(bm.bookmarkedAt).toLocaleString()}</Typography>
+                              {bm.notes && <Typography variant="body2">Notes: {bm.notes}</Typography>}
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  )}
+                </Box>
+              )}
+              {tab === 3 && (
+                <Box>
+                  {contacted.length === 0 ? (
+                    <Typography color="text.secondary">No candidates contacted by this recruiter.</Typography>
+                  ) : (
+                    <Grid container spacing={1}>
+                      {contacted.map((ct, cIdx) => (
+                        <Grid item xs={12} key={ct._id || ct.id || `ct-${cIdx}`}>
+                          <Card variant="outlined">
+                            <CardContent>
+                              <Typography variant="subtitle2">{ct.candidateId?.fullName || 'Unknown'} ({ct.candidateId?.email || 'No email'})</Typography>
+                              <Typography variant="caption" color="text.secondary">Contacted At: {new Date(ct.contactedAt).toLocaleString()}</Typography>
+                              <Typography variant="body2">Method: {ct.method}</Typography>
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      ))}
+                    </Grid>
+                  )}
+                </Box>
+              )}
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={() => setSnackbar(s => ({ ...s, open: false }))} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+        <Alert severity={snackbar.severity} onClose={() => setSnackbar(s => ({ ...s, open: false }))}>{snackbar.message}</Alert>
+      </Snackbar>
+    </Box>
   );
 }
