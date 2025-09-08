@@ -1,0 +1,18 @@
+{
+  "name": "profolio",
+  "version": "1.0.0",
+  "description": "ProFolio - Full-stack MERN application for resumes, portfolios, recruiters, and admin analytics",
+  "main": "backend/index.js",
+  "scripts": {
+    "start:backend": "node backend/index.js",
+    "start:frontend": "cd client && npm run dev",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "install:all": "cd backend && npm install && cd ../client && npm install"
+  },
+  "keywords": ["MERN", "Resume", "Portfolio", "Recruiter", "Admin"],
+  "author": "PROFOLIO",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+}
