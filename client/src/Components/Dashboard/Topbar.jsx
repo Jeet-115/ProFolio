@@ -87,9 +87,11 @@ function Topbar({ onOpenMenu }) {
           </motion.button>
         )}
 
-        <motion.div variants={itemVariants} className="pl-[50px] md:pl-0">
-          <Logo compact />
-        </motion.div>
+        {isDashboardHome && (
+          <motion.div variants={itemVariants} className="pl-[50px] md:pl-0">
+            <Logo compact />
+          </motion.div>
+        )}
       </div>
 
       <motion.button

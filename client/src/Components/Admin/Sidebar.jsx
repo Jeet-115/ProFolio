@@ -392,7 +392,7 @@ function Sidebar() {
   );
 }
                 </div>
-                <h2 className="text-xl font-bold tracking-wide outfit text-white">
+                <h2 className="text-lg font-bold tracking-wide outfit text-white">
                   PROFOLIO
                 </h2>
               </motion.div>
@@ -426,7 +426,7 @@ function Sidebar() {
           <div className="bg-white/20 p-2 rounded-full shadow-lg">
             <img src="/logo.png" alt="logo" className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold outfit tracking-wide text-white">
+          <h2 className="text-lg font-bold outfit tracking-wide text-white">
             PROFOLIO
           </h2>
         </motion.div>

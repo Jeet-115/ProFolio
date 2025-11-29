@@ -328,14 +328,12 @@ export default function UserProfile() {
         <ThemedInput
           name="headline"
           label="Headline"
-          placeholder="e.g. Frontend Developer"
           value={formData.headline}
           onChange={handleChange}
         />
         <ThemedInput
           name="skills"
           label="Skills"
-          placeholder="Comma separated"
           value={formData.skills}
           onChange={handleChange}
         />

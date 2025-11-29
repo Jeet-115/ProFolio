@@ -1,10 +1,11 @@
-import React from "react";
-import { Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeProvider, createTheme, responsiveFontSizes } from "@mui/material/styles";
-import { CssBaseline, Box, useMediaQuery } from "@mui/material";
+import { CssBaseline, Box, useMediaQuery, IconButton, Typography } from "@mui/material";
 import Sidebar from "../Components/Admin/NewSidebar";
 import luxuryGoldTheme from "../theme/luxuryGoldTheme";
+import MenuIcon from "@mui/icons-material/Menu";
 
 // Create MUI theme with responsive typography
 let theme = createTheme({
@@ -38,6 +39,10 @@ theme = responsiveFontSizes(theme);
 
 function AdminLayout() {
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'));
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const handleDrawerToggle = () => setMobileOpen(v => !v);
+  const handleCloseDrawer = () => setMobileOpen(false);
+  const navigate = useNavigate();
 
   return (
     <ThemeProvider theme={theme}>
@@ -50,9 +55,23 @@ function AdminLayout() {
           color: theme.palette.text.primary,
         }}
       >
-        {/* Sidebar (uncontrolled so it renders its own mobile toggle and overlay) */}
+        {/* Sidebar (controlled on mobile for external toggle) */}
         <Box component="nav" sx={{ width: { lg: 280 }, flexShrink: { lg: 0 } }}>
-          <Sidebar />
+          <AnimatePresence>
+            {isMobile && mobileOpen && (
+              <Box
+                sx={{
+                  position: 'fixed',
+                  inset: 0,
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  zIndex: 1200,
+                  backdropFilter: 'blur(2px)'
+                }}
+                onClick={handleCloseDrawer}
+              />
+            )}
+          </AnimatePresence>
+          <Sidebar open={isMobile ? mobileOpen : undefined} onClose={handleCloseDrawer} />
         </Box>
         
         {/* Main content */}
@@ -68,9 +87,43 @@ function AdminLayout() {
             }),
           }}
         >
+          {/* Sticky minimal top bar with hamburger on mobile/tablet */}
+          {isMobile && (
+            <Box
+              sx={{
+                position: 'sticky',
+                top: 0,
+                zIndex: 1400,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                height: 56,
+                px: 1.5,
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                backgroundColor: theme.palette.background.paper,
+                backdropFilter: 'saturate(180%) blur(4px)'
+              }}
+            >
+              <IconButton onClick={handleDrawerToggle} aria-label="open sidebar" sx={{ color: theme.palette.text.primary }}>
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                variant="subtitle1"
+                fontWeight={600}
+                sx={{ cursor: 'pointer' }}
+                onClick={() => navigate('/admin')}
+                title="Go to Admin Dashboard"
+              >
+                Admin
+              </Typography>
+            </Box>
+          )}
+
           <Box
             sx={{
               p: { xs: 2, sm: 3 },
+              maxWidth: { xs: '100%', md: 1200 },
+              mx: 'auto',
             }}
           >
             <motion.div

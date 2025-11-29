@@ -3,6 +3,7 @@ import { Box, Typography, Container, Button } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useTheme } from '@mui/material/styles';
 import ConstructionIcon from '@mui/icons-material/Construction';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 
 const Settings = () => {
   const theme = useTheme();
@@ -30,33 +31,16 @@ const Settings = () => {
             gap: 2,
           }}
         >
-          {/* Animated badge */}
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Box
-              sx={{
-                width: { xs: 100, sm: 120 },
-                height: { xs: 100, sm: 120 },
-                borderRadius: '50%',
-                mx: 'auto',
-                display: 'grid',
-                placeItems: 'center',
-                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.accent.main} 100%)`,
-                color: theme.palette.primary.contrastText,
-                boxShadow: '0 8px 24px rgba(245, 124, 0, 0.35)',
-              }}
+          {/* Themed rotating settings logo */}
+          <Box sx={{ p: 2, mb: 1, color: theme.palette.text.primary }}>
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 12, ease: 'linear' }}
+              style={{ display: 'inline-flex' }}
             >
-              <motion.div
-                animate={{ rotate: [0, -10, 10, 0] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <ConstructionIcon sx={{ fontSize: { xs: 48, sm: 56 } }} />
-              </motion.div>
-            </Box>
-          </motion.div>
+              <SettingsOutlinedIcon sx={{ fontSize: { xs: 90, sm: 120 } }} />
+            </motion.div>
+          </Box>
 
           <Typography
             variant="h4"
@@ -73,7 +57,7 @@ const Settings = () => {
             We’re crafting a delightful, customizable settings experience. Check back shortly!
           </Typography>
 
-          {/* Loader dots */}
+          {/* Subtle loader dots remain for continuity */}
           <Box sx={{ display: 'flex', gap: 1.2, mt: 2, mb: 1 }}>
             {[0, 1, 2].map((i) => (
               <motion.span

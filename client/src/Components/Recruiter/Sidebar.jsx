@@ -159,9 +159,7 @@ function Sidebar({ showMobileToggle = true }) {
           <div className="bg-amber-500/30 p-2 rounded-full shadow-lg">
             <img src="/logo.png" alt="logo" className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold outfit tracking-wide text-white">
-            PROFOLIO
-          </h2>
+          <h2 className="text-md font-bold tracking-wide outfit">PROFOLIO</h2>
         </motion.div>
 
         {items.map((item, index) => (

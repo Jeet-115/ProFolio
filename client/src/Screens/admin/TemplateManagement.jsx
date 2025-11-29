@@ -189,7 +189,7 @@ const TemplateManagement = () => {
           </Grid>
         ) : (
           filtered.map((tpl, idx) => (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={tpl._id || tpl.id || `tpl-${idx}`}>
+            <Grid item xs={12} sm={6} md={6} lg={4} key={tpl._id || tpl.id || `tpl-${idx}`}>
               <TemplateCard tpl={tpl} />
             </Grid>
           ))

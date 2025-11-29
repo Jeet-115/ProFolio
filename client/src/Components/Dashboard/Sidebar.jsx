@@ -158,7 +158,7 @@ function Sidebar({ mobileOpen, setMobileOpen, showInlineToggle = true }) {
               className="fixed inset-y-0 left-0 z-60 w-64 bg-white/10 backdrop-blur-xl border-r border-white/20 text-white p-6 flex flex-col gap-6 shadow-xl rounded-tr-3xl rounded-br-3xl md:hidden"
             >
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold tracking-wide outfit">
+                <h2 className="text-xl font-bold tracking-wide outfit">
                   PROFOLIO
                 </h2>
                 <button

@@ -87,7 +87,7 @@ export default function PortfolioBuilder() {
         // Update URL to include id so future saves are updates
         const next = new URLSearchParams(location.search);
         next.set("id", newId);
-        navigate(`/dashboard/portfolio/builder?${next.toString()}`, {
+        navigate(`/dashboard/portfolio-builder?${next.toString()}` , {
           replace: true,
         });
 

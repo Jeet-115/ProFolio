@@ -148,7 +148,7 @@ export default function RecruiterManagement() {
             </Grid>
           ) : (
             filtered.map((rec, idx) => (
-              <Grid item xs={12} sm={6} md={4} key={rec._id || rec.id || `rec-${idx}`}>
+              <Grid item xs={12} sm={6} md={6} lg={4} key={rec._id || rec.id || `rec-${idx}`}>
                 <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1 }}>

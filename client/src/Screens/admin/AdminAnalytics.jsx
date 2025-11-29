@@ -126,7 +126,7 @@ export default function AdminAnalytics() {
         </Grid>
 
         {/* Admin Analytics */}
-        <Grid item xs={12} lg={4}>
+        <Grid item xs={12} md={12} lg={4}>
           <Card>
             <CardContent>
               <SectionTitle icon={InsightsIcon} title="Admin Analytics" />

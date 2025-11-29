@@ -224,18 +224,14 @@ export default function CandidateProfile() {
 
       {/* Actions */}
       <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-row sm:gap-3 sm:items-center">
-        {/* Contact button (gradient style) */}
-        <div className="order-2 sm:order-none bg-gradient-to-b from-stone-300/40 to-transparent p-[2px] rounded-[10px] w-auto">
+        {/* Contact button (transparent) */}
+        <div className="order-2 sm:order-none w-auto">
           <button
             onClick={handleContact}
-            className="group p-[2px] rounded-[8px] bg-gradient-to-b from-white to-stone-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.45)] active:shadow-[0_0px_1px_rgba(0,0,0,0.45)] active:scale-[0.997] w-auto focus-visible:outline-none"
+            className="inline-flex items-center gap-1.5 h-[36px] px-3 rounded-md border border-white/30 hover:border-white/50 text-white/90 hover:text-white transition"
           >
-            <div className="bg-gradient-to-b from-stone-200/40 to-white/80 rounded-[6px] h-[36px] w-auto sm:w-[110px] px-3 py-1 flex items-center justify-center focus-visible:ring-2 focus-visible:ring-white/50">
-              <div className="flex gap-1.5 items-center text-stone-900">
-                <Mail className="w-[14px] h-[14px] sm:w-[12px] sm:h-[12px]" />
-                <span className="font-semibold text-[14px] sm:text-[12px] leading-none">Contact</span>
-              </div>
-            </div>
+            <Mail className="w-[14px] h-[14px] sm:w-[12px] sm:h-[12px]" />
+            <span className="font-semibold text-[14px] sm:text-[12px] leading-none">Contact</span>
           </button>
         </div>
 
@@ -261,18 +257,14 @@ export default function CandidateProfile() {
             <div className="mt-1 text-[10px] text-white/60 text-right">{reportReason.length}/300</div>
           </div>
 
-          <div className={`order-2 sm:order-none bg-gradient-to-b from-stone-300/40 to-transparent p-[2px] rounded-[10px] w-auto ${reporting ? 'opacity-60 cursor-not-allowed' : ''}`}>
+          <div className={`order-2 sm:order-none w-auto ${reporting ? 'opacity-60 cursor-not-allowed' : ''}`}>
             <button
               onClick={handleReport}
               disabled={reporting}
-              className="group p-[2px] rounded-[8px] bg-gradient-to-b from-white to-stone-200/40 shadow-[0_1px_3px_rgba(0,0,0,0.45)] active:shadow-[0_0px_1px_rgba(0,0,0,0.45)] active:scale-[0.997] w-auto"
+              className="inline-flex items-center gap-1.5 h-[36px] px-3 rounded-md border border-white/30 hover:border-white/50 text-white/90 hover:text-white transition"
             >
-              <div className="bg-gradient-to-b from-stone-200/40 to-white/80 rounded-[6px] h-[36px] w-auto sm:w-[110px] px-3 py-1 flex items-center justify-center">
-                <div className="flex gap-1.5 items-center text-stone-900">
-                  <Flag className="w-[14px] h-[14px] sm:w-[12px] sm:h-[12px]" />
-                  <span className="font-semibold text-[14px] sm:text-[12px] leading-none">Report</span>
-                </div>
-              </div>
+              <Flag className="w-[14px] h-[14px] sm:w-[12px] sm:h-[12px]" />
+              <span className="font-semibold text-[14px] sm:text-[12px] leading-none">Report</span>
             </button>
           </div>
         </div>

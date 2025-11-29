@@ -15,7 +15,16 @@ const Logo = ({ compact = false }) => {
       <div className={compact ? "flex items-center" : "flex items-center justify-between px-6 pt-3"}>
         <Link to="/">
           <div className="flex">
-            <h1 className={compact ? "text-lg md:text-xl font-bold inter" : "text-5xl font-bold inter ml-3 mt-3"} style={{ color: logoColor }}>
+            <h1 
+              className={`${compact ? "text-xl md:text-2xl" : "text-3xl md:text-4xl"} font-bold tracking-tight`} 
+              style={{ 
+                color: logoColor,
+                fontFamily: "'Poppins', sans-serif",
+                fontWeight: 800,
+                letterSpacing: '-0.025em',
+                lineHeight: 1
+              }}
+            >
               PROFOLIO
             </h1>
           </div>
